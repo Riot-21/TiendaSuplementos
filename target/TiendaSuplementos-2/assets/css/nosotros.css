@@ -1,0 +1,64 @@
+.navbar-light {
+    box-shadow: 0 4px 6px -1px #bcbcbc;
+    background: linear-gradient(70deg, rgb(0, 0, 0), #555555);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 10px;
+    text-decoration-color: #04aef6;
+}
+
+.section-title {
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(50deg, #04aef6, #ffffff);
+}
+
+.about-section {
+    background-color: #f8f9fa;
+    padding: 40px 20px;
+    border-radius: 10px;
+}
+
+.mission-vision {
+    background-color: #f1f1f1;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.map-responsive {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+}
+
+.map-responsive iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.derechos-footer {
+    background-color: #000000;
+}
