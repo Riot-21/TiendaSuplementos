@@ -1,5 +1,10 @@
 # Ignorar la carpeta target generada por Maven
 /target/
 
+# Ignorar archivos generados por IDEs
+
+nb-configuration.xml
+
+
 # Ignorar archivos de logs
 *.log
