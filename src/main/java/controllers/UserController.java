@@ -6,11 +6,16 @@ package controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import modelo.dao.UsuarioDao;
+import modelo.dto.Usuario;
 
 /**
  *
@@ -19,66 +24,125 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UserController", urlPatterns = {"/UserController"})
 public class UserController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UserController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    private UsuarioDao userdao;
+
+    @Override
+    public void init() {
+        userdao = new UsuarioDao();
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        String action = request.getParameter("action");
+
+        if ("login".equals(action)) {
+            login(request, response);
+        } else if ("register".equals(action)) {
+            register(request, response);
+        } else if ("logout".equals(action)) {
+            logout(request, response);
+        } else if ("list".equals(action)) {
+            listarUsuarios(request, response);
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    private void login(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String email = request.getParameter("email");
+        String contraseña = request.getParameter("pass");
+
+        try {
+            Usuario user = userdao.validarUsuario(email, contraseña);
+
+            if (user != null) {
+                // Si el usuario es válido, crear o obtener la sesión y redirigir a index.jsp
+                HttpSession session = request.getSession(true);  // No usar false aquí, ya que necesitamos una sesión
+                session.setAttribute("usuario", user);
+                response.sendRedirect("index.jsp");
+            } else {
+                // Si los datos son incorrectos, mostrar mensaje de error y redirigir a login.jsp
+
+                request.setAttribute("error", "Usuario o contraseña incorrectos");
+                request.getRequestDispatcher("login.jsp").forward(request, response);  // Mantén la solicitud actual
+            }
+        } catch (SQLException e) {
+            System.out.println("error" + e);
+            throw new ServletException("Error", e);
+        }
+    }
+
+    private void register(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String nombres = request.getParameter("nombres");
+        String apellidos = request.getParameter("apellidos");
+        String email = request.getParameter("email");
+        String contraseña = request.getParameter("pass");
+        int dni = Integer.parseInt(request.getParameter("dni"));
+        int telefono = Integer.parseInt(request.getParameter("telefono"));
+
+        Usuario newuser = new Usuario();
+        newuser.setNombres(nombres);
+        newuser.setApellidos(apellidos);
+        newuser.setEmail(email);
+        newuser.setContraseña(contraseña);
+        newuser.setDni(dni);
+        newuser.setTelefono(telefono);
+        System.out.println(newuser.getApellidos());
+
+        try {
+            boolean resultado = userdao.registroUsuario(newuser);
+            System.out.println(newuser.getApellidos() + "+" + newuser.getContraseña());
+            if (resultado) {
+                response.sendRedirect("login.jsp");
+            } else {
+                request.setAttribute("error", "No se puedo registrar el usuario");
+                request.getRequestDispatcher("registro.jsp").forward(request, response);
+            }
+
+        } catch (SQLException e) {
+            throw new ServletException("Error", e);
+        }
+
+    }
+
+    private void logout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        System.out.println("Intentado cerrar sesion...");
+        if (session != null) {
+            session.invalidate();
+            System.out.println("Sesion cerrada");
+        } else {
+            System.out.println("no hay sesion");
+        }
+        response.sendRedirect("index.jsp");
+
+    }
+
+    private void listarUsuarios(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            List<Usuario> usuarios = userdao.listarUsuarios();
+            request.setAttribute("listaUsuarios", usuarios);
+            request.getRequestDispatcher("admin/listarUsuarios.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            throw new ServletException("Error", e);
+        }
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";
