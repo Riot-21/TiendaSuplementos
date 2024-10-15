@@ -26,28 +26,32 @@
     <div class="register-container">
         <div class="register-box">
             <h3 class="text-center">Registro</h3>
-            <form>
+            <form action="UserController" method="POST">
                 <div class="form-group">
-                    <label for="username">Nombre de Usuario</label>
-                    <input type="text" class="form-control" id="username" placeholder="Ingresa tu nombre de usuario">
+                    <label for="username">Nombres</label>
+                    <input type="text" class="form-control" id="username" name="nombres" placeholder="Ingresa tu nombre">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Apellido</label>
+                    <input type="text" class="form-control" id="lastname" name="apellidos" placeholder="Ingresa tu nombre de usuario">
                 </div>
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo">
-                </div>
-                <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" placeholder="Ingresa tu direccion">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo">
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" class="form-control" id="password" placeholder="Crea una contraseña">
+                    <input type="password" class="form-control" id="password" name="pass" placeholder="Crea una contraseña">
+                </div>
+                <div class="form-group">
+                    <label for="dni">Dni</label>
+                    <input type="text" class="form-control" id="dni" name="dni" placeholder="Ingresa tu numero de DNI">
                 </div>
                 <div class="form-group">
                     <label for="phone">Teléfono</label>
-                    <input type="text" class="form-control" id="phoone" placeholder="Ingresa tu teléfono">
+                    <input type="text" class="form-control" id="phoone" name="telefono" placeholder="Ingresa tu teléfono">
                 </div>
-                <button type="submit" class="btn btn-dark btn-block">Crear Cuenta</button>
+                <button type="submit" name="action" value="register" class="btn btn-dark btn-block">Crear Cuenta</button>
             </form>
             <div class="text-center mt-3">
                 <p>¿Ya tienes una cuenta? <a href="login.jsp">Inicia sesión aquí­</a></p>

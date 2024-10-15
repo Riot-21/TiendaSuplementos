@@ -34,6 +34,7 @@
                 <button class="btn btn-outline-light" type="submit"><i class="fa fa-search"></i></button>
             </form>
 
+
             <!-- Ícono de usuario -->
             <a class="nav-icon text-secondary" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-user fa-lg"></i>
@@ -45,6 +46,16 @@
                 <li><a class="dropdown-item" href="#">Configuración</a></li>
                 <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
             </ul>
+
+            <!-- Icono de Usuario -->
+            <!--<a class="nav-icon text-white ms-3" href="login.jsp">
+                <i class="fa fa-user fa-lg"></i>
+            </a>
+            <form action="${pageContext.request.contextPath}/UserController" method="post">
+
+                <button type="submit" name="action" value="logout">Cerrar sesión</button>
+            </form>-->
+
 
             <!-- Icono Carrito -->
             <button class="btn nav-icon text-white ms-3" id="cart-icon" onclick="toggleCart()">
