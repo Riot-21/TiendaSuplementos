@@ -2,7 +2,9 @@ package servicios.conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,4 +41,25 @@ public class ConexionBD {
             throw new SQLException("No se pudo establecer la conexión a la base de datos.");
         }
     }
+    
+    public ResultSet ejecutarConsulta(String sql) throws SQLException {
+        Statement st = null;
+        Connection conn = null;
+        try {
+            conn = getConexion();
+            st = conn.createStatement();
+            return st.executeQuery(sql);
+        } catch (SQLException e) {
+            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, "Error al ejecutar la consulta", e);
+            throw e;
+        } finally {
+            if (st != null) {
+                st.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+    
 }

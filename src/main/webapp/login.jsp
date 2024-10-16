@@ -28,14 +28,14 @@
             <h3 class="text-center">Iniciar Sesión</h3>
             <form>
                 <div class="form-group">
-                    <label for="email">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo">
+                    <label for="usuario">Correo Electrónico</label>
+                    <input type="text" class="form-control" name="txtusuario" placeholder="Ingresa tu correo">
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
+                    <input type="password" class="form-control" name="txtclave" placeholder="Ingresa tu contraseña">
                 </div>
-                <button type="submit" class="btn btn-dark btn-block">Iniciar Sesión</button>
+                <button type="submit" class="btn btn-dark btn-block" name="btn-login">Iniciar Sesión</button>
             </form>
             <div class="text-center mt-3">
                 <p>¿No tienes cuenta? <a href="registro.jsp">Regí­strate aquí­</a></p>
