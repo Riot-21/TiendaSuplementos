@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 @WebServlet(name = "ProductController", urlPatterns = {"/ProductController"})
+@MultipartConfig
 public class ProductController extends HttpServlet {
 
     private ProductoDao producdao;
@@ -41,93 +43,97 @@ public class ProductController extends HttpServlet {
         imgdao = new ImagenProdDao();
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+
+    // Procesar los campos no relacionados con archivos
+    String action = request.getParameter("action");
+
+    if ("guardar".equals(action)) {
+        guardarProducto(request, response);
+    } else {
+        response.sendRedirect("index.jsp");
     }
+    System.out.println("Action: " + action);
+}
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+private void guardarProducto(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    // Procesar los parámetros del formulario
+    String nombreProducto = request.getParameter("nombrep");
+    String descripcionProducto = request.getParameter("descp");
+    int stockProducto = Integer.parseInt(request.getParameter("stkp"));
+    String marcaProducto = request.getParameter("marcap");
+    double precioProducto = Double.parseDouble(request.getParameter("preciop"));
+    String modoUsoProducto = request.getParameter("modp");
+    String advertenciaProducto = request.getParameter("advp");
+    int categoriaProducto = Integer.parseInt(request.getParameter("catp"));
 
-        // Crear un nuevo producto
-        Producto producto = new Producto();
-        producto.setNombre(request.getParameter("product-name"));
-        producto.setDescripcion(request.getParameter("product-description"));
-        producto.setStock(Integer.parseInt(request.getParameter("product-stock")));
-        producto.setMarca(request.getParameter("product-brand"));
-        producto.setPreciounit(Double.parseDouble(request.getParameter("product-price")));
-        producto.setMod_empleo(request.getParameter("product-modeUse"));
-        producto.setAdvert(request.getParameter("product-warning"));
+    // Crear un objeto Producto
+    Producto producto = new Producto();
+    producto.setNombre(nombreProducto);
+    producto.setDescripcion(descripcionProducto);
+    producto.setStock(stockProducto);
+    producto.setMarca(marcaProducto);
+    producto.setPreciounit(precioProducto);
+    producto.setMod_empleo(modoUsoProducto);
+    producto.setAdvert(advertenciaProducto);
 
-        // Obtener la categoría seleccionada
-        String categoriaNombre = request.getParameter("product-cat");
-        Categoria categoria = null;
+    // Obtener la categoría seleccionada
+    Categoria categoria = new Categoria();
+    categoria.setIdCategoria(categoriaProducto);
+    producto.setCategorias(Collections.singletonList(categoria)); // Añadir la categoría al producto
 
-        try {
-            categoria = catdao.obtenerCategoriaPorNombre(categoriaNombre); // Método que debes implementar en CategoriaDao
-            if (categoria == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Categoría no encontrada.");
-                return; // Salir si no se encuentra la categoría
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la categoría.");
-            return;
-        }
-        
-        producto.setCategorias(Collections.singletonList(categoria)); // Añade la categoría a la lista de categorías
+    // Lista para almacenar imágenes
+    List<ImgProd> imagenes = new ArrayList<>();
 
-        // Manejar la subida de imágenes
-        if (ServletFileUpload.isMultipartContent(request)) {
-            List<ImgProd> imagenes = new ArrayList<>();
+    // Manejar las imágenes subidas
+    try {
+        // Obtener múltiples partes del formulario
+        for (Part part : request.getParts()) {
+            if (part.getName().equals("photos")) {
+                // Verificar que haya contenido en el archivo
+                String fileName = part.getSubmittedFileName();
+                if (fileName != null && !fileName.isEmpty()) {
+                    // Obtener la ruta real de la carpeta `img` en el servidor
+                    String uploadPath = "C:/Users/RIOT/Documents/NetBeansProjects/TiendaSuplementos/src/main/webapp/img";
 
-            // Crear una fábrica de elementos de archivo
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletFileUpload upload = new ServletFileUpload(factory);
-
-            try {
-                // Parsear el request para obtener los elementos de archivo
-                List<FileItem> items = upload.parseRequest(request);
-
-                for (FileItem item : items) {
-                    if (!item.isFormField() && "photos".equals(item.getFieldName())) {
-                        // Lógica para almacenar la imagen
-                        String imagenPath = "img/" + item.getName(); // Definir la ruta de almacenamiento
-                        File uploadedFile = new File(imagenPath);
-                        item.write(uploadedFile); // Guardar el archivo
-
-                        ImgProd imgProd = new ImgProd();
-                        imgProd.setImagen(imagenPath);
-                        imagenes.add(imgProd);
+                    File uploadDir = new File(uploadPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdir(); // Crear la carpeta si no existe
                     }
+
+                    // Ruta completa para guardar el archivo
+                    String filePath = uploadPath + File.separator + fileName;
+                    part.write(filePath); // Guardar archivo en el servidor
+                    System.out.println("Archivo guardado en: " + filePath);
+
+                    // Guardar la ruta relativa de la imagen en la base de datos
+                    ImgProd imgProd = new ImgProd();
+                    imgProd.setImagen("img/" + fileName); // Ruta relativa
+                    imagenes.add(imgProd);
                 }
-
-                // Asignar las imágenes al producto
-                producto.setImagenes(imagenes);
-
-                // Guardar el producto en la base de datos
-                producdao.agregarProducto(producto);
-                response.sendRedirect("nosotros.jsp"); // Redirigir a una página de éxito
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al guardar el producto.");
-            } catch (FileUploadException ex) {
-                ex.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar la subida de archivos.");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error inesperado.");
             }
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Solicitud no válida, se esperaba un archivo.");
         }
+
+        // Asignar las imágenes al producto
+        producto.setImagenes(imagenes);
+
+        // Guardar el producto y las imágenes en la base de datos
+        producdao.agregarProducto(producto);
+
+        response.sendRedirect("administrador.jsp"); // Redirigir tras éxito
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("error", "Error al subir el archivo: " + e.getMessage());
+        RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
+        dispatcher.forward(request, response);
     }
+}
 
 
     @Override
@@ -135,5 +141,4 @@ public class ProductController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-        }
-    
+}

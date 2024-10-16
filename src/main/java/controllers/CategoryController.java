@@ -38,6 +38,7 @@ public class CategoryController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("nombre antes del post: "+ request.getParameter("categoria-nombre"));
         // Crear una nueva categoría
         Categoria categoria = new Categoria();
         categoria.setCategoria(request.getParameter("categoria-nombre"));

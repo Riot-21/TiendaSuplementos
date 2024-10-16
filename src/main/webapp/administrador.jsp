@@ -178,39 +178,41 @@
                         <form id="agregarProductoForm" enctype="multipart/form-data" action="ProductController" method="POST">
                             <div class="form-group">
                                 <label for="product-name">Nombre del Producto:</label>
-                                <input type="text" class="form-control" id="product-name" name="product-name">
+                                <input type="text" class="form-control" id="product-name" name="nombrep">
                             </div>
                             <div class="form-group">
                                 <label for="product-description">Descripción del Producto:</label>
-                                <textarea class="form-control" id="product-description" name="product-description"></textarea>
+                                <textarea class="form-control" id="product-description" name="descp"></textarea>
                             </div>
+                            <!--
                             <div class="form-group">
                                 <label for="product-photos">Fotos del Producto:</label>
                                 <input type="file" multiple accept="image/*" class="form-control" id="product-photos" name="photos">
                             </div>
+                            -->
                             <div class="form-group">
                                 <label for="product-stock">Stock del producto</label>
-                                <input type="number" class="form-control" id="product-stock" name="product-stock">
+                                <input type="number" class="form-control" id="product-stock" name="stkp">
                             </div>
                             <div class="form-group">
                                 <label for="product-brand">Marca del Producto:</label>
-                                <input type="text" class="form-control" id="product-brand" name="product-brand">
+                                <input type="text" class="form-control" id="product-brand" name="marcap">
                             </div>
                             <div class="form-group">
                                 <label for="product-price">Precio del producto</label>
-                                <input type="number" class="form-control" id="product-price" name="product-price">
+                                <input type="number" class="form-control" id="product-price" name="preciop">
                             </div>
                             <div class="form-group">
                                 <label for="product-modeUse">Modo de empleo del producto:</label>
-                                <textarea class="form-control" id="product-modeUse" name="product-modeUse"></textarea>
+                                <textarea class="form-control" id="product-modeUse" name="product-modp"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="product-warning">Advertencia:</label>
-                                <textarea class="form-control" id="product-warning" name="product-warning"></textarea>
+                                <textarea class="form-control" id="product-warning" name="product-advp"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="product-cat">Categoria del Producto:</label>
-                                <select class="form-control" id="product-cat" name="product-cat" multiple>
+                                <select class="form-control" id="product-cat" name="catp" >
                             <%
                                 CategoriaDao catedao = new CategoriaDao();
                                 List<Categoria> categorias = null;
@@ -232,7 +234,7 @@ for(Categoria cat: categorias){
                             </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                            <button type="submit" class="btn btn-primary" name="action" value="guardar">Agregar Producto</button>
                         </form>
 
                     </div>

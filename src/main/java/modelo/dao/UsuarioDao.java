@@ -54,10 +54,8 @@ public class UsuarioDao {
             ps.setString(4, user.getContraseña());
             ps.setInt(5, user.getDni());
             ps.setInt(6, user.getTelefono());
-            System.out.println("ANTES DEL EXECUTEUPDATE: " +user.getApellidos());
 
             ps.executeUpdate();
-            System.out.println("DEPUES DEL EXECUTE UPDATE: "+user.getApellidos());
             return true;
             
         } catch (SQLException e) {

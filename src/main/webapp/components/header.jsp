@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page session="true"%>
 <!-- Header -->
 <nav class="navbar navbar-light navbar-expand-lg custom-header">
     <div class="container">
@@ -35,17 +37,22 @@
             </form>
 
 
+            
+
             <!-- Ícono de usuario -->
-            <a class="nav-icon text-secondary" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-icon text-secondary" href="login.jsp" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-user fa-lg"></i>
             </a>
-
-            <!-- Menú desplegable -->
+  
+                <!-- Menú desplegable -->
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+
                 <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
                 <li><a class="dropdown-item" href="#">Configuración</a></li>
                 <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
             </ul>
+
+            
 
             <!-- Icono de Usuario -->
             <!--<a class="nav-icon text-white ms-3" href="login.jsp">
