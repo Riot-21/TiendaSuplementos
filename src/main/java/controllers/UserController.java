@@ -3,7 +3,10 @@ package controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +29,15 @@ public class UserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        List<Usuario> listaUsuarios = new ArrayList<>();
+        try {
+            listaUsuarios = userdao.listarUsuarios();
+            HttpSession misesion = request.getSession();
+            misesion.setAttribute("listaUsuarios", listaUsuarios);
+            response.sendRedirect("admin-usuarios.jsp");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

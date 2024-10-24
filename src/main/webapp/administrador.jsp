@@ -1,310 +1,123 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - eLearning</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .content-section {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="d-flex">
-        <div class="bg-dark text-white p-3" style="width: 200px; height: 100vh;">
-            <h2 class="text-center">Admin</h2>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" onclick="showSection('dashboard')">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" onclick="showSection('usuarios')">Usuarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" onclick="showSection('agregar-producto')" data-toggle="modal" data-target="#agregarProductoModal">Agregar Producto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" onclick="showSection('editar-producto')">Editar Producto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" onclick="cerrarSesion()">Cerrar Sesión</a>
-                </li>
-            </ul>
-        </div>
+<html lang="en">
 
-        <div class="flex-grow-1 p-3">
-            <section id="dashboard" class="content-section">
-                <h2>Dashboard</h2>
-                <p>Aquí puedes ver las métricas del sitio.</p>
-                <!-- Simulación de métricas -->
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Administrador</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+
+    <body>
+
+        <header>
+            <nav class="navbar navbar-light navbar-expand-lg bg-primary shadow-sm">
+                <div class="container-fluid">
+                    <span class="navbar-brand mb-0 h1 text-light ms-3">Administrador</span>
+                    <div class="d-flex ms-auto">
+                        <a href="#" class="btn btn-outline-light" data-bs-toggle="modal"
+                           data-bs-target="#SalirModal">Salir</a>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="SalirModal" tabindex="-1" aria-labelledby="SalirModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="SalirModalLabel">¿Seguro de salir?</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-primary">Salir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="container mt-5">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="card text-white bg-primary mb-3">
-                            <div class="card-header">Prodcutos</div>
+                        <div class="card text-center">
                             <div class="card-body">
-                                <h5 class="card-title">150</h5>
-                                <p class="card-text">Total de productos disponibles.</p>
+                                <h5 class="card-title">Usuarios</h5>
+                                <p class="card-text">Gestiona los usuarios del sistema.</p>
+                                <form action="UserController" method="GET">
+                                    <button type="submit" class="btn btn-primary">Mostrar Usuarios</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card text-white bg-success mb-3">
-                            <div class="card-header">Usuarios</div>
+                        <div class="card text-center">
                             <div class="card-body">
-                                <h5 class="card-title">1200</h5>
-                                <p class="card-text">Total de usuarios registrados.</p>
+                                <h5 class="card-title">Productos</h5>
+                                <p class="card-text">Gestiona los productos disponibles.</p>
+                                <a href="productos.html" class="btn btn-primary">Ir a Productos</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card text-white bg-warning mb-3">
-                            <div class="card-header">Compras</div>
+                        <div class="card text-center">
                             <div class="card-body">
-                                <h5 class="card-title">3000</h5>
-                                <p class="card-text">Total de compras en el ultimo mes.</p>
+                                <h5 class="card-title">Añadir Productos</h5>
+                                <p class="card-text">Añade nuevos productos</p>
+                                <a href="nuevoProducto.html" class="btn btn-primary">Añadir Productos</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <section id="usuarios" class="content-section">
-                <h2>Usuarios</h2>
-                <p>Lista de clientes registrados.</p>
-                <!-- Simulación de lista de usuarios -->
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark"></thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Telefono</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan Pérez</td>
-                            <td>juan.perez@example.com</td>
-                            <td>940576983</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(1)">Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>María López</td>
-                            <td>maria.lopez@example.com</td>
-                            <td>987456362</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(2)">Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Carlos García</td>
-                            <td>carlos.garcia@example.com</td>
-                            <td>987456362</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(3)">Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <script>
-                function eliminarUsuario(userId) {
-                    
-                    alert('Usuario ' + userId + ' eliminado');
-                }
-            </script>
-            <section id="editar-producto" class="content-section">
-                <h2>Editar Producto</h2>
-                <p>Selecciona un producto para editar.</p>
-                
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre Producto</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Vitaminas</td>
-                            <td><button class="btn btn-primary" data-toggle="modal" data-target="#editarProductoModal">Editar</button></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Proteínas</td>
-                            <td><button class="btn btn-primary" data-toggle="modal" data-target="#editarProductoModal">Editar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-        </div>
-    </div>
-
-    <!-- Modal para agregar producto -->
-    <div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-labelledby="agregarProductoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="agregarProductoForm">
-                        <div class="form-group">
-                            <label for="product-name">Nombre del Producto:</label>
-                            <input type="text" class="form-control" id="product-name" name="product-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="product-description">Descripción del Producto:</label>
-                            <textarea class="form-control" id="product-description" name="product-description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="product-stock">Stock del producto</label>
-                            <input type="number" class="form-control" id="product-stock" name="product-stock">
-                        </div>
-                        <div class="form-group">
-                            <label for="product-brand">Marca del Producto:</label>
-                            <input type="text" class="form-control" id="product-brand" name="product-brand">
-                        </div>
-                        <div class="form-group">
-                            <label for="product-price">Precio del producto</label>
-                            <input type="number" class="form-control" id="product-price" name="product-price">
-                        </div>
-                        <div class="form-group">
-                            <label for="product-modeUse">Modo de empleo del producto:</label>
-                            <textarea class="form-control" id="product-modeUse" name="product-modeUse"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="product-warning">Advertencia:</label>
-                            <textarea class="form-control" id="product-warning" name="product-warning"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="product-cat">Categoria del Producto:</label>
-                            <select class="form-control" id="product-cat" name="product-cat">
-                                <option>Vitaminas</option>
-                                <option>Proteínas</option>
-                                <option>Energizantes</option>
-                            </select>
-                        </div>
-                        <!-- Botón para abrir el modal de nueva categoría -->
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#nuevaCategoriaModal">Nueva Categoría</button>
-
-                        <!-- Modal para nueva categoría -->
-                        <div class="modal fade" id="nuevaCategoriaModal" tabindex="-1" aria-labelledby="nuevaCategoriaModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="nuevaCategoriaModalLabel">Nueva Categoría</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="nuevaCategoriaForm">
-                                            <div class="form-group">
-                                                <label for="categoria-nombre">Nombre de la Categoría:</label>
-                                                <input type="text" class="form-control" id="categoria-nombre" name="categoria-nombre">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Agregar Categoría</button>
-                                        </form>
-                                    </div>
-                                </div>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">DashBoard</h5>
+                                <p class="card-text">Observa las métricas clave.</p>
+                                <a href="dashboard.html" class="btn btn-primary">Ir a DashBoard</a>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Agregar Producto</button>
-                    </form>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Pedidos</h5>
+                                <p class="card-text">Gestiona los pedidos realizados.</p>
+                                <a href="pedidos.html" class="btn btn-primary">Ir a Pedidos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Administradores</h5>
+                                <p class="card-text">Gestiona los usuarios administradores.</p>
+                                <a href="pedidos.html" class="btn btn-primary">Ir a Administradores</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Modal para editar Producto -->
-    <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-labelledby="editarProductoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editarProductoModalLabel">Editar Producto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="agregarProductoForm">
-                        <div class="form-group">
-                            <label for="edit-product-name">Nombre del Producto:</label>
-                            <input type="text" class="form-control" id="edit-product-name" name="edit-product-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-description">Descripción del Producto:</label>
-                            <textarea class="form-control" id="edit-product-description" name="edit-product-description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-stock">Stock del producto</label>
-                            <input type="number" class="form-control" id="edit-product-stock" name="edit-product-stock">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-brand">Marca del Producto:</label>
-                            <input type="text" class="form-control" id="edit-product-brand" name="edit-product-brand">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-price">Precio del producto</label>
-                            <input type="number" class="form-control" id="edit-product-price" name="edit-product-price">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-modeUse">Modo de empleo del producto:</label>
-                            <textarea class="form-control" id="edit-product-modeUse" name="edit-product-modeUse"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-warning">Advertencia:</label>
-                            <textarea class="form-control" id="edit-product-warning" name="edit-product-warning"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-product-cat">Categoria del Producto:</label>
-                            <select class="form-control" id="edit-product-cat" name="edit-product-cat">
-                                <option>Vitaminas</option>
-                                <option>Proteínas</option>
-                                <option>Energizantes</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Agregar Producto</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(sectionId).style.display = 'block';
-        }
 
-        function cerrarSesion() {
-            // Aquí puedes agregar la lógica para cerrar sesión
-            alert('Sesión cerrada');
-        }
+        </main>
 
-        // Mostrar el dashboard por defecto
-        showSection('dashboard');
-    </script>
-</body>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+                integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+                integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+    </body>
+
 </html>
