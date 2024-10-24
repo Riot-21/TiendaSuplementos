@@ -48,8 +48,11 @@
         <div class="container mt-4">
             <h2>Usuarios</h2>
             <p>Lista de usuarios en la plataforma.</p>
+            <form action="UserController" method="GET">
+                <button type="submit" class="btn btn-primary">Recargar</button>
+            </form>
             <!-- Simulación de lista de usuarios -->
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered mt-3">
                 <thead class="thead-dark"></thead>
                 <tr>
                     <th>ID</th>
@@ -74,31 +77,16 @@
                         <td><%=usu.getEmail()%></td>
                         <td><%=usu.getDni()%></td>
                         <td><%=usu.getTelefono()%></td>
-                        <td><button class="btn btn-danger btn-sm" onclick="" data-bs-toggle="modal"
-                                    data-bs-target="#EliminarUsuarioModal">Eliminar</button>
+                        <td>
+                            <form action="SvEliminar" method="POST">
+                                <input type="hidden" name="idUsuario" value="<%=usu.getIdUsuario()%>" />
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button> 
+                            </form>
                         </td>
                     </tr>
                     <%}%>
-
-
                 </tbody>
             </table>
-            <!-- Modal Confirmación de eliminación -->
-            <div class="modal fade" id="EliminarUsuarioModal" tabindex="-1" aria-labelledby="#EliminarUsuarioLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="#EliminarUsuarioLabel">¿Seguro de eliminar el usuario ...?</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-danger">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
