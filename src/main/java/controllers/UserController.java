@@ -87,14 +87,14 @@ public class UserController extends HttpServlet {
 
     private void register(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String nombres = request.getParameter("nombres");
         String apellidos = request.getParameter("apellidos");
         String email = request.getParameter("email");
         String contraseña = request.getParameter("pass");
         int dni = Integer.parseInt(request.getParameter("dni"));
         int telefono = Integer.parseInt(request.getParameter("telefono"));
-
+        System.out.println("nombre antes del dao: "+nombres);
         Usuario newuser = new Usuario();
         newuser.setNombres(nombres);
         newuser.setApellidos(apellidos);

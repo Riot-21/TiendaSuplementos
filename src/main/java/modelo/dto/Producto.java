@@ -1,5 +1,7 @@
 package modelo.dto;
 
+import java.util.List;
+
 public class Producto {
     
     private int idProducto;
@@ -10,10 +12,14 @@ public class Producto {
     private double preciounit;
     private String mod_empleo;
     private String advert;
+    
+    private List<Categoria> categorias;
+    private List<ImgProd> imagenes;
 
-    public Producto() {}
+    public Producto() {
+    }
 
-    public Producto(int idProducto, String nombre, String descripcion, int stock, String marca, double preciounit, String mod_empleo, String advert) {
+    public Producto(int idProducto, String nombre, String descripcion, int stock, String marca, double preciounit, String mod_empleo, String advert, List<Categoria> categorias, List<ImgProd> imagenes) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -22,14 +28,24 @@ public class Producto {
         this.preciounit = preciounit;
         this.mod_empleo = mod_empleo;
         this.advert = advert;
+        this.categorias = categorias;
+        this.imagenes = imagenes;
     }
 
-    public String getAdvert() {
-        return advert;
+    public List<ImgProd> getImagenes() {
+        return imagenes;
     }
 
-    public void setAdvert(String advert) {
-        this.advert = advert;
+    public void setImagenes(List<ImgProd> imagenes) {
+        this.imagenes = imagenes;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 
     public int getIdProducto() {
@@ -87,6 +103,15 @@ public class Producto {
     public void setMod_empleo(String mod_empleo) {
         this.mod_empleo = mod_empleo;
     }
+
+    public String getAdvert() {
+        return advert;
+    }
+
+    public void setAdvert(String advert) {
+        this.advert = advert;
+    }
     
-            
+    
+
 }
