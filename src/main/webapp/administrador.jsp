@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<html lang="en">
+<!doctype html>
+<html lang="es">
 
     <head>
         <meta charset="utf-8">
@@ -58,7 +59,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Productos</h5>
                                 <p class="card-text">Gestiona los productos disponibles.</p>
-                                <a href="productos.html" class="btn btn-primary">Ir a Productos</a>
+                                <a href="admin-productos.jsp" class="btn btn-primary">Ir a Productos</a>
                             </div>
                         </div>
                     </div>
@@ -67,7 +68,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Añadir Productos</h5>
                                 <p class="card-text">Añade nuevos productos</p>
-                                <a href="nuevoProducto.html" class="btn btn-primary">Añadir Productos</a>
+                                <a href="admin-nuevoprod.jsp" class="btn btn-primary">Añadir Productos</a>
                             </div>
                         </div>
                     </div>
@@ -78,7 +79,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">DashBoard</h5>
                                 <p class="card-text">Observa las métricas clave.</p>
-                                <a href="dashboard.html" class="btn btn-primary">Ir a DashBoard</a>
+                                <a href="dashboard.jsp" class="btn btn-primary">Ir a DashBoard</a>
                             </div>
                         </div>
                     </div>
@@ -87,7 +88,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Pedidos</h5>
                                 <p class="card-text">Gestiona los pedidos realizados.</p>
-                                <a href="pedidos.html" class="btn btn-primary">Ir a Pedidos</a>
+                                <a href="pedidos.jsp" class="btn btn-primary">Ir a Pedidos</a>
                             </div>
                         </div>
                     </div>
@@ -96,7 +97,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Administradores</h5>
                                 <p class="card-text">Gestiona los usuarios administradores.</p>
-                                <a href="pedidos.html" class="btn btn-primary">Ir a Administradores</a>
+                                <a href="administradores.jsp" class="btn btn-primary">Ir a Administradores</a>
                             </div>
                         </div>
                     </div>

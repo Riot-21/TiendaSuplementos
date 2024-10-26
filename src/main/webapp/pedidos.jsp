@@ -1,5 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -24,7 +25,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="SalirModalLabel">¿Seguro de salir?</h1>
+                            <h1 class="modal-title fs-5" id="SalirModalLabel">Â¿Seguro de salir?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-footer">
@@ -57,26 +58,26 @@
                     <tr>
                         <td>1</td>
                         <td>2021-12-01</td>
-                        <td>Juan Pérez</td>
+                        <td>Juan PÃ©rez</td>
                         <td>Enviado</td>
                         <td>Producto 1, Producto 2</td>
                         <td>100.00</td>
                         <td>
                             <a href="#" class="btn btn-primary">Ver</a>
-                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatos(1, '2021-12-01', 'Juan Pérez', 'Enviado', 'Producto 1, Producto 2', 100.00)">Editar</a>
+                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatos(1, '2021-12-01', 'Juan PÃ©rez', 'Enviado', 'Producto 1, Producto 2', 100.00)">Editar</a>
                             <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarModal" onclick="confirmarEliminacion(1)">Eliminar</a>
                         </td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td>2021-12-02</td>
-                        <td>Maria López</td>
+                        <td>Maria LÃ³pez</td>
                         <td>Enviado</td>
                         <td>Producto 3, Producto 4</td>
                         <td>200.00</td>
                         <td>
                             <a href="#" class="btn btn-primary">Ver</a>
-                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatos(2, '2021-12-02', 'Maria López', 'Enviado', 'Producto 3, Producto 4', 200.00)">Editar</a>
+                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatos(2, '2021-12-02', 'Maria LÃ³pez', 'Enviado', 'Producto 3, Producto 4', 200.00)">Editar</a>
                             <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarModal" onclick="confirmarEliminacion(2)">Eliminar</a>
                         </td>
                     </tr>
@@ -123,16 +124,16 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmación de Eliminación -->
+    <!-- Modal de ConfirmaciÃ³n de EliminaciÃ³n -->
     <div class="modal fade" id="eliminarModal" tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="eliminarModalLabel">Confirmar Eliminación</h1>
+                    <h1 class="modal-title fs-5" id="eliminarModalLabel">Confirmar EliminaciÃ³n</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Estás seguro de que deseas eliminar este pedido?</p>
+                    <p>Â¿EstÃ¡s seguro de que deseas eliminar este pedido?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -162,9 +163,9 @@
 
         function eliminarPedido() {
             console.log(`Pedido eliminado: ID=${pedidoIdAEliminar}`);
-            // Aquí puedes agregar el código para eliminar el pedido en tu sistema.
+            // AquÃ­ puedes agregar el cÃ³digo para eliminar el pedido en tu sistema.
 
-            // Cerrar el modal de eliminación
+            // Cerrar el modal de eliminaciÃ³n
             const eliminarModal = document.getElementById('eliminarModal');
             const modal = bootstrap.Modal.getInstance(eliminarModal);
             modal.hide();

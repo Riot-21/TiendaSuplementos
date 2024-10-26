@@ -1,5 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -25,7 +26,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="SalirModalLabel">¿Seguro de salir?</h1>
+                            <h1 class="modal-title fs-5" id="SalirModalLabel">Â¿Seguro de salir?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-footer">
@@ -43,11 +44,11 @@
             <div class="col-md-3">
                 <div class="list-group" id="list-tab" role="tablist">
                     <a class="list-group-item list-group-item-action active" id="list-overview-list"
-                        data-bs-toggle="list" href="#list-overview" role="tab" aria-controls="overview">Información</a>
+                        data-bs-toggle="list" href="#list-overview" role="tab" aria-controls="overview">InformaciÃ³n</a>
                     <a class="list-group-item list-group-item-action" id="list-reports-list" data-bs-toggle="list"
                         href="#list-reports" role="tab" aria-controls="reports">Reportes</a>
                     <a class="list-group-item list-group-item-action" id="list-analytics-list" data-bs-toggle="list"
-                        href="#list-analytics" role="tab" aria-controls="analytics">Analíticas</a>
+                        href="#list-analytics" role="tab" aria-controls="analytics">AnalÃ­ticas</a>
                     <a class="list-group-item list-group-item-action" id="list-export-list" data-bs-toggle="list"
                         href="#list-export" role="tab" aria-controls="export">Exportar</a>
                 </div>
@@ -58,18 +59,18 @@
                         aria-labelledby="list-overview-list">
                         <div class="card">
                             <div class="card-header">
-                                Información General
+                                InformaciÃ³n General
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Bienvenido a la Información de NutriPoint</h5>
-                                <p class="card-text">Aquí puedes ver un resumen de la empresa.</p>
+                                <h5 class="card-title">Bienvenido a la InformaciÃ³n de NutriPoint</h5>
+                                <p class="card-text">AquÃ­ puedes ver un resumen de la empresa.</p>
                                 <hr>
                                 <p><strong>Nombre:</strong> NutriPoint</p>
                                 <p><strong>RUC:</strong> 1716537341001</p>
                                 <p><strong>Sede Principal:</strong> Magdalena del Mar, Lima</p>
-                                <p><strong>Sector:</strong> Servicios de bienestar y mantenimiento físico</p>
-                                <p><strong>Número de empleados:</strong> 235</p>
-                                <p><strong>Número telefónico:</strong> 945796624</p>
+                                <p><strong>Sector:</strong> Servicios de bienestar y mantenimiento fÃ­sico</p>
+                                <p><strong>NÃºmero de empleados:</strong> 235</p>
+                                <p><strong>NÃºmero telefÃ³nico:</strong> 945796624</p>
                                 <hr>
                             </div>
                         </div>
@@ -81,7 +82,7 @@
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Tus reportes</h5>
-                                <p class="card-text">Aquí puedes ver y gestionar tus reportes.</p>
+                                <p class="card-text">AquÃ­ puedes ver y gestionar tus reportes.</p>
                                 <hr>
                                 <div class="d-flex justify-content-between">
                                     <a href="#" class="btn btn-primary">Ver Reportes</a>
@@ -94,15 +95,15 @@
                         aria-labelledby="list-analytics-list">
                         <div class="card">
                             <div class="card-header">
-                                Analíticas
+                                AnalÃ­ticas
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Tus analíticas</h5>
-                                <p class="card-text">Aquí puedes ver y analizar tus datos.</p>
+                                <h5 class="card-title">Tus analÃ­ticas</h5>
+                                <p class="card-text">AquÃ­ puedes ver y analizar tus datos.</p>
                                 <hr>
                                 <div class="d-flex justify-content-between">
-                                    <a href="#" class="btn btn-primary">Ver Analíticas</a>
-                                    <a href="#" class="btn btn-primary">Crear Analítica</a>
+                                    <a href="#" class="btn btn-primary">Ver AnalÃ­ticas</a>
+                                    <a href="#" class="btn btn-primary">Crear AnalÃ­tica</a>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +115,7 @@
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Exportar datos</h5>
-                                <p class="card-text">Aquí puedes exportar tus datos.</p>
+                                <p class="card-text">AquÃ­ puedes exportar tus datos.</p>
                                 <hr>
                                 <div class="d-flex justify-content-between">
                                     <a href="#" class="btn btn-primary">Exportar Datos</a>

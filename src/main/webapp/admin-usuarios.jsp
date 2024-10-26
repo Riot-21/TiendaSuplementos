@@ -2,9 +2,8 @@
 <%@page import="modelo.dto.Usuario"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
     <head>
         <meta charset="utf-8">
@@ -21,7 +20,7 @@
                 <div class="container-fluid">
                     <span class="navbar-brand mb-0 h1 text-light ms-3">Usuarios</span>
                     <div class="d-flex ms-auto">
-                        <a href="admin.jsp" class="btn btn-outline-light me-2">Inicio</a>
+                        <a href="administrador.jsp" class="btn btn-outline-light me-2">Inicio</a>
                         <a href="#" class="btn btn-outline-light" data-bs-toggle="modal"
                            data-bs-target="#SalirModal">Salir</a>
                     </div>

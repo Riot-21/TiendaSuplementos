@@ -1,5 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -24,7 +25,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="SalirModalLabel">¿Seguro de salir?</h1>
+                            <h1 class="modal-title fs-5" id="SalirModalLabel">Â¿Seguro de salir?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-footer">
@@ -45,7 +46,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>DescripciÃ³n</th>
                     <th>Stock</th>
                     <th>Marca</th>
                     <th>Precio U. (S/.)</th>
@@ -58,18 +59,18 @@
                 <tr>
                     <td>1</td>
                     <td>Mutant Mass - 5LB</td>
-                    <td>MUTANT MASS es un excelente ganador de peso muy energético ideal para desarrollar y ganar masa
+                    <td>MUTANT MASS es un excelente ganador de peso muy energÃ©tico ideal para desarrollar y ganar masa
                         muscular</td>
                     <td>15</td>
                     <td>Mutant</td>
                     <td>189</td>
                     <td>Oral</td>
-                    <td>Consumir una vez al día</td>
+                    <td>Consumir una vez al dÃ­a</td>
                     <td>
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-danger btn-sm me-2" onclick="" data-bs-toggle="modal"
                                 data-bs-target="#EliminarProductoModal">Eliminar</button>
-                            <button class="btn btn-warning btn-sm" onclick="cargarDatosProducto(1, 'Mutant Mass - 5LB', 'MUTANT MASS es un excelente ganador de peso muy energético ideal para desarrollar y ganar masa muscular', 15, 'Mutant', 189, 'Oral', 'Consumir una vez al día')" data-bs-toggle="modal"
+                            <button class="btn btn-warning btn-sm" onclick="cargarDatosProducto(1, 'Mutant Mass - 5LB', 'MUTANT MASS es un excelente ganador de peso muy energÃ©tico ideal para desarrollar y ganar masa muscular', 15, 'Mutant', 189, 'Oral', 'Consumir una vez al dÃ­a')" data-bs-toggle="modal"
                                 data-bs-target="#EditarProductoModal">Editar</button>
                         </div>
                     </td>

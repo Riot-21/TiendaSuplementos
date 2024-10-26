@@ -1,5 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -24,7 +25,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="SalirModalLabel">¿Seguro de salir?</h1>
+                            <h1 class="modal-title fs-5" id="SalirModalLabel">Â¿Seguro de salir?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-footer">
@@ -59,11 +60,11 @@
                     <tr>
                         <td>1</td>
                         <td>Juan</td>
-                        <td>Pérez</td>
+                        <td>PÃ©rez</td>
                         <td>12345678</td>
                         <td>juan.perez@example.com</td>
                         <td>
-                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatos(1, 'Juan', 'Pérez', '12345678', 'juan.perez@example.com')">Editar</a>
+                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatos(1, 'Juan', 'PÃ©rez', '12345678', 'juan.perez@example.com')">Editar</a>
                             <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarModal" onclick="confirmarEliminacion(1)">Eliminar</a>
                         </td>
                     </tr>
@@ -96,7 +97,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="agregarDNI" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="agregarDNI" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
+                            <input type="text" class="form-control" id="agregarDNI" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo nÃºmeros">
                         </div>
                         <div class="mb-3">
                             <label for="agregarCorreo" class="form-label">Correo</label>
@@ -130,7 +131,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editarDNI" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="editarDNI" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
+                            <input type="text" class="form-control" id="editarDNI" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo nÃºmeros">
                         </div>
                         <div class="mb-3">
                             <label for="editarCorreo" class="form-label">Correo</label>
@@ -143,16 +144,16 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmación de Eliminación -->
+    <!-- Modal de ConfirmaciÃ³n de EliminaciÃ³n -->
     <div class="modal fade" id="eliminarModal" tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="eliminarModalLabel">Confirmar Eliminación</h1>
+                    <h1 class="modal-title fs-5" id="eliminarModalLabel">Confirmar EliminaciÃ³n</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Estás seguro de que deseas eliminar este Administrador?</p>
+                    <p>Â¿EstÃ¡s seguro de que deseas eliminar este Administrador?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -174,12 +175,12 @@
         }
 
         function confirmarEliminacion(id) {
-            // Aquí puedes guardar el ID para la eliminación
+            // AquÃ­ puedes guardar el ID para la eliminaciÃ³n
             window.idEliminar = id;
         }
 
         function eliminarAdmin() {
-            // Realizar la eliminación utilizando window.idEliminar
+            // Realizar la eliminaciÃ³n utilizando window.idEliminar
             console.log('Eliminar administrador con ID:', window.idEliminar);
             // Luego, cierras el modal
             const eliminarModal = bootstrap.Modal.getInstance(document.getElementById('eliminarModal'));
