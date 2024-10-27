@@ -26,16 +26,16 @@
     <div class="login-container">
         <div class="login-box">
             <h3 class="text-center">Administrador - Iniciar Sesión</h3>
-            <form>
+            <form action="AdminController" method="POST">
                 <div class="form-group">
                     <label for="admin-email">Correo Electrónico de Administrador</label>
-                    <input type="email" class="form-control" id="admin-email" placeholder="Ingresa tu correo de administrador">
+                    <input type="email" class="form-control" name="email" id="admin-email" placeholder="Ingresa tu correo de administrador">
                 </div>
                 <div class="form-group">
                     <label for="admin-password">Contraseña</label>
-                    <input type="password" class="form-control" id="admin-password" placeholder="Ingresa tu contraseña">
+                    <input type="password" class="form-control" name="passw" id="admin-password" placeholder="Ingresa tu contraseña">
                 </div>
-                <button type="submit" class="btn btn-danger btn-block">Iniciar Sesión</button>
+                <button type="submit" class="btn btn-danger btn-block" name="action" value="login">Iniciar Sesión</button>
             </form>
             <div class="text-center mt-3">
                 <p><a href="index.jsp">Volver a la página principal</a></p>

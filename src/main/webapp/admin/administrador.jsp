@@ -32,7 +32,9 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <button type="button" class="btn btn-primary">Salir</button>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="btn btn-primary" name="action" value="logout">Salir</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -48,7 +50,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Usuarios</h5>
                                 <p class="card-text">Gestiona los usuarios del sistema.</p>
-                                <form action="UserController" method="GET">
+                                <form action="${pageContext.request.contextPath}/UserController" method="GET">
                                     <button type="submit" class="btn btn-primary">Mostrar Usuarios</button>
                                 </form>
                             </div>
@@ -59,7 +61,10 @@
                             <div class="card-body">
                                 <h5 class="card-title">Productos</h5>
                                 <p class="card-text">Gestiona los productos disponibles.</p>
-                                <a href="admin-productos.jsp" class="btn btn-primary">Ir a Productos</a>
+                                <form action="${pageContext.request.contextPath}/ProductController" method="GET">
+                                    <button type="submit" class="btn btn-primary" name="action" value="cargartodo">Ir a productos</button>
+                                </form>
+
                             </div>
                         </div>
                     </div>

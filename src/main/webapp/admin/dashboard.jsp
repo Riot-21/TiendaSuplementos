@@ -17,7 +17,7 @@
             <div class="container-fluid">
                 <span class="navbar-brand mb-0 h1 text-light ms-3">DashBoard</span>
                 <div class="d-flex ms-auto">
-                    <a href="index2.jsp" class="btn btn-outline-light me-2">Inicio</a>
+                    <a href="administrador.jsp" class="btn btn-outline-light me-2">Inicio</a>
                     <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#SalirModal">Salir</button>
                 </div>
             </div>
@@ -31,7 +31,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <a href="inicio.jsp" class="btn btn-primary">Salir</a>
+                            <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="btn btn-primary" name="action" value="logout">Salir</button>
+                                </form>
                         </div>
                     </div>
                 </div>

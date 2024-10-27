@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import modelo.dto.Categoria;
 import modelo.dto.ImgProd;
 import modelo.dto.Producto;
@@ -59,6 +61,67 @@ public class ProductoDao {
             System.out.println("Error: " + ex.getMessage());
             throw ex;
         }
+    }
+
+    public Producto obtenerProductoPorId(int id) throws SQLException {
+        Producto producto = null;
+        String query = "SELECT * FROM productos WHERE id_producto = ?";
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, id); // Usamos el ID para la búsqueda
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setDescripcion(rs.getString("descripcion"));
+                producto.setStock(rs.getInt("stock"));
+                producto.setMarca(rs.getString("marca"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setMod_empleo(rs.getString("mod_empleo"));
+                producto.setAdvert(rs.getString("advert"));
+                // También puedes obtener las categorías e imágenes si es necesario
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            throw ex;
+        }
+        return producto;
+    }
+    
+    public List<Producto> obtenerTodosLosProductos() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT * FROM productos";
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto")); // Asegúrate de tener el método setId en Producto
+                producto.setNombre(rs.getString("nombre"));
+                producto.setDescripcion(rs.getString("descripcion"));
+                producto.setStock(rs.getInt("stock"));
+                producto.setMarca(rs.getString("marca"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setMod_empleo(rs.getString("mod_empleo"));
+                producto.setAdvert(rs.getString("advert"));
+
+                // Puedes cargar las categorías e imágenes si lo necesitas
+                // producto.setCategorias(cargarCategoriasPorProducto(producto.getId()));
+                // producto.setImagenes(cargarImagenesPorProducto(producto.getId()));
+
+                productos.add(producto);
+            }
+        }catch(SQLException ex){
+            throw ex;
+        } 
+        return productos;
     }
 
 }

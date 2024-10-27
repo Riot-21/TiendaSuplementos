@@ -29,12 +29,14 @@ public class UserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         List<Usuario> listaUsuarios = new ArrayList<>();
         try {
             listaUsuarios = userdao.listarUsuarios();
             HttpSession misesion = request.getSession();
             misesion.setAttribute("listaUsuarios", listaUsuarios);
-            response.sendRedirect("admin-usuarios.jsp");
+            response.sendRedirect("admin/admin-usuarios.jsp");
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -87,14 +89,14 @@ public class UserController extends HttpServlet {
 
     private void register(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String nombres = request.getParameter("nombres");
         String apellidos = request.getParameter("apellidos");
         String email = request.getParameter("email");
         String contraseña = request.getParameter("pass");
         int dni = Integer.parseInt(request.getParameter("dni"));
         int telefono = Integer.parseInt(request.getParameter("telefono"));
-        System.out.println("nombre antes del dao: "+nombres);
+        System.out.println("nombre antes del dao: " + nombres);
         Usuario newuser = new Usuario();
         newuser.setNombres(nombres);
         newuser.setApellidos(apellidos);

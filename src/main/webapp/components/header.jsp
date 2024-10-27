@@ -37,31 +37,33 @@
             </form>
 
 
-            
+            <!-- Contenedor del ícono de usuario y el menú desplegable -->
+            <c:if test="${not empty sessionScope.usuario}">
+                <div class="dropdown">
+                    <!-- Ícono de usuario con menú desplegable -->
+                    <a class="nav-icon text-white ms-3" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                        <i class="fa fa-user fa-lg"></i>
+                    </a>
 
-            <!-- Ícono de usuario -->
-            <a class="nav-icon text-secondary" href="login.jsp" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-user fa-lg"></i>
-            </a>
-  
-                <!-- Menú desplegable -->
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                    <!-- Menú desplegable -->
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Configuración</a></li>
+                        <li>
+                            <form action="${pageContext.request.contextPath}/UserController" method="post">
+                                <button type="submit" name="action" value="logout" class="dropdown-item">Cerrar Sesión</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </c:if>
 
-                <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
-                <li><a class="dropdown-item" href="#">Configuración</a></li>
-                <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
-            </ul>
-
-            
-
-            <!-- Icono de Usuario -->
-            <!--<a class="nav-icon text-white ms-3" href="login.jsp">
-                <i class="fa fa-user fa-lg"></i>
-            </a>
-            <form action="${pageContext.request.contextPath}/UserController" method="post">
-
-                <button type="submit" name="action" value="logout">Cerrar sesión</button>
-            </form>-->
+            <!-- Mostrar solo el ícono de usuario para redireccionar al login si no hay sesión activa -->
+            <c:if test="${empty sessionScope.usuario}">
+                <a class="nav-icon text-white ms-3" href="login.jsp">
+                    <i class="fa fa-user fa-lg"></i>
+                </a>
+            </c:if>
 
 
             <!-- Icono Carrito -->

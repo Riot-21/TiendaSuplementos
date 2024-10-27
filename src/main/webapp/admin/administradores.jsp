@@ -17,7 +17,7 @@
             <div class="container-fluid">
                 <span class="navbar-brand mb-0 h1 text-light ms-3">Administradores</span>
                 <div class="d-flex ms-auto">
-                    <a href="index.jsp" class="btn btn-outline-light me-2">Inicio</a>
+                    <a href="administrador.jsp" class="btn btn-outline-light me-2">Inicio</a>
                     <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#SalirModal">Salir</button>
                 </div>
             </div>
@@ -30,7 +30,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <a href="inicio.jsp" class="btn btn-primary">Salir</a>
+                            <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="btn btn-primary" name="action" value="logout">Salir</button>
+                                </form>
                         </div>
                     </div>
                 </div>
@@ -82,28 +84,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formAgregarAdmin">
-                        <div class="mb-3">
-                            <label for="agregarId" class="form-label">ID</label>
-                            <input type="text" class="form-control" id="agregarId" required>
-                        </div>
+                    <form id="formAgregarAdmin" action="${pageContext.request.contextPath}/AdminController" method="POST">
                         <div class="mb-3">
                             <label for="agregarNombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="agregarNombre" required>
+                            <input type="text" class="form-control" id="agregarNombre" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="agregarApellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="agregarApellido" required>
+                            <input type="text" class="form-control" id="agregarApellido" name="lastname" required>
                         </div>
                         <div class="mb-3">
                             <label for="agregarDNI" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="agregarDNI" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
+                            <input type="text" class="form-control" id="agregarDNI" name="dni" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
+                        </div>
+                        <div class="mb-3">
+                            <label for="agregarTelf" class="form-label">Telefono</label>
+                            <input type="text" class="form-control" id="agregarCorreo" name="tel" required>
                         </div>
                         <div class="mb-3">
                             <label for="agregarCorreo" class="form-label">Correo</label>
-                            <input type="email" class="form-control" id="agregarCorreo" required>
+                            <input type="email" class="form-control" id="agregarCorreo" name="email" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Agregar Administrador</button>
+                        <div class="mb-3">
+                            <label for="agregarClave" class="form-label">Clave</label>
+                            <input type="text" class="form-control" id="agregarCorreo" name="passw" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="action" value="register">Agregar Administrador</button>
                     </form>
                 </div>
             </div>

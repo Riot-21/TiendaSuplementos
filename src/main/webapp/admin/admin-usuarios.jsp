@@ -1,5 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="modelo.dto.Usuario"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
@@ -36,7 +37,9 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <button type="button" class="btn btn-primary">Salir</button>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="btn btn-primary" name="action" value="logout">Salir</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -47,45 +50,41 @@
         <div class="container mt-4">
             <h2>Usuarios</h2>
             <p>Lista de usuarios en la plataforma.</p>
-            <form action="UserController" method="GET">
+            <form action="${pageContext.request.contextPath}/UserController" method="GET">
                 <button type="submit" class="btn btn-primary">Recargar</button>
             </form>
-            <!-- Simulación de lista de usuarios -->
-            <table class="table table-striped table-bordered mt-3">
-                <thead class="thead-dark"></thead>
+             <!-- Tabla de usuarios -->
+    <table class="table table-striped table-bordered mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+                <th>DNI</th>
+                <th>Telefono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="usu" items="${sessionScope.listaUsuarios}">
                 <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Email</th>
-                    <th>DNI</th>
-                    <th>Telefono</th>
-                    <th>Acciones</th>
+                    <td>${usu.idUsuario}</td>
+                    <td>${usu.nombres}</td>
+                    <td>${usu.apellidos}</td>
+                    <td>${usu.email}</td>
+                    <td>${usu.dni}</td>
+                    <td>${usu.telefono}</td>
+                    <td>
+                        <form action="SvEliminar" method="POST">
+                            <input type="hidden" name="idUsuario" value="${usu.idUsuario}" />
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button> 
+                        </form>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-
-                    <%
-                        List<Usuario> listaUsuarios = (List) request.getSession().getAttribute("listaUsuarios");
-                        for (Usuario usu : listaUsuarios) {
-                    %>
-                    <tr>
-                        <td><%=usu.getIdUsuario()%></td>
-                        <td><%=usu.getNombres()%></td>
-                        <td><%=usu.getApellidos()%></td>
-                        <td><%=usu.getEmail()%></td>
-                        <td><%=usu.getDni()%></td>
-                        <td><%=usu.getTelefono()%></td>
-                        <td>
-                            <form action="SvEliminar" method="POST">
-                                <input type="hidden" name="idUsuario" value="<%=usu.getIdUsuario()%>" />
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button> 
-                            </form>
-                        </td>
-                    </tr>
-                    <%}%>
-                </tbody>
-            </table>
+            </c:forEach>
+        </tbody>
+    </table>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
