@@ -40,7 +40,7 @@ public class SvEliminar extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("idUsuario"));
         try {
             userdao.eliminarUsuario(id);
-            response.sendRedirect("admin-usuarios.jsp");
+            response.sendRedirect("admin/admin-usuarios.jsp");
         } catch (SQLException ex) {
             Logger.getLogger(SvEliminar.class.getName()).log(Level.SEVERE, null, ex);
         }

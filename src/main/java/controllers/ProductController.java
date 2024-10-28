@@ -58,18 +58,6 @@ public class ProductController extends HttpServlet {
         }
         System.out.println("Action: " + action);
     }
-//private void cargarProductos(HttpServletRequest request, HttpServletResponse response)
-//        throws ServletException, IOException {
-//    response.setContentType("application/json;charset=UTF-8");
-//    try {
-//        List<Producto> productos = producdao.obtenerTodosLosProductos();
-//        Gson gson = new Gson();
-//        String json = gson.toJson(productos);
-//        response.getWriter().write(json);
-//    } catch (SQLException ex) {
-//        response.getWriter().write("{\"error\":\"Error al cargar los productos: " + ex.getMessage() + "\"}");
-//    }
-//}
 
     private void cargarProductos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

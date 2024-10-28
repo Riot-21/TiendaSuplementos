@@ -3,6 +3,10 @@ package controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +30,15 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        List<Administrador> listaAdmin = new ArrayList<>();
+        try {
+            listaAdmin = admindao.listarAdmin();
+            HttpSession misesion = request.getSession();
+            misesion.setAttribute("listaAdmin", listaAdmin);
+            response.sendRedirect("admin/administradores.jsp");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

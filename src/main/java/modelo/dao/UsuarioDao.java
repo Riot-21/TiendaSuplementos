@@ -113,14 +113,7 @@ public class UsuarioDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println("Error al eliminar usuario: " + ex.getMessage());
-        } finally {
-            if (ps != null) {
-                ps.close();
-            }
-            if (cnx != null) {
-                cnx.close();
-            }
-        }
+        } 
 
         return eliminado;
     }

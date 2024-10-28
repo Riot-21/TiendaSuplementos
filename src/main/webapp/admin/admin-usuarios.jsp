@@ -1,5 +1,3 @@
-<%@page import="java.util.List"%>
-<%@page import="modelo.dto.Usuario"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -76,7 +74,7 @@
                     <td>${usu.dni}</td>
                     <td>${usu.telefono}</td>
                     <td>
-                        <form action="SvEliminar" method="POST">
+                        <form action="${pageContext.request.contextPath}/SvEliminar" method="POST">
                             <input type="hidden" name="idUsuario" value="${usu.idUsuario}" />
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button> 
                         </form>

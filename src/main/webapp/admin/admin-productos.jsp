@@ -18,7 +18,7 @@
                 <div class="container-fluid">
                     <span class="navbar-brand mb-0 h1 text-light ms-3">Administradores</span>
                     <div class="d-flex ms-auto">
-                        <a href="administrador.jsp" class="btn btn-outline-light me-2">Inicio</a>
+                        <a href="admin/administrador.jsp" class="btn btn-outline-light me-2">Inicio</a>
                         <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#SalirModal">Salir</button>
                     </div>
                 </div>

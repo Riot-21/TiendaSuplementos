@@ -102,7 +102,9 @@
                             <div class="card-body">
                                 <h5 class="card-title">Administradores</h5>
                                 <p class="card-text">Gestiona los usuarios administradores.</p>
-                                <a href="administradores.jsp" class="btn btn-primary">Ir a Administradores</a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="GET">
+                                    <button type="submit" class="btn btn-primary">Ir a Administradores</button>
+                                </form>
                             </div>
                         </div>
                     </div>
