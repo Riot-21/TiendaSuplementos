@@ -38,14 +38,14 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
         </dependency>
 
         <!-- Apache Commons IO -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>2.14.0</version>
         </dependency>
         <!-- Dependencia para manejar datos JSON -->
         <dependency>
@@ -53,6 +53,34 @@
             <artifactId>gson</artifactId>
             <version>2.11.0</version> 
         </dependency>
+        
+            <!-- Dependencia principal de Apache POI -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>5.2.3</version>
+    </dependency>
+    
+    <!-- Dependencia para soporte de archivos Excel (.xlsx) -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.2.3</version>
+    </dependency>
+    
+    <!-- Dependencia para manejo de imágenes (opcional, si usarás logos o gráficos) -->
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>4.4</version>
+    </dependency>
+
+    <!-- Dependencia para soporte XML (necesario para poi-ooxml) -->
+    <dependency>
+        <groupId>org.apache.xmlbeans</groupId>
+        <artifactId>xmlbeans</artifactId>
+        <version>5.1.1</version>
+    </dependency>
     </dependencies>
 
     <build>

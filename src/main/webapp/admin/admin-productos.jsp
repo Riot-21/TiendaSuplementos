@@ -83,6 +83,14 @@
                     </c:forEach>
                 </tbody>
             </table>
+            
+            <div class="d-flex justify-content-end mb-3">
+    <form action="${pageContext.request.contextPath}/ProductController" method="GET">
+        <button type="submit" class="btn btn-success" name="action" value="exportarExcel">
+            Exportar a Excel
+        </button>
+    </form>
+</div>
 
 
             <!-- Modal Editar Producto -->
@@ -168,51 +176,6 @@
             }
             </script>
             
-            <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetchProductos();
-    });
-
-    function fetchProductos() {
-        fetch(`${pageContext.request.contextPath}/ProductController?action=cargartodo`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al obtener los productos');
-                }
-                return response.json();
-            })
-            .then(productos => {
-                const tbody = document.querySelector("tbody");
-                tbody.innerHTML = ""; // Limpiar contenido actual
-
-                productos.forEach(producto => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${producto.idProducto}</td>
-                        <td>${producto.nombre}</td>
-                        <td>${producto.descripcion}</td>
-                        <td>${producto.stock}</td>
-                        <td>${producto.marca}</td>
-                        <td>${producto.preciounit}</td>
-                        <td>${producto.mod_empleo}</td>
-                        <td>${producto.advert}</td>
-                        <td>
-                            <div class="d-flex justify-content-between">
-                                <button class="btn btn-danger btn-sm me-2" data-bs-toggle="modal"
-                                        data-bs-target="#EliminarProductoModal">Eliminar</button>
-                                <button class="btn btn-warning btn-sm" onclick="cargarDatosProducto(${producto.idProducto})" data-bs-toggle="modal"
-                                        data-bs-target="#EditarProductoModal">Editar</button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-    }
-</script>
 
 
             </body>
