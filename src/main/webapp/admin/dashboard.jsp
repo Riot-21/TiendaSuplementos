@@ -2,138 +2,191 @@
 <!doctype html>
 <html lang="es">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Administrador</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Administrador</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            .sidebar {
+                height: 100vh;
+            }
 
-<body>
+            .profile-img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                margin-bottom: 10px;
+            }
 
-    <header>
-        <nav class="navbar navbar-light navbar-expand-lg bg-primary shadow-sm">
-            <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1 text-light ms-3">DashBoard</span>
-                <div class="d-flex ms-auto">
-                    <a href="administrador.jsp" class="btn btn-outline-light me-2">Inicio</a>
-                    <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#SalirModal">Salir</button>
-                </div>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="SalirModal" tabindex="-1" aria-labelledby="SalirModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="SalirModalLabel">¿Seguro de salir?</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <form action="${pageContext.request.contextPath}/AdminController" method="POST">
-                                    <button type="submit" class="btn btn-primary" name="action" value="logout">Salir</button>
-                                </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+            .sidebar-heading {
+                text-align: center;
+                color: #ffffff;
+                font-weight: bold;
+                font-size: 1.2rem;
+                margin-top: 10px;
+            }
 
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-overview-list"
-                        data-bs-toggle="list" href="#list-overview" role="tab" aria-controls="overview">Información</a>
-                    <a class="list-group-item list-group-item-action" id="list-reports-list" data-bs-toggle="list"
-                        href="#list-reports" role="tab" aria-controls="reports">Reportes</a>
-                    <a class="list-group-item list-group-item-action" id="list-analytics-list" data-bs-toggle="list"
-                        href="#list-analytics" role="tab" aria-controls="analytics">Analíticas</a>
-                    <a class="list-group-item list-group-item-action" id="list-export-list" data-bs-toggle="list"
-                        href="#list-export" role="tab" aria-controls="export">Exportar</a>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="list-overview" role="tabpanel"
-                        aria-labelledby="list-overview-list">
+            .nav-link:hover {
+                background-color: #343a40;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar p-3">
+                    <div class="position-sticky d-flex flex-column align-items-center">
+                        <img src="assets/img/usuario.avif" alt="Admin" class="profile-img">
+                        <div class="sidebar-heading">Administrador</div>
+                        <ul class="nav flex-column mt-3 w-100">
+                            <li class="nav-item p-2">
+                                <a class="nav-link active text-white" href="dashboard.jsp">
+                                    <i class="fa-solid fa-house me-2"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-white" href="admin-usuarios.jsp">
+                                    <i class="fas fa-users me-2"></i> Usuarios
+                                </a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-white" href="admin-productos.jsp">
+                                    <i class="fas fa-boxes me-2"></i>Productos
+                                </a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-white" href="admin-nuevoprod.jsp">
+                                    <i class="fa-solid fa-plus me-2"></i>Nuevo Producto
+                                </a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-white" href="pedidos.jsp">
+                                    <i class="fa-solid fa-cart-shopping me-2"></i>Pedidos
+                                </a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-white" href="administradores.jsp">
+                                    <i class="fas fa-user me-2"></i>Administradores
+                                </a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-white" href="#">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Salir
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-1">
+                    <h1>DASHBOARD</h1>
+                <p>Aquí puedes ver las estadísticas principales de NutriPoint.</p>
+                <div class="row">
+                    <div class="col-md-4">
                         <div class="card">
-                            <div class="card-header">
-                                Información General
-                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Bienvenido a la Información de NutriPoint</h5>
-                                <p class="card-text">Aquí puedes ver un resumen de la empresa.</p>
-                                <hr>
-                                <p><strong>Nombre:</strong> NutriPoint</p>
-                                <p><strong>RUC:</strong> 1716537341001</p>
-                                <p><strong>Sede Principal:</strong> Magdalena del Mar, Lima</p>
-                                <p><strong>Sector:</strong> Servicios de bienestar y mantenimiento físico</p>
-                                <p><strong>Número de empleados:</strong> 235</p>
-                                <p><strong>Número telefónico:</strong> 945796624</p>
-                                <hr>
+                                <h5 class="card-title text-primary">Usuario Registrados</h5>
+                                <p><strong>145 usuarios registrados</strong></p>
+                                <small>+18 en la última semana</small>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="list-reports" role="tabpanel" aria-labelledby="list-reports-list">
+                    <div class="col-md-4">
                         <div class="card">
-                            <div class="card-header">
-                                Reportes
-                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Tus reportes</h5>
-                                <p class="card-text">Aquí puedes ver y gestionar tus reportes.</p>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="btn btn-primary">Ver Reportes</a>
-                                    <a href="#" class="btn btn-primary">Crear Reporte</a>
-                                </div>
+                                <h5 class="card-title text-primary">Productos Disponibles</h5>
+                                <p><strong>234 prodcutos disponibles</strong></p>
+                                <small>+36 en la última semana</small>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="list-analytics" role="tabpanel"
-                        aria-labelledby="list-analytics-list">
+                    <div class="col-md-4">
                         <div class="card">
-                            <div class="card-header">
-                                Analíticas
-                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Tus analíticas</h5>
-                                <p class="card-text">Aquí puedes ver y analizar tus datos.</p>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="btn btn-primary">Ver Analíticas</a>
-                                    <a href="#" class="btn btn-primary">Crear Analítica</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="list-export" role="tabpanel" aria-labelledby="list-export-list">
-                        <div class="card">
-                            <div class="card-header">
-                                Exportar
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Exportar datos</h5>
-                                <p class="card-text">Aquí puedes exportar tus datos.</p>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="btn btn-primary">Exportar Datos</a>
-                                    <a href="#" class="btn btn-primary">Exportar Reportes</a>
-                                </div>
+                                <h5 class="card-title text-primary">Ventas</h5>
+                                <p><strong>2500 ventas registradas</strong></p>
+                                <small>+78 en la última semana</small>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-primary card-title">Productos más vendidos</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Producto</th>
+                                            <th>Ventas</th>
+                                            <th>Precio</th>
+                                            <th>Stock</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>00167</th>
+                                            <td>Proteína de suero</td>
+                                            <td>1200</td>
+                                            <td>$120.00</td>
+                                            <td>134</td>
+                                        </tr>
+                                        <tr>
+                                            <th>00357</th>
+                                            <td>Vitaminas b12</td>
+                                            <td>980</td>
+                                            <td>$98.00</td>
+                                            <td>198</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-primary card-title">Usuarios más activos</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>DNI</th>
+                                            <th>Compras</th>
+                                            <th>Valor Prom.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Jhoan Muñoz</td>
+                                            <td>74640816</td>
+                                            <td>65</td>
+                                            <td>S/. 124</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Miguel Ruiz</td>
+                                            <td>74688816</td>
+                                            <td>54</td>
+                                            <td>S/. 114</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </main>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-</body>
+    </body>
 
 </html>
