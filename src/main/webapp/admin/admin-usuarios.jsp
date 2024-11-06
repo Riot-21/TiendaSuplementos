@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="es">
@@ -52,14 +51,16 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="admin-usuarios.jsp">
-                                    <i class="fas fa-users me-2"></i> Usuarios
-                                </a>
+                                <form action="${pageContext.request.contextPath}/UserController" method="GET">
+                                    <button type="submit" class="nav-link text-white">
+                                        <i class="fas fa-users me-2"></i>Usuarios</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="admin-productos.jsp">
-                                    <i class="fas fa-boxes me-2"></i>Productos
-                                </a>
+                                <form action="${pageContext.request.contextPath}/ProductController" method="GET">
+                                    <button type="submit" class="nav-link text-white" name="action" value="cargartodo">
+                                        <i class="fas fa-boxes me-2"></i>Productos</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
                                 <a class="nav-link text-white" href="admin-nuevoprod.jsp">
@@ -72,14 +73,15 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="administradores.jsp">
-                                    <i class="fas fa-user me-2"></i>Administradores
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="GET">
+                                    <button type="submit" class="nav-link text-white">
+                                        <i class="fas fa-user me-2"></i>Administradores</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="#">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Salir
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="nav-link text-white" name="action" value="logout"><i class="fas fa-sign-out-alt me-2"></i>Salir</button>
+                                </form>
                             </li>
                         </ul>
                     </div>
@@ -92,6 +94,7 @@
                         <form action="${pageContext.request.contextPath}/UserController" method="GET">
                             <button type="submit" class="btn btn-primary">Recargar</button>
                         </form>
+                        <hr>
                         <!-- Tabla de usuarios -->
                         <table class="table table-striped table-bordered mt-3">
                             <thead class="thead-dark">

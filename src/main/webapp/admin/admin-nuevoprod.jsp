@@ -78,9 +78,9 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="#">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Salir
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="nav-link text-white" name="action" value="logout"><i class="fas fa-sign-out-alt me-2"></i>Salir</button>
+                                </form>
                             </li>
                         </ul>
                     </div>

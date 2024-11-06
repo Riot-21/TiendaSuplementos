@@ -1,0 +1,22 @@
+.sidebar {
+    height: 100vh;
+}
+
+.profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.sidebar-heading {
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.nav-link:hover {
+    background-color: #343a40;
+}

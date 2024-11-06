@@ -1,4 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!doctype html>
 <html lang="es">
 
@@ -49,14 +51,16 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="admin-usuarios.jsp">
-                                    <i class="fas fa-users me-2"></i> Usuarios
-                                </a>
+                                <form action="${pageContext.request.contextPath}/UserController" method="GET">
+                                    <button type="submit" class="nav-link text-white">
+                                        <i class="fas fa-users me-2"></i>Usuarios</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="admin-productos.jsp">
-                                    <i class="fas fa-boxes me-2"></i>Productos
-                                </a>
+                                <form action="${pageContext.request.contextPath}/ProductController" method="GET">
+                                    <button type="submit" class="nav-link text-white" name="action" value="cargartodo">
+                                        <i class="fas fa-boxes me-2"></i>Productos</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
                                 <a class="nav-link text-white" href="admin-nuevoprod.jsp">
@@ -69,117 +73,118 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="administradores.jsp">
-                                    <i class="fas fa-user me-2"></i>Administradores
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="GET">
+                                    <button type="submit" class="nav-link text-white">
+                                        <i class="fas fa-user me-2"></i>Administradores</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="#">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Salir
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="nav-link text-white" name="action" value="logout"><i class="fas fa-sign-out-alt me-2"></i>Salir</button>
+                                </form>
                             </li>
                         </ul>
                     </div>
                 </nav>
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-1">
                     <h1>DASHBOARD</h1>
-                <p>Aquí puedes ver las estadísticas principales de NutriPoint.</p>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary">Usuario Registrados</h5>
-                                <p><strong>145 usuarios registrados</strong></p>
-                                <small>+18 en la última semana</small>
+                    <p>Aquí puedes ver las estadísticas principales de NutriPoint.</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Usuario Registrados</h5>
+                                    <p><strong>145 usuarios registrados</strong></p>
+                                    <small>+18 en la última semana</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Productos Disponibles</h5>
+                                    <p><strong>234 prodcutos disponibles</strong></p>
+                                    <small>+36 en la última semana</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Ventas</h5>
+                                    <p><strong>2500 ventas registradas</strong></p>
+                                    <small>+78 en la última semana</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary">Productos Disponibles</h5>
-                                <p><strong>234 prodcutos disponibles</strong></p>
-                                <small>+36 en la última semana</small>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="text-primary card-title">Productos más vendidos</h5>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Producto</th>
+                                                <th>Ventas</th>
+                                                <th>Precio</th>
+                                                <th>Stock</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>00167</th>
+                                                <td>Proteína de suero</td>
+                                                <td>1200</td>
+                                                <td>$120.00</td>
+                                                <td>134</td>
+                                            </tr>
+                                            <tr>
+                                                <th>00357</th>
+                                                <td>Vitaminas b12</td>
+                                                <td>980</td>
+                                                <td>$98.00</td>
+                                                <td>198</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="text-primary card-title">Usuarios más activos</h5>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>DNI</th>
+                                                <th>Compras</th>
+                                                <th>Valor Prom.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Jhoan Muñoz</td>
+                                                <td>74640816</td>
+                                                <td>65</td>
+                                                <td>S/. 124</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Miguel Ruiz</td>
+                                                <td>74688816</td>
+                                                <td>54</td>
+                                                <td>S/. 114</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary">Ventas</h5>
-                                <p><strong>2500 ventas registradas</strong></p>
-                                <small>+78 en la última semana</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="text-primary card-title">Productos más vendidos</h5>
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Producto</th>
-                                            <th>Ventas</th>
-                                            <th>Precio</th>
-                                            <th>Stock</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th>00167</th>
-                                            <td>Proteína de suero</td>
-                                            <td>1200</td>
-                                            <td>$120.00</td>
-                                            <td>134</td>
-                                        </tr>
-                                        <tr>
-                                            <th>00357</th>
-                                            <td>Vitaminas b12</td>
-                                            <td>980</td>
-                                            <td>$98.00</td>
-                                            <td>198</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="text-primary card-title">Usuarios más activos</h5>
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>DNI</th>
-                                            <th>Compras</th>
-                                            <th>Valor Prom.</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Jhoan Muñoz</td>
-                                            <td>74640816</td>
-                                            <td>65</td>
-                                            <td>S/. 124</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Miguel Ruiz</td>
-                                            <td>74688816</td>
-                                            <td>54</td>
-                                            <td>S/. 114</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </main>
             </div>
         </div>

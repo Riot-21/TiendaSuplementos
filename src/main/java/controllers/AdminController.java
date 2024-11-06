@@ -70,7 +70,7 @@ public class AdminController extends HttpServlet {
                 // Si el admin es válido, crear o obtener la sesión y redirigir a index.jsp
                 HttpSession session = request.getSession(true);  // No usar false aquí, ya que necesitamos una sesión
                 session.setAttribute("administrador", admin);
-                response.sendRedirect("admin/administrador.jsp");
+                response.sendRedirect("admin/dashboard.jsp");
             } else {
                 // Si los datos son incorrectos, mostrar mensaje de error y redirigir a login.jsp
                 request.setAttribute("error", "Aministrador o contraseña incorrectos");

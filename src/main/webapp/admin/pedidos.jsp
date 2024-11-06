@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="es">
@@ -50,14 +51,16 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="admin-usuarios.jsp">
-                                    <i class="fas fa-users me-2"></i> Usuarios
-                                </a>
+                                <form action="${pageContext.request.contextPath}/UserController" method="GET">
+                                    <button type="submit" class="nav-link text-white">
+                                        <i class="fas fa-users me-2"></i>Usuarios</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="admin-productos.jsp">
-                                    <i class="fas fa-boxes me-2"></i>Productos
-                                </a>
+                                <form action="${pageContext.request.contextPath}/ProductController" method="GET">
+                                    <button type="submit" class="nav-link text-white" name="action" value="cargartodo">
+                                        <i class="fas fa-boxes me-2"></i>Productos</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
                                 <a class="nav-link text-white" href="admin-nuevoprod.jsp">
@@ -70,14 +73,15 @@
                                 </a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="administradores.jsp">
-                                    <i class="fas fa-user me-2"></i>Administradores
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="GET">
+                                    <button type="submit" class="nav-link text-white">
+                                        <i class="fas fa-user me-2"></i>Administradores</button>
+                                </form>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-white" href="#">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Salir
-                                </a>
+                                <form action="${pageContext.request.contextPath}/AdminController" method="POST">
+                                    <button type="submit" class="nav-link text-white" name="action" value="logout"><i class="fas fa-sign-out-alt me-2"></i>Salir</button>
+                                </form>
                             </li>
                         </ul>
                     </div>
@@ -193,30 +197,30 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
         <script>
-                            let pedidoIdAEliminar;
+                                    let pedidoIdAEliminar;
 
-                            function cargarDatos(id, fecha, cliente, estado, productos, total) {
-                                document.getElementById('editarId').value = id;
-                                document.getElementById('editarFecha').value = fecha;
-                                document.getElementById('editarCliente').value = cliente;
-                                document.getElementById('editarEstado').value = estado;
-                                document.getElementById('editarProductos').value = productos;
-                                document.getElementById('editarTotal').value = total;
-                            }
+                                    function cargarDatos(id, fecha, cliente, estado, productos, total) {
+                                        document.getElementById('editarId').value = id;
+                                        document.getElementById('editarFecha').value = fecha;
+                                        document.getElementById('editarCliente').value = cliente;
+                                        document.getElementById('editarEstado').value = estado;
+                                        document.getElementById('editarProductos').value = productos;
+                                        document.getElementById('editarTotal').value = total;
+                                    }
 
-                            function confirmarEliminacion(id) {
-                                pedidoIdAEliminar = id;
-                            }
+                                    function confirmarEliminacion(id) {
+                                        pedidoIdAEliminar = id;
+                                    }
 
-                            function eliminarPedido() {
-                                console.log(`Pedido eliminado: ID=${pedidoIdAEliminar}`);
-                                // Aquí puedes agregar el código para eliminar el pedido en tu sistema.
+                                    function eliminarPedido() {
+                                        console.log(`Pedido eliminado: ID=${pedidoIdAEliminar}`);
+                                        // Aquí puedes agregar el código para eliminar el pedido en tu sistema.
 
-                                // Cerrar el modal de eliminación
-                                const eliminarModal = document.getElementById('eliminarModal');
-                                const modal = bootstrap.Modal.getInstance(eliminarModal);
-                                modal.hide();
-                            }
+                                        // Cerrar el modal de eliminación
+                                        const eliminarModal = document.getElementById('eliminarModal');
+                                        const modal = bootstrap.Modal.getInstance(eliminarModal);
+                                        modal.hide();
+                                    }
         </script>
     </body>
 
