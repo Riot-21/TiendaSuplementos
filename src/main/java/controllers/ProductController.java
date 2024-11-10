@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.dao.CategoriaDao;
-import modelo.dao.ImagenProdDao;
 import modelo.dao.ProductoDao;
 import modelo.dto.Categoria;
 import modelo.dto.ImgProd;
@@ -43,13 +42,11 @@ public class ProductController extends HttpServlet {
 
     private ProductoDao producdao;
     private CategoriaDao catdao;
-    private ImagenProdDao imgdao;
 
     @Override
     public void init() {
         producdao = new ProductoDao();
         catdao = new CategoriaDao();
-        imgdao = new ImagenProdDao();
     }
 
     @Override
@@ -63,11 +60,26 @@ public class ProductController extends HttpServlet {
             cargarProductos(request, response);
         } else if ("cargarid".equals(action)) {
             cargarPorId(request, response);
-        }else if ("exportarExcel".equals(action)) {
-            
+        } else if ("exportarExcel".equals(action)) {
             exportarExcel(request, response);
-        }
-        System.out.println("Action: " + action);
+        } else if ("tienda".equals(action)) {
+            ProdTienda(request, response);}
+        
+            System.out.println("Action: " + action);       
+    }    
+
+    private void ProdTienda(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException{
+            try{
+                List<Producto> productos = producdao.ProductosTienda();
+                request.setAttribute("tienda", productos);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
+                dispatcher.forward(request, response);
+            }catch(SQLException ex){
+                request.setAttribute("error", "Error al cargar los productos: " + ex.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.forward(request, response);
+            }
     }
 
     private void cargarProductos(HttpServletRequest request, HttpServletResponse response)
@@ -80,7 +92,7 @@ public class ProductController extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (SQLException ex) {
             request.setAttribute("error", "Error al cargar los productos: " + ex.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             dispatcher.forward(request, response);
         }
     }
@@ -109,98 +121,96 @@ public class ProductController extends HttpServlet {
         }
     }
 
+    private void exportarExcel(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Lista de Productos");
 
-private void exportarExcel(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    try {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Lista de Productos");
-        
-        // Estilos para el título y los encabezados
-        CellStyle titleStyle = workbook.createCellStyle();
-        Font titleFont = workbook.createFont();
-        titleFont.setBold(true);
-        titleFont.setFontHeightInPoints((short) 16);
-        titleStyle.setFont(titleFont);
-        
-        CellStyle headerStyle = workbook.createCellStyle();
-        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        Font headerFont = workbook.createFont();
-        headerFont.setBold(true);
-        headerFont.setFontHeightInPoints((short) 12);
-        headerStyle.setFont(headerFont);
-        
-        // Título y logo
-        Row titleRow = sheet.createRow(0);
-        Cell titleCell = titleRow.createCell(1);
-        titleCell.setCellValue("Lista de Productos - Nutripooint");
-        titleCell.setCellStyle(titleStyle);
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 6)); // Ajustar rango según el número de columnas
-        
-        // Agregar el logo
-        String relativePath = "/img/4.png";
-        try (InputStream logoStream = new FileInputStream(getServletContext().getRealPath(relativePath))) {
-            BufferedImage logo = ImageIO.read(logoStream);
-            ByteArrayOutputStream logoBytes = new ByteArrayOutputStream();
-            ImageIO.write(logo, "png", logoBytes);
-            int logoIndex = workbook.addPicture(logoBytes.toByteArray(), Workbook.PICTURE_TYPE_PNG);
-            Drawing<?> drawing = sheet.createDrawingPatriarch();
-            ClientAnchor anchor = new XSSFClientAnchor();
-            anchor.setCol1(0);
-            anchor.setRow1(1);
-            anchor.setAnchorType(AnchorType.DONT_MOVE_DO_RESIZE);
-            Picture logoPicture = drawing.createPicture(anchor, logoIndex);
-            logoPicture.resize(0.5, 0.5); // Ajustar tamaño según sea necesario
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        // Encabezados de columnas
-        String[] headers = {"ID", "Nombre", "Descripción", "Stock", "Marca", "Precio", "Modo Empleo", "Advertencia"};
-        Row headerRow = sheet.createRow(4);
-        for (int i = 0; i < headers.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(headers[i]);
-            cell.setCellStyle(headerStyle);
-        }
-        
-        // Obtener productos de la base de datos
-        List<Producto> productos = producdao.obtenerTodosLosProductos();
-        int rowNum = 5;  // Fila de inicio para los datos
-        
-        for (Producto producto : productos) {
-            Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(producto.getIdProducto());
-            row.createCell(1).setCellValue(producto.getNombre());
-            row.createCell(2).setCellValue(producto.getDescripcion());
-            row.createCell(3).setCellValue(producto.getStock());
-            row.createCell(4).setCellValue(producto.getMarca());
-            row.createCell(5).setCellValue(producto.getPreciounit());
-            row.createCell(6).setCellValue(producto.getMod_empleo());
-            row.createCell(7).setCellValue(producto.getAdvert());
-        }
-        
-        // Ajustar el tamaño de las columnas
-        for (int i = 0; i < headers.length; i++) {
-            sheet.autoSizeColumn(i);
-        }
-        
-        // Configurar respuesta HTTP
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=ListaProductos.xlsx");
-        
-        // Escribir el archivo y cerrarlo
-        try (OutputStream out = response.getOutputStream()) {
-            workbook.write(out);
-        } finally {
-            workbook.close();
-        }
-    } catch (SQLException ex) {
+            // Estilos para el título y los encabezados
+            CellStyle titleStyle = workbook.createCellStyle();
+            Font titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 16);
+            titleStyle.setFont(titleFont);
+
+            CellStyle headerStyle = workbook.createCellStyle();
+            headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerFont.setFontHeightInPoints((short) 12);
+            headerStyle.setFont(headerFont);
+
+            // Título y logo
+            Row titleRow = sheet.createRow(0);
+            Cell titleCell = titleRow.createCell(1);
+            titleCell.setCellValue("Lista de Productos - Nutripooint");
+            titleCell.setCellStyle(titleStyle);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 6)); // Ajustar rango según el número de columnas
+
+            // Agregar el logo
+            String relativePath = "/img/4.png";
+            try (InputStream logoStream = new FileInputStream(getServletContext().getRealPath(relativePath))) {
+                BufferedImage logo = ImageIO.read(logoStream);
+                ByteArrayOutputStream logoBytes = new ByteArrayOutputStream();
+                ImageIO.write(logo, "png", logoBytes);
+                int logoIndex = workbook.addPicture(logoBytes.toByteArray(), Workbook.PICTURE_TYPE_PNG);
+                Drawing<?> drawing = sheet.createDrawingPatriarch();
+                ClientAnchor anchor = new XSSFClientAnchor();
+                anchor.setCol1(0);
+                anchor.setRow1(1);
+                anchor.setAnchorType(AnchorType.DONT_MOVE_DO_RESIZE);
+                Picture logoPicture = drawing.createPicture(anchor, logoIndex);
+                logoPicture.resize(0.5, 0.5); // Ajustar tamaño según sea necesario
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Encabezados de columnas
+            String[] headers = {"ID", "Nombre", "Descripción", "Stock", "Marca", "Precio", "Modo Empleo", "Advertencia"};
+            Row headerRow = sheet.createRow(4);
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            // Obtener productos de la base de datos
+            List<Producto> productos = producdao.obtenerTodosLosProductos();
+            int rowNum = 5;  // Fila de inicio para los datos
+
+            for (Producto producto : productos) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(producto.getIdProducto());
+                row.createCell(1).setCellValue(producto.getNombre());
+                row.createCell(2).setCellValue(producto.getDescripcion());
+                row.createCell(3).setCellValue(producto.getStock());
+                row.createCell(4).setCellValue(producto.getMarca());
+                row.createCell(5).setCellValue(producto.getPreciounit());
+                row.createCell(6).setCellValue(producto.getMod_empleo());
+                row.createCell(7).setCellValue(producto.getAdvert());
+            }
+
+            // Ajustar el tamaño de las columnas
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Configurar respuesta HTTP
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=ListaProductos.xlsx");
+
+            // Escribir el archivo y cerrarlo
+            try (OutputStream out = response.getOutputStream()) {
+                workbook.write(out);
+            } finally {
+                workbook.close();
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-}
 
-    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -212,12 +222,11 @@ private void exportarExcel(HttpServletRequest request, HttpServletResponse respo
 
         if ("guardar".equals(action)) {
             guardarProducto(request, response);
-} else {
+        } else {
             response.sendRedirect("index.jsp");
         }
         System.out.println("Action: " + action);
     }
-    
 
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -293,7 +302,7 @@ private void exportarExcel(HttpServletRequest request, HttpServletResponse respo
             // Guardar el producto y las imágenes en la base de datos
             producdao.agregarProducto(producto);
 
-            response.sendRedirect("admin/administrador.jsp"); // Redirigir tras éxito
+            response.sendRedirect("admin/dashboard.jsp"); // Redirigir tras éxito
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,7 +311,6 @@ private void exportarExcel(HttpServletRequest request, HttpServletResponse respo
             dispatcher.forward(request, response);
         }
     }
-
 
     @Override
     public String getServletInfo() {

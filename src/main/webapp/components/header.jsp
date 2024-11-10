@@ -20,8 +20,13 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="index.jsp">Inicio</a>
                 </li>
-                <li class="nav-item"></li>
-                <a class="nav-link text-white" href="productos.jsp">Tienda</a>
+                <li class="nav-item">
+                    <form action="${pageContext.request.contextPath}/ProductController" method="GET">
+                        <button type="submit" name="action" value="tienda" class="nav-link text-white">Tienda2</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="productos.jsp">Tienda</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="nosotros.jsp">Nosotros</a>

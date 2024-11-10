@@ -9,7 +9,7 @@ contraseña varchar(50),
 dni int,
 telefono int
 );
-
+ -- comentario
 
 drop table administrador;
 create table administrador(

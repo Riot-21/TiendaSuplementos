@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import modelo.dto.Categoria;
 import modelo.dto.ImgProd;
@@ -91,7 +92,7 @@ public class ProductoDao {
         }
         return producto;
     }
-    
+
     public List<Producto> obtenerTodosLosProductos() throws SQLException {
         List<Producto> productos = new ArrayList<>();
         String query = "SELECT * FROM productos";
@@ -112,15 +113,40 @@ public class ProductoDao {
                 producto.setMod_empleo(rs.getString("mod_empleo"));
                 producto.setAdvert(rs.getString("advert"));
 
-                // Puedes cargar las categorías e imágenes si lo necesitas
-                // producto.setCategorias(cargarCategoriasPorProducto(producto.getId()));
-                // producto.setImagenes(cargarImagenesPorProducto(producto.getId()));
-
                 productos.add(producto);
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             throw ex;
-        } 
+        }
+        return productos;
+    }
+
+    public List<Producto> ProductosTienda() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock , MIN(i.imagen) AS imagen\n"
+                + "FROM productos p\n"
+                + "INNER JOIN imgProd i ON p.id_producto = i.id_producto\n"
+                + "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock;";
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
+                
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
+                
+                productos.add(producto);
+            }
+        } catch (SQLException ex) {
+            throw ex;
+        }
         return productos;
     }
 

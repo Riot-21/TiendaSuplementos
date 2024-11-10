@@ -56,9 +56,7 @@ public class UserController extends HttpServlet {
             register(request, response);
         } else if ("logout".equals(action)) {
             logout(request, response);
-        } else if ("list".equals(action)) {
-            listarUsuarios(request, response);
-        }
+        } 
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response)
@@ -136,17 +134,6 @@ public class UserController extends HttpServlet {
 
     }
 
-    private void listarUsuarios(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            List<Usuario> usuarios = userdao.listarUsuarios();
-            request.setAttribute("listaUsuarios", usuarios);
-            request.getRequestDispatcher("admin/listarUsuarios.jsp").forward(request, response);
-
-        } catch (SQLException e) {
-            throw new ServletException("Error", e);
-        }
-    }
 
     @Override
     public String getServletInfo() {

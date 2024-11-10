@@ -31,6 +31,10 @@ public class Producto {
         this.categorias = categorias;
         this.imagenes = imagenes;
     }
+        // Método para obtener una sola imagen (por ejemplo, la primera)
+    public String getImagen() {
+        return (imagenes != null && !imagenes.isEmpty()) ? imagenes.get(0).getImagen() : null;
+    }
 
     public List<ImgProd> getImagenes() {
         return imagenes;
