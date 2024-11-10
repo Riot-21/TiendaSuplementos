@@ -23,12 +23,19 @@
     border: 1px solid #bcbcbc;
     border-radius: 5px;
     padding: 5px;
+     /* O cualquier tamaño que desees */
+    height: 100px; /* O cualquier tamaño que desees */
+    object-fit: cover; /* Mantiene la proporción de la imagen sin distorsionarla */
+    margin: 5px;
 }
 .product-main-image {
-    width: 100%;
+/*    width: 100%;*/
     border: 1px solid #bcbcbc;
     border-radius: 5px;
     padding: 10px;
+    width: 300px;  /* O cualquier tamaño que desees */
+    height: 300px; /* O cualquier tamaño que desees */
+    object-fit: contain; /* Ajusta la imagen sin recortarla */
 }
 .related-products img {
     width: 100%;

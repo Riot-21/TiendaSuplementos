@@ -99,45 +99,52 @@
                                                 <p class="stock-status text-danger">Sin stock</p>
                                             </c:otherwise>
                                         </c:choose>
-                                        <a href="producto-especifico.jsp?id=${producto.idProducto}" class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                                        <a onclick="verDetalleProducto(${producto.idProducto})" class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
                     </div>
                 </div>
-                
-                    <!-- Paginación -->
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Anterior</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Siguiente</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+
+                <!-- Paginación -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Siguiente</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
+    </div>
 
-        <%@include file="components/footer.jsp" %>
+    <%@include file="components/footer.jsp" %>
 
-        <script src="assets/script/cart-shopping.js"></script>
+    <script src="assets/script/cart-shopping.js"></script>
+    <script>
+        // Función que se llama cuando el usuario hace clic en el botón
+        function verDetalleProducto(idProducto) {
+            // Redirige a la página de producto específico sin mostrar el ID en la URL
+            window.location.href = "producto-especifico.jsp?id=" + idProducto;
+        }
+    </script>
 
-        <!-- Bootstrap JS (opcional) -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    </body>
+    <!-- Bootstrap JS (opcional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
 
 </html>

@@ -63,35 +63,78 @@ public class ProductoDao {
             throw ex;
         }
     }
-
+    
     public Producto obtenerProductoPorId(int id) throws SQLException {
-        Producto producto = null;
-        String query = "SELECT * FROM productos WHERE id_producto = ?";
+    Producto producto = null;
+    String query = "SELECT p.id_producto, p.nombre, p.descripcion, p.stock, p.marca, p.preciounit, "
+            + "p.mod_empleo, p.advert, i.imagen "
+            + "FROM productos p "
+            + "LEFT JOIN imgProd i ON p.id_producto = i.id_producto "
+            + "WHERE p.id_producto = ?";
 
-        try {
-            cnx = new ConexionBD().getConexion();
-            ps = cnx.prepareStatement(query);
-            ps.setInt(1, id); // Usamos el ID para la búsqueda
-            rs = ps.executeQuery();
+    try {
+        cnx = new ConexionBD().getConexion();
+        ps = cnx.prepareStatement(query);
+        ps.setInt(1, id); // Usamos el ID para la búsqueda
+        rs = ps.executeQuery();
 
-            if (rs.next()) {
-                producto = new Producto();
-                producto.setIdProducto(rs.getInt("id_producto"));
-                producto.setNombre(rs.getString("nombre"));
-                producto.setDescripcion(rs.getString("descripcion"));
-                producto.setStock(rs.getInt("stock"));
-                producto.setMarca(rs.getString("marca"));
-                producto.setPreciounit(rs.getDouble("preciounit"));
-                producto.setMod_empleo(rs.getString("mod_empleo"));
-                producto.setAdvert(rs.getString("advert"));
-                // También puedes obtener las categorías e imágenes si es necesario
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
-            throw ex;
+        if (rs.next()) {
+            producto = new Producto();
+            producto.setIdProducto(rs.getInt("id_producto"));
+            producto.setNombre(rs.getString("nombre"));
+            producto.setDescripcion(rs.getString("descripcion"));
+            producto.setStock(rs.getInt("stock"));
+            producto.setMarca(rs.getString("marca"));
+            producto.setPreciounit(rs.getDouble("preciounit"));
+            producto.setMod_empleo(rs.getString("mod_empleo"));
+            producto.setAdvert(rs.getString("advert"));
+
+            // Crear lista de imágenes
+            List<ImgProd> imagenes = new ArrayList<>();
+            do {
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                imagenes.add(img);
+            } while (rs.next()); // Continúa agregando imágenes si las hay
+
+            producto.setImagenes(imagenes); // Establecer la lista de imágenes
         }
-        return producto;
+    } catch (SQLException ex) {
+        System.out.println("Error: " + ex.getMessage());
+        throw ex;
     }
+    return producto;
+}
+
+
+//    public Producto obtenerProductoPorId(int id) throws SQLException {
+//        Producto producto = null;
+//        String query = "SELECT * FROM productos WHERE id_producto = ?";
+//
+//        try {
+//            cnx = new ConexionBD().getConexion();
+//            ps = cnx.prepareStatement(query);
+//            ps.setInt(1, id); // Usamos el ID para la búsqueda
+//            rs = ps.executeQuery();
+//
+//            if (rs.next()) {
+//                producto = new Producto();
+//                producto.setIdProducto(rs.getInt("id_producto"));
+//                producto.setNombre(rs.getString("nombre"));
+//                producto.setDescripcion(rs.getString("descripcion"));
+//                producto.setStock(rs.getInt("stock"));
+//                producto.setMarca(rs.getString("marca"));
+//                producto.setPreciounit(rs.getDouble("preciounit"));
+//                producto.setMod_empleo(rs.getString("mod_empleo"));
+//                producto.setAdvert(rs.getString("advert"));
+//                // También puedes obtener las categorías e imágenes si es necesario
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Error: " + ex.getMessage());
+//            throw ex;
+//        }
+//        return producto;
+//    }
 
     public List<Producto> obtenerTodosLosProductos() throws SQLException {
         List<Producto> productos = new ArrayList<>();
