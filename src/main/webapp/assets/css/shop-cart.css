@@ -24,9 +24,9 @@
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     transition: right 0.4s ease;
     z-index: 999;
-  }
-  
-  .cart-header {
+}
+
+.cart-header {
     padding: 21px;
     background-color: #ffffff;
     box-shadow: 0 4px 6px -1px #bcbcbc;
@@ -34,46 +34,78 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .cart-body {
+}
+
+.cart-body {
     padding: 15px;
     overflow-y: auto;
     max-height: calc(100vh - 160px);
-  }
-  
-  .cart-footer {
+}
+/* Espaciado y alineación de los productos */
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+/* Imagen de los productos en el carrito */
+.cart-item-image {
+    width: 100px ; /* Tamaño fijo para las imágenes */
+    height: 100px ; /* Mantiene la proporción */
+    object-fit: cover; /* Ajusta sin distorsionar la imagen */
+    border-radius: 5px; /* Bordes redondeados */
+    margin-right: 10px; /* Espaciado entre la imagen y el texto */
+    flex-shrink: 0; /* Evita que la imagen se reduzca con el texto */
+}
+
+/* Detalles del producto */
+.cart-item-details h6 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cart-item-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+
+
+
+.cart-body {
+    padding: 15px;
+    overflow-y: auto;
+    max-height: calc(100vh - 160px); /* Ajusta la altura máxima */
+}
+
+/* Ajuste del botón */
+.cart-footer .btn {
+    width: 100%; /* Botón ocupa todo el ancho */
+    font-size: 16px;
+}
+
+.cart-footer {
     padding: 15px;
     border-top: 1px solid #ddd;
     position: absolute;
     bottom: 0;
     width: 100%;
-  }
-  
-  .close-cart {
+}
+
+.close-cart {
     background: none;
     border: none;
     color: rgb(0, 0, 0);
     font-size: 20px;
     cursor: pointer;
-  }
-  
-  .cart-container.show {
+}
+
+.cart-container.show {
     right: 0;
-  }
-
-  /* Establece un tamaño fijo para las imágenes de miniatura */
-.product-images img {
-    width: 100px;  /* O cualquier tamaño que desees */
-    height: 100px; /* O cualquier tamaño que desees */
-    object-fit: cover; /* Mantiene la proporción de la imagen sin distorsionarla */
-    margin: 5px;
-    cursor: pointer;
 }
 
-/* Establece un tamaño fijo para la imagen principal */
-.product-main-image {
-    width: 300px;  /* O cualquier tamaño que desees */
-    height: 300px; /* O cualquier tamaño que desees */
-    object-fit: contain; /* Ajusta la imagen sin recortarla */
-}
+
+

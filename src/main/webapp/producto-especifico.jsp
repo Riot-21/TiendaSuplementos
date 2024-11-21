@@ -25,35 +25,65 @@
                 <div class="col-md-4">
                     <!-- Imágenes -->
                     <div class="product-images">
-                        <img src="" alt="Imagen 1" onclick="changeMainImage(this.src)">
-                        <img src="" alt="Imagen 2" onclick="changeMainImage(this.src)">
-                        <img src="" alt="Imagen 3" onclick="changeMainImage(this.src)">
+                        <c:forEach var="img" items="${producto.imagenes}">
+                            <img src="${img.imagen}" alt="Imagen Producto" onclick="changeMainImage(this.src)">
+                        </c:forEach>
                     </div>
-                    <img src="" alt="Imagen Principal" id="mainImage" class="product-main-image mt-3">
+                    <img src="${producto.imagenes[0].imagen}" alt="Imagen Principal" id="mainImage" class="product-main-image mt-3">
                 </div>
 
                 <div class="col-md-8">
-                    <h2 id="productoNombre">Producto Cargando...</h2>
-                    <p><strong>SKU:</strong> <span id="productoSKU">Cargando...</span></p>
-                    <h3 class="text-primary" id="productoPrecio">S/. 0.00</h3>
-                    <p class="text-success" id="productoStock"><i class="fa fa-check-circle"></i> Cargando...</p>
+                    <h2 id="productoNombre">${producto.nombre}</h2>
+                    <p><strong>SKU:</strong> <span id="productoSKU">${producto.idProducto}</span></p>
+                    <h3 class="text-primary" id="productoPrecio">S/. ${producto.preciounit}</h3>
+                    <!-- Verificar stock -->
+                    <p class="text-${producto.stock > 0 ? 'success' : 'danger'}" id="productoStock">
+                        <c:if test="${producto.stock > 0}">
+                            <i class="fa fa-check-circle"></i><span id="stk">${producto.stock}</span> unidad(es) disponibles 
+                        </c:if>
+                        <c:if test="${producto.stock <= 0}">
+                            <i class="fa fa-times-circle"></i> Agotado
+                        </c:if>
+                    </p>
+                    <form action="ProductController" method="POST">
+    <input type="hidden" name="action" value="addToCart">
+    <input type="hidden" name="id" value="${producto.idProducto}">
 
                     <!-- Cantidad y Agregar al carrito -->
                     <div class="input-group mb-3" style="max-width: 150px;">
                         <button class="btn btn-outline-secondary" type="button" id="button-minus">-</button>
-                        <input type="text" class="form-control text-center" value="1" id="productQuantity">
+                        <input name="cantidad" type="text" class="form-control text-center" value="1" id="productQuantity">
                         <button class="btn btn-outline-secondary" type="button" id="button-plus">+</button>
                     </div>
-                    <button class="btn btn-dark mb-3" type="button" id="addToCartButton"><i class="fa fa-cart-plus"></i> Agregar al carrito</button>
+
+                    <c:if test="${not empty sessionScope.usuario}">
+                        <!-- Agregar al carrito -->
+                        <c:if test="${producto.stock > 0}">
+                                <button type="submit" class="btn btn-dark mb-3"><i class="fa fa-cart-plus"></i>Agregar al carrito</button>
+                        </c:if>
+                            <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+</form>
+
+                        <!-- Mensaje si no hay stock -->
+                        <c:if test="${producto.stock <= 0}">
+                            <a class="btn btn-dark mb-3" href="javascript:void(0);" disabled>
+                                <i class="fa fa-cart-plus"></i> Agregar al carrito
+                            </a>
+                        </c:if>
+                    </c:if>
+
+                    <c:if test="${empty sessionScope.usuario}">
+                        <a class="btn btn-dark mb-3" href="login.jsp">Inicia sesión para agregar productos al carrito</a>
+                    </c:if>
 
                     <!-- Descripción del producto -->
                     <h5>Descripción</h5>
-                    <p id="productoDescripcion">Cargando...</p>
+                    <p id="productoDescripcion">${producto.descripcion}</p>
                 </div>
             </div>
 
 
-        
+
 
             <!-- Productos Relacionados -->
             <h4 class="mt-5">Productos Relacionados</h4>
@@ -98,59 +128,15 @@
 
 
         <script>
-            // Al cargar la página, obtener el ID del producto desde la URL
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const idProducto = urlParams.get('id');
-                if (idProducto) {
-                    obtenerDetalles(idProducto);
-                }
-            };
-
-            // Función para obtener los detalles del producto desde el servidor
-            function obtenerDetalles(id) {
-                fetch(`ProductController?action=cargarid&id=` + id)  // Asegúrate de que la URL coincida con tu servlet
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Producto no encontrado');
-                            }
-                            return response.json();  // Convierte la respuesta JSON a un objeto JavaScript
-                        })
-                        .then(data => {
-                            mostrarDetallesProducto(data);
-                        })
-                        .catch(error => {
-                            alert('Error al cargar los datos del producto');
-                            console.error(error);
-                        });
-            }
-
-            // Función para mostrar los detalles del producto en la página
-            function mostrarDetallesProducto(producto) {
-                document.getElementById('productoNombre').innerText = producto.nombre;
-                document.getElementById('productoSKU').innerText = producto.idProducto;  // O el SKU si lo tienes en los datos
-                document.getElementById('productoPrecio').innerText = 'S/.' + producto.preciounit.toFixed(2);
-                document.getElementById('productoDescripcion').innerText = producto.descripcion;
-
-                // Mostrar stock
-                const stockText = producto.stock > 0 ? producto.stock +' unidades disponibles' : 'Sin stock';
-                document.getElementById('productoStock').innerHTML = stockText;
-
-                // Cambiar las imágenes
-                const imagesContainer = document.querySelectorAll('.product-images img');
-                for (let i = 0; i < imagesContainer.length; i++) {
-                    if (producto.imagenes[i]) {
-                        imagesContainer[i].src = producto.imagenes[i].imagen;
-                    }
-                }
-                document.getElementById('mainImage').src = producto.imagenes[0]?.imagen || 'default-image.jpg';  // Primera imagen como principal
-            }
-
-            // Cambiar imagen principal cuando se haga clic en una imagen de la galería
-            function changeMainImage(imageSrc) {
-                document.getElementById('mainImage').src = imageSrc;
-            }
+                                // Cambiar imagen principal cuando se haga clic en una imagen de la galería
+                                function changeMainImage(imageSrc) {
+                                    document.getElementById('mainImage').src = imageSrc;
+                                }
         </script>
-    </body>
+
+    </script>
+    <script src="assets/script/producto-esp.js" type="text/javascript"></script>
+    <script src="assets/script/cart-shopping.js" type="text/javascript"></script>
+</body>
 
 </html>

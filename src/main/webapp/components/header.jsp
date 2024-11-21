@@ -22,11 +22,8 @@
                 </li>
                 <li class="nav-item">
                     <form action="${pageContext.request.contextPath}/ProductController" method="GET">
-                        <button type="submit" name="action" value="tienda" class="nav-link text-white">Tienda2</button>
+                        <button type="submit" name="action" value="tienda" class="nav-link text-white">Tienda</button>
                     </form>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="productos.jsp">Tienda</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="nosotros.jsp">Nosotros</a>
@@ -73,19 +70,50 @@
 
             <!-- Icono Carrito -->
             <button class="btn nav-icon text-white ms-3" id="cart-icon" onclick="toggleCart()">
-                <i class="fa fa-cart-shopping fa-lg"></i>
+                <i class="fa fa-cart-shopping fa-lg"><label>${contador}</label> </i>
             </button>
-            <!-- Carrito de compras (Oculto al inicio) -->
+
+            <!-- Carrito de compras -->
             <div id="cart" class="cart-container">
                 <div class="cart-header">
                     <h5>Carrito de Compras</h5>
                     <button class="close-cart" onclick="toggleCart()">&#10006;</button>
                 </div>
-                <div class="cart-footer">
-                    <h5>Total: S/.<span id="cart-total"> 0.00</span></h5>
-                    <button class="btn btn-dark">Finalizar Compra</button>
-                </div>
+
+                <div class="cart-body">
+                    <!-- Lista de productos -->
+                    <c:if test="${not empty carrito}">
+                        <div id="cart-items">
+                            <c:forEach var="cart" items="${carrito}">      
+                                <div class="cart-item">
+                                    <img src="${cart.imagen}" alt="Proteína Whey" class="cart-item-image">
+                                    <div class="cart-item-details">
+                                        <h6>${cart.nombres}</h6>
+                                        <p>Cantidad: <span class="cart-item-quantity">${cart.cantidad}</span></p>
+                                        <p>Precio: S/.<span class="cart-item-price">${cart.precio}</span></p>
+                                        <p>Subtotal: S/.<span class="cart-item-price">${cart.subtotal}</span></p>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+
+                    <div class="cart-footer">
+                        <h5>Total: S/.<span id="cart-total"></span>${total}</h5>
+                        <button class="btn btn-dark">Finalizar Compra</button>
+                    </div>
+                </c:if>
+                <!-- Mostrar un mensaje si el carrito está vacío -->
+                <c:if test="${empty carrito}">
+                    <div class="empty-cart">
+                        <p>Su carrito está vacío.</p>
+                    </div>
+                </c:if>
+
             </div>
         </div>
+
+
     </div>
+</div>
 </nav>

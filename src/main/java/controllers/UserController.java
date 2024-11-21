@@ -58,7 +58,7 @@ public class UserController extends HttpServlet {
             logout(request, response);
         } 
     }
-
+    
     private void login(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

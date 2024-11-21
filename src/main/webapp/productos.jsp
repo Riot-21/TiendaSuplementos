@@ -99,7 +99,7 @@
                                                 <p class="stock-status text-danger">Sin stock</p>
                                             </c:otherwise>
                                         </c:choose>
-                                        <a onclick="verDetalleProducto(${producto.idProducto})" class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                                        <a href="ProductController?action=cargarid&id=${producto.idProducto}"  class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
                                     </div>
                                 </div>
                             </div>
