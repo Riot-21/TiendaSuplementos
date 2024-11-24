@@ -1,3 +1,4 @@
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -54,18 +55,18 @@
                         <button class="btn btn-outline-secondary" type="button" id="button-minus">-</button>
                         <input name="cantidad" type="text" class="form-control text-center" value="1" id="productQuantity">
                         <button class="btn btn-outline-secondary" type="button" id="button-plus">+</button>
-                    </div>
-
+                    </div>  
+                    <h1>Cantidad del producto: ${cant}</h1>
+                            
                     <c:if test="${not empty sessionScope.usuario}">
                         <!-- Agregar al carrito -->
-                        <c:if test="${producto.stock > 0}">
+                        <c:if test="${producto.stock > 0 && cant<producto.stock}">
                                 <button type="submit" class="btn btn-dark mb-3"><i class="fa fa-cart-plus"></i>Agregar al carrito</button>
                         </c:if>
-                            <button type="submit" class="btn btn-primary">Agregar al carrito</button>
 </form>
 
                         <!-- Mensaje si no hay stock -->
-                        <c:if test="${producto.stock <= 0}">
+                        <c:if test="${producto.stock <= 0 || cant>=producto.stock}">
                             <a class="btn btn-dark mb-3" href="javascript:void(0);" disabled>
                                 <i class="fa fa-cart-plus"></i> Agregar al carrito
                             </a>
@@ -82,7 +83,7 @@
                 </div>
             </div>
 
-
+                            
 
 
             <!-- Productos Relacionados -->

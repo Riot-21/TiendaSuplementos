@@ -14,15 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modelo.dao.AdminDao;
+import modelo.dao.CategoriaDao;
 import modelo.dto.Administrador;
+import modelo.dto.Categoria;
 
 @WebServlet(name = "AdminController", urlPatterns = {"/AdminController"})
 public class AdminController extends HttpServlet {
         private AdminDao admindao;
+        private CategoriaDao catdao;
 
     @Override
     public void init() {
         admindao = new AdminDao();
+        catdao = new CategoriaDao();
     }
 
     @Override
@@ -67,9 +71,12 @@ public class AdminController extends HttpServlet {
             Administrador admin = admindao.validarAdmin(email, contraseña);
 
             if (admin != null) {
+                List<Categoria> categorias = catdao.getAllCategorias();
+                
                 // Si el admin es válido, crear o obtener la sesión y redirigir a index.jsp
                 HttpSession session = request.getSession(true);  // No usar false aquí, ya que necesitamos una sesión
                 session.setAttribute("administrador", admin);
+                session.setAttribute("cat", categorias);
                 response.sendRedirect("admin/dashboard.jsp");
             } else {
                 // Si los datos son incorrectos, mostrar mensaje de error y redirigir a login.jsp

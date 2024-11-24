@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import modelo.dao.CategoriaDao;
 import modelo.dto.Categoria;
 
@@ -29,8 +30,8 @@ public class CategoryController extends HttpServlet {
                 System.out.println("antes del get");
         List<Categoria> categorias = catdao.getAllCategorias();
         System.out.println("Categorías recuperadas: " + categorias.size());
-        request.setAttribute("categorias", categorias);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("administrador.jsp");
+        request.setAttribute("cat", categorias);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/admin-nuevo-prod.jsp");
         dispatcher.forward(request, response);
     
     }
@@ -39,6 +40,8 @@ public class CategoryController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("nombre antes del post: "+ request.getParameter("categoria-nombre"));
+                HttpSession session = request.getSession();
+        
         // Crear una nueva categoría
         Categoria categoria = new Categoria();
         categoria.setCategoria(request.getParameter("categoria-nombre"));
@@ -47,7 +50,10 @@ public class CategoryController extends HttpServlet {
         // Guardar la categoría en la base de datos
         try {
             catdao.agregarCategoria(categoria);
-            response.sendRedirect("tiendas.jsp"); // Redirigir a una página de éxito
+            if (session.getAttribute("cat") != null) {
+            session.setAttribute("cat", catdao.getAllCategorias());
+        }
+            response.sendRedirect("admin/admin-nuevoprod.jsp"); // Redirigir a una página de éxito
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp"); // Redirigir a una página de error

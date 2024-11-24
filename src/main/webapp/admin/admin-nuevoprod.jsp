@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="modelo.dto.Categoria"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.dao.CategoriaDao"%>
@@ -91,20 +92,9 @@
                             <div class="form-group">
                                 <label for="product-cat">Categoria del Producto:</label>
                                 <select class="form-control" id="product-cat" name="catp[]" multiple>
-                                    <%
-                                        CategoriaDao catedao = new CategoriaDao();
-                                        List<Categoria> categorias = null;
-                                        categorias = catedao.getAllCategorias();
-                                        if (categorias == null || categorias.isEmpty()) {%>
-                                    <tr>
-                                        <td colspan = "9" > No se encontraron reclamaciones con estado de respuesta.</td> </tr>
-
-                                    <% } else {
-                                        for (Categoria cat : categorias) {
-                                    %>
-                                    <option value="<%= cat.getIdCategoria()%>"><%= cat.getCategoria()%></option>
-                                    <% }
-                                }%>  
+                                    <c:forEach var="cat" items="${cat}">                                 
+                                        <option value="${cat.idCategoria}">${cat.categoria}</option>
+                                    </c:forEach> 
                                 </select>
                             </div>
                             <div class="container mt-2 col-md-5 mx-auto">
@@ -113,6 +103,18 @@
                         </form>
 
                     </div>
+                    <h2>Agregar Categorias</h2>
+                    <form action="${pageContext.request.contextPath}/CategoryController" method="POST">
+                        <div class="form-group">
+                            <label>nombre de categoria</label>
+                            <input type="text" class="form-control" name="categoria-nombre">  
+                        </div>
+                        <div class="form-group">
+                            <label>objetivo de categoria</label>
+                            <input type="text" class="form-control" name="categoria-obj">  
+                        </div>
+                        <button type="submit" class="btn btn-success">Add category</button>
+                    </form>
                 </main>
             </div>
         </div>

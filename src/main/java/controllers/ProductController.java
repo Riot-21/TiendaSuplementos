@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
@@ -68,18 +69,58 @@ public class ProductController extends HttpServlet {
             cargarProductos(request, response);
         } else if ("cargarid".equals(action)) {
             cargarPorId(request, response);
+        } else if ("editar".equals(action)) {
+            editar(request, response);
         } else if ("exportarExcel".equals(action)) {
             exportarExcel(request, response);
         } else if ("tienda".equals(action)) {
             ProdTienda(request, response);
+        }else if ("sortBy".equals(action)) {
+            filterProductos(request, response);
         }
         System.out.println("Action: " + action);
     }
+    
+    private void filterProductos(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        // Obtener las categorías seleccionadas
+        String[] categoriasParam = request.getParameterValues("categorias");
+        List<Integer> categorias = new ArrayList<>();
+        if (categoriasParam != null) {
+            for (String catId : categoriasParam) {
+                categorias.add(Integer.parseInt(catId));
+            }
+        }
+
+        // Obtener el filtro de precio
+        String precio = request.getParameter("precio");
+
+        try {
+            // Obtener productos filtrados
+            List<Producto> productos = producdao.obtenerProductosPorFiltros(categorias, precio);
+            request.setAttribute("tienda", productos);
+
+            // Cargar las categorías para el filtro
+            List<Categoria> categoriasList = catdao.getAllCategorias(); // Método para obtener las categorías
+            request.setAttribute("categorias", categoriasList);
+
+            // Redirigir a la página que muestra los productos filtrados
+            RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
+            dispatcher.forward(request, response);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            // Manejar error
+        }
+    }
+
 
     private void ProdTienda(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            List<Categoria> categorias = catdao.getAllCategorias();
             List<Producto> productos = producdao.ProductosTienda();
+            request.setAttribute("categorias", categorias);
             request.setAttribute("tienda", productos);
             RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
             dispatcher.forward(request, response);
@@ -105,15 +146,55 @@ public class ProductController extends HttpServlet {
         }
     }
 
-    private void cargarPorId(HttpServletRequest request, HttpServletResponse response)
+    private void editar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idParam = request.getParameter("id");
         if (idParam != null && !idParam.isEmpty()) {
             try {
                 int id = Integer.parseInt(idParam);
                 Producto producto = producdao.obtenerProductoPorId(id);
+                if (producto != null) {
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.write(new Gson().toJson(producto));
+                    out.flush();
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void cargarPorId(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idParam = request.getParameter("id");
+        int cant = 0;
+        int pos = -1;
+        if (idParam != null && !idParam.isEmpty()) {
+            try {
+                int id = Integer.parseInt(idParam);
+                Producto producto = producdao.obtenerProductoPorId(id);
+                if (!listaCarrito.isEmpty()) {
+                    for (int i = 0; i < listaCarrito.size(); i++) {
+                        if (id == listaCarrito.get(i).getIdProducto()) {
+                            pos = i;
+                            break; // Si encontramos el producto, salimos del ciclo
+                        }
+                    }
+                    if (pos != -1) {
+                        cant = listaCarrito.get(pos).getCantidad();
+                    } else {
+                        cant = 0;
+                    }
+                }
 
                 if (producto != null) {
+                    request.setAttribute("cant", cant);
                     request.setAttribute("producto", producto); // Agregar producto al request
                     RequestDispatcher dispatcher = request.getRequestDispatcher("producto-especifico.jsp");
                     dispatcher.forward(request, response);
@@ -243,16 +324,17 @@ public class ProductController extends HttpServlet {
             throws ServletException, IOException {
         int idp = Integer.parseInt(request.getParameter("id"));
         cantidad = Integer.parseInt(request.getParameter("cantidad"));
-        double total = 0.0;
+        double total;
+
         HttpSession session = request.getSession();
-        if (session.getAttribute("total") != null) {
-            total = (double) session.getAttribute("total"); // Recupera el total acumulado
-        }
+//        if (session.getAttribute("total") != null) {
+//            total = (double) session.getAttribute("total"); // Recupera el total acumulado
+//        }
         try {
             int pos = -1; // Inicializamos pos a -1 para indicar que el producto no se encuentra
             p = producdao.obtenerProductoPorId(idp);
 
-            if (listaCarrito.size() > 0) {
+            if (!listaCarrito.isEmpty()) {
                 for (int i = 0; i < listaCarrito.size(); i++) {
                     if (idp == listaCarrito.get(i).getIdProducto()) {
                         pos = i;
@@ -266,17 +348,17 @@ public class ProductController extends HttpServlet {
                 cantidad = listaCarrito.get(pos).getCantidad() + cantidad;
                 double subtotal;
                 if (cantidad > p.getStock()) {
-                    listaCarrito.get(pos).setCantidad(p.getStock());                   
+                    listaCarrito.get(pos).setCantidad(p.getStock());
                 } else {
                     listaCarrito.get(pos).setCantidad(cantidad);
                 }
                 subtotal = listaCarrito.get(pos).getPrecio() * listaCarrito.get(pos).getCantidad();
                 listaCarrito.get(pos).setSubtotal(subtotal);
                 // Ahora actualizamos el total: restamos el subtotal antiguo y sumamos el nuevo
-                    total = 0.0; // Reset total
-                    for (Carrito car : listaCarrito) {
-                        total += car.getSubtotal(); // Suma el subtotal de cada producto
-                    }
+                total = 0.0; // Reset total
+                for (Carrito car : listaCarrito) {
+                    total += car.getSubtotal(); // Suma el subtotal de cada producto
+                }
 
             } else {
                 // Producto no está en el carrito, agregamos un nuevo producto
@@ -290,13 +372,14 @@ public class ProductController extends HttpServlet {
                 car.setPrecio(p.getPreciounit());
                 car.setCantidad(cantidad);
                 car.setSubtotal(cantidad * p.getPreciounit());
-                total = total + car.getSubtotal();
+//                total = total + car.getSubtotal();
                 listaCarrito.add(car);
 
                 // Actualizamos el total al agregar un nuevo producto
-                total = 0.0; // Reset total
+                total = 0.0;
+                // Reset total
                 for (Carrito carItem : listaCarrito) {
-                    total += carItem.getSubtotal(); // Suma el subtotal de cada producto
+                    total += carItem.getSubtotal();// Suma el subtotal de cada producto
                 }
             }
 
@@ -306,8 +389,6 @@ public class ProductController extends HttpServlet {
             session.setAttribute("carrito", listaCarrito);
             response.sendRedirect("ProductController?action=cargarid&id=" + idp);
 
-            // Redirigir para mostrar los detalles del producto
-//        request.getRequestDispatcher("ProductController?action=cargarid&id=" + idp).forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -23,46 +23,44 @@
                 <div class="col-lg-3">
                     <div class="filter-section">
                         <h3>Filtrar por</h3>
+
                         <!-- Filtro de categorías -->
-                        <h6>Categorí­as</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="proteinas">
-                            <label class="form-check-label" for="proteinas">
-                                Proteí­nas
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="vitaminas">
-                            <label class="form-check-label" for="vitaminas">
-                                Vitaminas
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="aminoacidos">
-                            <label class="form-check-label" for="aminoacidos">
-                                Aminoácidos
-                            </label>
-                        </div>
-                        <!-- Filtro de precios -->
-                        <h6 class="mt-4">Precio</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="price" id="price1" value="option1">
-                            <label class="form-check-label" for="price1">
-                                Menos de S/.50,00
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="price" id="price2" value="option2">
-                            <label class="form-check-label" for="price2">
-                                S/.50,00 - S/.100,00
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="price" id="price3" value="option3">
-                            <label class="form-check-label" for="price3">
-                                Más de S/.100,00
-                            </label>
-                        </div>
+                        <h6>Categorías</h6>
+                        <form action="ProductController" method="GET">
+                            <c:forEach var="cat" items="${categorias}">
+                                <div class="form-check">
+                                    <!-- Checkbox para cada categoría -->
+                                    <input class="form-check-input" type="checkbox" name="categorias" value="${cat.idCategoria}" id="${cat.categoria}">
+                                    <label class="form-check-label" for="${cat.categoria}">
+                                        ${cat.categoria}
+                                    </label>
+                                </div>
+                            </c:forEach>
+
+                            <!-- Filtro de precios -->
+                            <h6 class="mt-4">Precio</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="precio" id="price1" value="lessThan50">
+                                <label class="form-check-label" for="price1">
+                                    Menos de S/.50,00
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="precio" id="price2" value="50to100">
+                                <label class="form-check-label" for="price2">
+                                    S/.50,00 - S/.100,00
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="precio" id="price3" value="moreThan100">
+                                <label class="form-check-label" for="price3">
+                                    Más de S/.100,00
+                                </label>
+                            </div>
+
+                            <!-- Botón de filtro -->
+                            <button type="submit" class="btn btn-primary mt-3" name="action" value="sortBy">Aplicar Filtro</button>
+                        </form>
                     </div>
                     <!--Ordenar Productos-->
                     <div class="container mt-4 order-section">
@@ -82,6 +80,7 @@
                 <div class="col-lg-9">
                     <h2 class="text-start mb-4 title-products">Productos</h2>
                     <div class="row">
+                        <c:if test="${not empty tienda}">
                         <c:forEach var="producto" items="${tienda}">
                             <div class="col-md-4 mb-4">
                                 <div class="card product-card">
@@ -104,6 +103,10 @@
                                 </div>
                             </div>
                         </c:forEach>
+                        </c:if>
+                        <c:if test="${empty tienda}">
+                            <h2>No hay productos disponibles</h2>
+                        </c:if>
                     </div>
                 </div>
 
@@ -129,22 +132,21 @@
                 </nav>
             </div>
         </div>
-    </div>
 
-    <%@include file="components/footer.jsp" %>
+        <%@include file="components/footer.jsp" %>
 
-    <script src="assets/script/cart-shopping.js"></script>
-    <script>
-        // Función que se llama cuando el usuario hace clic en el botón
-        function verDetalleProducto(idProducto) {
-            // Redirige a la página de producto específico sin mostrar el ID en la URL
-            window.location.href = "producto-especifico.jsp?id=" + idProducto;
-        }
-    </script>
+        <script src="assets/script/cart-shopping.js"></script>
+        <script>
+            // Función que se llama cuando el usuario hace clic en el botón
+            function verDetalleProducto(idProducto) {
+                // Redirige a la página de producto específico sin mostrar el ID en la URL
+                window.location.href = "producto-especifico.jsp?id=" + idProducto;
+            }
+        </script>
 
-    <!-- Bootstrap JS (opcional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-</body>
+        <!-- Bootstrap JS (opcional) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    </body>
 
 </html>

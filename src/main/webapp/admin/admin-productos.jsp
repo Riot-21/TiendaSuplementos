@@ -73,8 +73,8 @@
                                         <div class="d-flex justify-content-between">
                                             <button class="btn btn-danger btn-sm me-2" onclick="" data-bs-toggle="modal"
                                                     data-bs-target="#EliminarProductoModal">Eliminar</button>
-                                            <button class="btn btn-warning btn-sm" onclick="cargarDatosProducto(${producto.idProducto})" data-bs-toggle="modal"
-                                                    data-bs-target="#EditarProductoModal">Editar</button>
+                                            <button class="btn btn-warning btn-sm"  data-bs-toggle="modal"
+                                                    data-bs-target="#EditarProductoModal" onclick="cargarDatosProducto(${producto.idProducto})">Editar</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -82,68 +82,72 @@
                         </tbody>
                     </table>
 
+
                     <div class="d-flex justify-content-end mb-3">
                         <form action="${pageContext.request.contextPath}/ProductController" method="GET">
                             <button type="submit" class="btn btn-success" name="action" value="exportarExcel">
                                 Exportar a Excel
                             </button>
                         </form>
-                    </div>
 
 
-                    <!-- Modal Editar Producto -->
-                    <div class="modal fade" id="EditarProductoModal" tabindex="-1" aria-labelledby="EditarProductoLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="EditarProductoLabel">Editar Producto</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="editarProductoForm">
-                                        <div class="form-group">
-                                            <label for="nombre-producto">Nombre del Producto</label>
-                                            <input type="text" class="form-control" id="nombre-producto" name="nombre-producto">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="descripcion-producto">Descripción del Producto</label>
-                                            <textarea class="form-control" id="descripcion-producto" name="descripcion-producto"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="stock-producto">Stock del Producto</label>
-                                            <input type="number" class="form-control" id="stock-producto" name="stock-producto">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="marca-producto">Marca del Producto</label>
-                                            <input type="text" class="form-control" id="marca-producto" name="marca-producto">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="precio-producto">Precio del Producto (S/.)</label>
-                                            <input type="number" class="form-control" id="precio-producto" name="precio-producto">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="empleo-producto">Modo de Empleo del Producto</label>
-                                            <input type="text" class="form-control" id="empleo-producto" name="empleo-producto">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="advertencia-producto">Advertencia del Producto</label>
-                                            <textarea class="form-control" id="advertencia-producto" name="advertencia-producto"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="imagen-producto">Imagen del Producto</label>
-                                            <input type="file" class="form-control" id="imagen-producto" name="imagen-producto" accept="image/*">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-success" id="confirmar-editar">Confirmar</button>
+
+                        <!-- Modal Editar Producto -->
+                        <div class="modal fade" id="EditarProductoModal" tabindex="-1" aria-labelledby="EditarProductoLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="EditarProductoLabel">Editar Producto</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="editarProductoForm">
+                                            <div class="form-group">
+                                                <label for="nombre-producto">Nombre del Producto</label>
+                                                <input type="text" class="form-control" id="nombre-producto" name="nombre-producto">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="descripcion-producto">Descripción del Producto</label>
+                                                <textarea class="form-control" id="descripcion-producto" name="descripcion-producto"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="stock-producto">Stock del Producto</label>
+                                                <input type="number" class="form-control" id="stock-producto" name="stock-producto" value=12>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="marca-producto">Marca del Producto</label>
+                                                <input type="text" class="form-control" id="marca-producto" name="marca-producto">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="precio-producto">Precio del Producto (S/.)</label>
+                                                <input type="number" class="form-control" id="precio-producto" name="precio-producto">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="empleo-producto">Modo de Empleo del Producto</label>
+                                                <input type="text" class="form-control" id="empleo-producto" name="empleo-producto">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="advertencia-producto">Advertencia del Producto</label>
+                                                <textarea class="form-control" id="advertencia-producto" name="advertencia-producto"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="imagen-producto">Imagen del Producto</label>
+                                                <input type="file" class="form-control" id="imagen-producto" name="imagen-producto" accept="image/*">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success" id="confirmar-editar">Confirmar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
-                    
+
                 </main>
             </div>
         </div>
@@ -153,29 +157,29 @@
         crossorigin="anonymous"></script>
 
         <script>
-                                                    // Definimos una función llamada cargarDatosProducto que recibe un ID de producto.
-                                                    function cargarDatosProducto(id) {
-                                                        fetch(`ProductController?action=cargarid&id=` + id)
-                                                                .then(response => {
-                                                                    if (!response.ok) {
-                                                                        // Maneja errores basados en el código de estado HTTP
-                                                                        throw new Error(`Error: ${response.status}`);
-                                                                    }
-                                                                    return response.json();
-                                                                })
-                                                                .then(producto => {
-                                                                    document.getElementById('nombre-producto').value = producto.nombre;
-                                                                    document.getElementById('descripcion-producto').value = producto.descripcion;
-                                                                    document.getElementById('stock-producto').value = producto.stock;
-                                                                    document.getElementById('marca-producto').value = producto.marca;
-                                                                    document.getElementById('precio-producto').value = producto.preciounit;
-                                                                    document.getElementById('empleo-producto').value = producto.mod_empleo;
-                                                                    document.getElementById('advertencia-producto').value = producto.advert;
-                                                                })
-                                                                .catch(error => {
-                                                                    console.error('Error:', error);
-                                                                });
-                                                    }
+            // Definimos una función llamada cargarDatosProducto que recibe un ID de producto.
+            function cargarDatosProducto(id) {
+                fetch(`ProductController?action=editar&id=` + id)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Error: ${response.status}`);
+                            }
+                            return response.json(); // Procesar como JSON
+                        })
+                        .then(producto => {
+                            // Rellenar los campos del formulario con los datos
+                            document.getElementById('nombre-producto').value = producto.nombre;
+                            document.getElementById('descripcion-producto').value = producto.descripcion;
+                            document.getElementById('stock-producto').value = producto.stock;
+                            document.getElementById('marca-producto').value = producto.marca;
+                            document.getElementById('precio-producto').value = producto.preciounit;
+                            document.getElementById('empleo-producto').value = producto.mod_empleo;
+                            document.getElementById('advertencia-producto').value = producto.advert;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+            }
         </script>
     </body>
 </html>
