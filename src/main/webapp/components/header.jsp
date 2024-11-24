@@ -100,7 +100,11 @@
 
                     <div class="cart-footer">
                         <h5>Total: S/.<span id="cart-total"></span>${total}</h5>
-                        <button class="btn btn-dark">Finalizar Compra</button>
+                        <form action="${pageContext.request.contextPath}/PurchaseController" method="POST">
+                            <input type="hidden" name="direccion" value="pruebadireccion">
+                            <input type="hidden" name="distrito" value="distritoprueba">
+                            <button class="btn btn-dark" name="action" value="buy">Finalizar Compra</button>
+                        </form>
                     </div>
                 </c:if>
                 <!-- Mostrar un mensaje si el carrito está vacío -->
@@ -112,8 +116,6 @@
 
             </div>
         </div>
-
-
     </div>
 </div>
 </nav>

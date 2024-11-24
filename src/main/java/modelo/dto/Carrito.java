@@ -1,6 +1,5 @@
 package modelo.dto;
 
-
 public class Carrito {
     private int item;
     private int idProducto;
