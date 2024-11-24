@@ -60,6 +60,34 @@ on delete cascade
 on update cascade
 );
 
+create table compra(
+id_compra int primary key auto_increment,
+fecha date,
+total decimal(10,2),
+direccion varchar(100),
+distrito varchar(50),
+id_usuario int,
+foreign key (id_usuario) references usuarios(id_usuario)
+on delete cascade
+on update cascade
+);
+
+create table detalleCompra(
+id_detalle int primary key auto_increment,
+item int,
+cantidad int,
+preciouni decimal(10,2),
+subtotal decimal(10,2),
+id_producto int,
+id_compra int,
+foreign key (id_producto) references productos(id_producto)
+on delete cascade
+on update cascade,
+foreign key (id_compra) references compra(id_compra)
+on delete cascade
+on update cascade
+);
+
 -- consulta para ver productos con sus imagenes
 select p.id_producto, p.nombre, p.preciounit ,i.imagen from productos p 
 inner join imgProd i on p.id_producto = i.id_producto ;
