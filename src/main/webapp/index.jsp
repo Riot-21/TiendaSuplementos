@@ -66,17 +66,7 @@
         <div class="container mt-3">
             <h2 class="text-left mb-4 title-products">Productos Destacados</h2>
             <div class="row mt-3">
-                <!-- Producto 1 -->
-                <div class="col-md-4 mb-4">
-                    <div class="card product-card">
-                        <img src="assets/img/Proteinas.png" class="card-img-top" alt="Proteí­na">
-                        <div class="card-body">
-                            <h5 class="card-title">Proteí­na Whey</h5>
-                            <p class="card-text">La mejor proteí­na para tus entrenamientos.</p>
-                            <a href="producto-especifico.jsp" class="btn btn-dark">Comprar Ahora</a>
-                        </div>
-                    </div>
-                </div>
+
                 <!-- Producto 2 -->
                 <div class="col-md-4 mb-4">
                     <div class="card product-card">
@@ -88,17 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Producto 3 -->
-                <div class="col-md-4 mb-4">
-                    <div class="card product-card">
-                        <img src="assets/img/Aminoacidos.png" class="card-img-top" alt="Aminoácidos">
-                        <div class="card-body">
-                            <h5 class="card-title">Aminoácidos BCAA</h5>
-                            <p class="card-text">Recuperación muscular garantizada.</p>
-                            <a href="producto-especifico.jsp" class="btn btn-dark">Comprar Ahora</a>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -117,37 +97,18 @@
                         </div>
                     </div>
                 </div>
-                <!-- Producto 2 -->
-                <div class="col-md-4 mb-4">
-                    <div class="card product-card">
-                        <img src="assets/img/Vitaminas.png" class="card-img-top" alt="Vitaminas">
-                        <div class="card-body">
-                            <h5 class="card-title">Multivitamí­nico Completo</h5>
-                            <p class="card-text">Mejora tu salud con vitaminas esenciales.</p>
-                            <a href="producto-especifico.jsp" class="btn btn-dark">Comprar Ahora</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Producto 3 -->
-                <div class="col-md-4 mb-4">
-                    <div class="card product-card">
-                        <img src="assets/img/Aminoacidos.png" class="card-img-top" alt="AminoÃ¡cidos">
-                        <div class="card-body">
-                            <h5 class="card-title">Aminoácidos BCAA</h5>
-                            <p class="card-text">Recuperación muscular garantizada.</p>
-                            <a href="producto-especifico.jsp" class="btn btn-dark">Comprar Ahora</a>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
+        
+        
         <%@include file="components/footer.jsp" %>
 
         <script src="assets/script/cart-shopping.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
+        
     </body>
 
 </html>

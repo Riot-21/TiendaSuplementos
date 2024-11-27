@@ -35,7 +35,7 @@
             <!-- Buscar -->
             <form class="d-flex me-3">
                 <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-light" type="submit"><i class="fa fa-search"></i></button>
+                <button class="btn btn-outline-light" type="button"><i class="fa fa-search"></i></button>
             </form>
 
 

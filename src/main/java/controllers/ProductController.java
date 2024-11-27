@@ -27,6 +27,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
@@ -77,43 +79,87 @@ public class ProductController extends HttpServlet {
             ProdTienda(request, response);
         }else if ("sortBy".equals(action)) {
             filterProductos(request, response);
+        }else if ("index".equals(action)) {
+            principal(request, response);
         }
         System.out.println("Action: " + action);
     }
     
-    private void filterProductos(HttpServletRequest request, HttpServletResponse response)
+    private void principal(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        // Obtener las categorías seleccionadas
-        String[] categoriasParam = request.getParameterValues("categorias");
-        List<Integer> categorias = new ArrayList<>();
-        if (categoriasParam != null) {
-            for (String catId : categoriasParam) {
-                categorias.add(Integer.parseInt(catId));
+
+                try {
+            // Obtener productos vendidos con stock suficiente
+            List<Producto> productosVendidosConStock = producdao.ProductosVendidosConStock();
+            if (productosVendidosConStock.size() < 3) {
+                // Si no hay suficientes productos, obtener productos aleatorios
+                productosVendidosConStock.addAll(producdao.ProductosAleatorios());
             }
+            // Limitar a 3 productos
+            request.setAttribute("pdest", productosVendidosConStock.size() > 3 ? productosVendidosConStock.subList(0, 3) : productosVendidosConStock);
+
+            // Obtener productos con el menor precio
+            List<Producto> productosMenorPrecio = producdao.ProductosConMenorPrecio();
+            if (productosMenorPrecio.size() < 3) {
+                // Si no hay suficientes productos, obtener productos aleatorios
+                productosMenorPrecio.addAll(producdao.ProductosAleatorios());
+            }
+            // Limitar a 3 productos
+            request.setAttribute("ofsem", productosMenorPrecio.size() > 3 ? productosMenorPrecio.subList(0, 3) : productosMenorPrecio);
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejar excepción adecuadamente
         }
 
-        // Obtener el filtro de precio
-        String precio = request.getParameter("precio");
+        // Redirigir a la vista JSP para mostrar los productos
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
+    }
 
-        try {
-            // Obtener productos filtrados
-            List<Producto> productos = producdao.obtenerProductosPorFiltros(categorias, precio);
-            request.setAttribute("tienda", productos);
+    
+    private void filterProductos(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-            // Cargar las categorías para el filtro
-            List<Categoria> categoriasList = catdao.getAllCategorias(); // Método para obtener las categorías
-            request.setAttribute("categorias", categoriasList);
+    String[] categoriasParam = request.getParameterValues("categorias");
+    String precio = request.getParameter("precio");
+    String orden = request.getParameter("orden");
+    // Imprimir el valor recibido para depuración
+    System.out.println("Orden recibido: " + orden);
 
-            // Redirigir a la página que muestra los productos filtrados
-            RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
-            dispatcher.forward(request, response);
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            // Manejar error
+    // Mantener los valores existentes de filtros en caso ya estén aplicados
+    List<Integer> categorias = new ArrayList<>();
+    if (categoriasParam != null) {
+        for (String catId : categoriasParam) {
+            categorias.add(Integer.valueOf(catId));
         }
     }
 
+    try {
+        // Obtener productos con los filtros acumulados
+        List<Producto> productos = producdao.obtenerProductosPorFiltros(categorias, precio, orden);
+
+        // Enviar productos filtrados a la vista
+        request.setAttribute("tienda", productos);
+
+        // Mantener categorías seleccionadas
+        List<Categoria> categoriasList = catdao.getAllCategorias();
+        request.setAttribute("categorias", categoriasList);
+        request.setAttribute("categoriasSeleccionadas", categorias);
+
+        // Mantener el precio y orden seleccionados
+        request.setAttribute("precioSeleccionado", precio);
+        request.setAttribute("ordenSeleccionado", orden);
+
+        // Redirigir a la vista con los filtros aplicados
+        RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
+        dispatcher.forward(request, response);
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        // Manejar error si ocurre un fallo en la consulta
+    }
+}
+    
 
     private void ProdTienda(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

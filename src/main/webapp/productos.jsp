@@ -21,13 +21,14 @@
             <div class="row">
                 <!-- Filtros -->
                 <div class="col-lg-3">
+                    
                     <div class="filter-section">
                         <h3>Filtrar por</h3>
-
+<form action="ProductController" method="GET" id="filterForm">
                         <!-- Filtro de categorías -->
                         <h6>Categorías</h6>
-                        <form action="ProductController" method="GET">
-                            <c:forEach var="cat" items="${categorias}">
+                        
+                                                        <c:forEach var="cat" items="${categorias}">
                                 <div class="form-check">
                                     <!-- Checkbox para cada categoría -->
                                     <input class="form-check-input" type="checkbox" name="categorias" value="${cat.idCategoria}" id="${cat.categoria}">
@@ -66,43 +67,49 @@
                     <div class="container mt-4 order-section">
                         <h3>Ordenar Productos</h3>
                         <label for="orderOptions" class="form-label">Selecciona una opción de ordenación:</label>
-                        <select id="orderOptions" class="form-select">
-                            <option value="default">Selecciona...</option>
-                            <option value="price-asc">Ordenar por Precio: Menor a Mayor</option>
-                            <option value="price-desc">Ordenar por Precio: Mayor a Menor</option>
-                            <option value="popularity">Ordenar por Popularidad</option>
-                            <option value="name-asc">Ordenar por Nombre: A-Z</option>
-                            <option value="name-desc">Ordenar por Nombre: Z-A</option>
-                        </select>
+                        <form action="ProductController" method="GET" id="orderForm">
+                            <input type="hidden" name="action" value="sortBy">
+                            <select id="orderOptions" class="form-select" name="orden" onchange="document.getElementById('orderForm').submit();">
+                                <option value="default" ${empty ordenSeleccionado || ordenSeleccionado == 'default' ? 'selected' : ''}>Selecciona...</option>
+                                <option value="price-asc" ${ordenSeleccionado == 'price-asc' ? 'selected' : ''}>Ordenar por Precio: Menor a Mayor</option>
+                                <option value="price-desc" ${ordenSeleccionado == 'price-desc' ? 'selected' : ''}>Ordenar por Precio: Mayor a Menor</option>
+                                <option value="name-asc" ${ordenSeleccionado == 'name-asc' ? 'selected' : ''}>Ordenar por Nombre: A-Z</option>
+                                <option value="name-desc" ${ordenSeleccionado == 'name-desc' ? 'selected' : ''}>Ordenar por Nombre: Z-A</option>
+                            </select>
+</form>
                     </div>
+                        
+
+                            
+                            
                 </div>
                 <!-- Productos -->
                 <div class="col-lg-9">
                     <h2 class="text-start mb-4 title-products">Productos</h2>
                     <div class="row">
                         <c:if test="${not empty tienda}">
-                        <c:forEach var="producto" items="${tienda}">
-                            <div class="col-md-4 mb-4">
-                                <div class="card product-card">
-                                    <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}"style="width: 100%; height: 200px; object-fit: contain;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${producto.nombre}</h5>
-                                        <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
-                                        <c:choose>
-                                            <c:when test="${producto.stock > 0}">
-                                                <p class="stock-status text-muted">Stock disponible: 
-                                                    <span class="text-dark fw-bold">${producto.stock} unidades</span>
-                                                </p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p class="stock-status text-danger">Sin stock</p>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <a href="ProductController?action=cargarid&id=${producto.idProducto}"  class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                            <c:forEach var="producto" items="${tienda}">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card product-card">
+                                        <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}"style="width: 100%; height: 200px; object-fit: contain;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${producto.nombre}</h5>
+                                            <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
+                                            <c:choose>
+                                                <c:when test="${producto.stock > 0}">
+                                                    <p class="stock-status text-muted">Stock disponible: 
+                                                        <span class="text-dark fw-bold">${producto.stock} unidades</span>
+                                                    </p>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p class="stock-status text-danger">Sin stock</p>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <a href="ProductController?action=cargarid&id=${producto.idProducto}"  class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </c:forEach>
+                            </c:forEach>
                         </c:if>
                         <c:if test="${empty tienda}">
                             <h2>No hay productos disponibles</h2>
@@ -137,11 +144,11 @@
 
         <script src="assets/script/cart-shopping.js"></script>
         <script>
-            // Función que se llama cuando el usuario hace clic en el botón
-            function verDetalleProducto(idProducto) {
-                // Redirige a la página de producto específico sin mostrar el ID en la URL
-                window.location.href = "producto-especifico.jsp?id=" + idProducto;
-            }
+                                // Función que se llama cuando el usuario hace clic en el botón
+                                function verDetalleProducto(idProducto) {
+                                    // Redirige a la página de producto específico sin mostrar el ID en la URL
+                                    window.location.href = "producto-especifico.jsp?id=" + idProducto;
+                                }
         </script>
 
         <!-- Bootstrap JS (opcional) -->

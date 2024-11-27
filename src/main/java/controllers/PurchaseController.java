@@ -62,7 +62,7 @@ public class PurchaseController extends HttpServlet {
             c.setIdUsuario(usuario.getIdUsuario());
             
             CompraDao compradao = new CompraDao();
-            compradao.generarCompra(c, listaCarrito);
+//            compradao.generarCompra(c, listaCarrito);
             int codigo = compradao.generarCompra(c, listaCarrito);
             BoletaPDF pdf = new BoletaPDF();
             pdf.generarPDFBoleta(listaCarrito, usuario, c, codigo);
@@ -71,11 +71,11 @@ public class PurchaseController extends HttpServlet {
                 compradao.actualizarStock(carrito.getIdProducto(), carrito.getCantidad());
             }
             
-            
+            listaCarrito.clear();
+            request.removeAttribute("cant");
             session.removeAttribute("carrito");
             session.removeAttribute("total");
             session.removeAttribute("contador");
-            
             response.sendRedirect("index.jsp");
             
         }catch(Exception e){

@@ -163,133 +163,194 @@ public class ProductoDao {
         }
         return productos;
     }
-    
-    public List<Producto> obtenerProductosPorFiltros(List<Integer> categorias, String precio) throws SQLException {
-    List<Producto> productos = new ArrayList<>();
-    
-    // Comienza la consulta con los campos básicos
-    StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
-            "FROM productos p " +
-            "INNER JOIN imgProd i ON p.id_producto = i.id_producto ");
-    
-    // Si se seleccionaron categorías, agregar el filtro
-    if (categorias != null && !categorias.isEmpty()) {
-        query.append("INNER JOIN prodCategoria pc ON p.id_producto = pc.id_producto WHERE pc.id_categoria IN (");
-        for (int i = 0; i < categorias.size(); i++) {
-            query.append(categorias.get(i));
-            if (i < categorias.size() - 1) {
-                query.append(", ");
+
+    public List<Producto> obtenerProductosPorFiltros(List<Integer> categorias, String precio, String orden) throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen "
+                + "FROM productos p "
+                + "INNER JOIN imgProd i ON p.id_producto = i.id_producto ");
+
+        // Agregar filtros de categorías
+        if (categorias != null && !categorias.isEmpty()) {
+            query.append("INNER JOIN prodCategoria pc ON p.id_producto = pc.id_producto WHERE pc.id_categoria IN (");
+            for (int i = 0; i < categorias.size(); i++) {
+                query.append(categorias.get(i));
+                if (i < categorias.size() - 1) {
+                    query.append(", ");
+                }
+            }
+            query.append(") ");
+        }
+
+        // Agregar filtros de precio
+        if (precio != null) {
+            if (precio.equals("lessThan50")) {
+                query.append("AND p.preciounit < 50 ");
+            } else if (precio.equals("50to100")) {
+                query.append("AND p.preciounit BETWEEN 50 AND 100 ");
+            } else if (precio.equals("moreThan100")) {
+                query.append("AND p.preciounit > 100 ");
             }
         }
-        query.append(") ");
-    }
-    
-    // Agregar filtro de precio
-    if (precio != null) {
-        if (precio.equals("lessThan50")) {
-            query.append("AND p.preciounit < 50 ");
-        } else if (precio.equals("50to100")) {
-            query.append("AND p.preciounit BETWEEN 50 AND 100 ");
-        } else if (precio.equals("moreThan100")) {
-            query.append("AND p.preciounit > 100 ");
+
+        // Añadir agrupación
+        query.append("GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock ");
+
+        // Agregar ordenación basada en el parámetro
+        if (orden != null) {
+            switch (orden) {
+                case "price-asc":
+                    query.append("ORDER BY p.preciounit ASC ");
+                    break;
+                case "price-desc":
+                    query.append("ORDER BY p.preciounit DESC ");
+                    break;
+                case "name-asc":
+                    query.append("ORDER BY p.nombre ASC ");
+                    break;
+                case "name-desc":
+                    query.append("ORDER BY p.nombre DESC ");
+                    break;
+                default:
+                    break; // No ordenar si no se especifica
+            }
         }
-    }
 
-    // Agrupar y ordenar los resultados
-    query.append("GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock");
+        // Ejecutar la consulta
+        try (Connection cnx = new ConexionBD().getConexion(); PreparedStatement ps = cnx.prepareStatement(query.toString()); ResultSet rs = ps.executeQuery()) {
 
-    // Ejecutar la consulta
-    try {
-        cnx = new ConexionBD().getConexion();
-        ps = cnx.prepareStatement(query.toString());
-        rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
 
-        while (rs.next()) {
-            Producto producto = new Producto();
-            producto.setIdProducto(rs.getInt("id_producto"));
-            producto.setNombre(rs.getString("nombre"));
-            producto.setPreciounit(rs.getDouble("preciounit"));
-            producto.setStock(rs.getInt("stock"));
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
 
-            ImgProd img = new ImgProd();
-            img.setImagen(rs.getString("imagen"));
-            producto.setImagenes(Collections.singletonList(img));
-
-            productos.add(producto);
+                productos.add(producto);
+            }
+        } catch (SQLException ex) {
+            throw ex;
         }
-    } catch (SQLException ex) {
-        throw ex;
+
+        return productos;
     }
 
-    return productos;
-}
+    // Método para obtener productos vendidos con stock suficiente
+    public List<Producto> ProductosVendidosConStock() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
+                       "FROM productos p " +
+                       "INNER JOIN imgProd i ON p.id_producto = i.id_producto " +
+                       "INNER JOIN detalleCompra dc ON p.id_producto = dc.id_producto " +
+                       "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock " +
+                       "HAVING p.stock > 0 " + 
+                       "ORDER BY COUNT(dc.id_producto) DESC"; 
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
+                
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
+
+                productos.add(producto);
+            }
+
+            if (productos.size() < 3) {
+                productos.addAll(ProductosAleatorios());
+            }
+
+        } catch (SQLException ex) {
+            throw ex;
+        }
+        return productos.size() > 3 ? productos.subList(0, 3) : productos; 
+    }
+
+    // Método para obtener productos con el menor precio
+    public List<Producto> ProductosConMenorPrecio() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
+                       "FROM productos p " +
+                       "INNER JOIN imgProd i ON p.id_producto = i.id_producto " +
+                       "WHERE p.stock > 0 " + 
+                       "ORDER BY p.preciounit ASC"; 
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
+                
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
+
+                productos.add(producto);
+            }
+
+            if (productos.size() < 3) {
+                productos.addAll(ProductosAleatorios());
+            }
+
+        } catch (SQLException ex) {
+            throw ex;
+        }
+        return productos.size() > 3 ? productos.subList(0, 3) : productos;
+    }
+
+    // Método para obtener 3 productos aleatorios
+    public List<Producto> ProductosAleatorios() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
+                       "FROM productos p " +
+                       "INNER JOIN imgProd i ON p.id_producto = i.id_producto " +
+                       "ORDER BY RAND() LIMIT 3"; 
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
+                
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
+
+                productos.add(producto);
+            }
+
+        } catch (SQLException ex) {
+            throw ex;
+        }
+        return productos;
+    }
 
 
-//    public List<Producto> obtenerProductosPorCategoriaYPrecio(Integer idCategoria, Double precioMin, Double precioMax) throws SQLException {
-//        List<Producto> productos = new ArrayList<>();
-//        StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.descripcion, p.stock, p.marca, p.preciounit, p.mod_empleo, p.advert, i.imagen ");
-//        query.append("FROM productos p ");
-//        query.append("LEFT JOIN imgProd i ON p.id_producto = i.id_producto ");
-//        query.append("JOIN prodCategoria pc ON p.id_producto = pc.id_producto ");
-//        query.append("WHERE 1=1 "); // Condición siempre verdadera para facilitar la adición de condiciones
-//
-//        // Agregar condiciones de filtro basadas en los parámetros
-//        if (idCategoria != null) {
-//            query.append("AND pc.id_categoria = ? ");
-//        }
-//        if (precioMin != null) {
-//            query.append("AND p.preciounit >= ? ");
-//        }
-//        if (precioMax != null) {
-//            query.append("AND p.preciounit <= ? ");
-//        }
-//
-//        try {
-//            cnx = new ConexionBD().getConexion();
-//            ps = cnx.prepareStatement(query.toString());
-//
-//            // Configurar los parámetros de la consulta dependiendo de los filtros
-//            int paramIndex = 1;
-//            if (idCategoria != null) {
-//                ps.setInt(paramIndex++, idCategoria);
-//            }
-//            if (precioMin != null) {
-//                ps.setDouble(paramIndex++, precioMin);
-//            }
-//            if (precioMax != null) {
-//                ps.setDouble(paramIndex++, precioMax);
-//            }
-//
-//            rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                Producto producto = new Producto();
-//                producto.setIdProducto(rs.getInt("id_producto"));
-//                producto.setNombre(rs.getString("nombre"));
-//                producto.setDescripcion(rs.getString("descripcion"));
-//                producto.setStock(rs.getInt("stock"));
-//                producto.setMarca(rs.getString("marca"));
-//                producto.setPreciounit(rs.getDouble("preciounit"));
-//                producto.setMod_empleo(rs.getString("mod_empleo"));
-//                producto.setAdvert(rs.getString("advert"));
-//
-//                // Crear lista de imágenes
-//                List<ImgProd> imagenes = new ArrayList<>();
-//                do {
-//                    ImgProd img = new ImgProd();
-//                    img.setImagen(rs.getString("imagen"));
-//                    imagenes.add(img);
-//                } while (rs.next()); // Continúa agregando imágenes si las hay
-//
-//                producto.setImagenes(imagenes); // Establecer la lista de imágenes
-//                productos.add(producto);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Error: " + ex.getMessage());
-//            throw ex;
-//        }
-//
-//        return productos;
-//    }
 
 }
