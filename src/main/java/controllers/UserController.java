@@ -72,7 +72,7 @@ public class UserController extends HttpServlet {
                 // Si el usuario es válido, crear o obtener la sesión y redirigir a index.jsp
                 HttpSession session = request.getSession(true);  // No usar false aquí, ya que necesitamos una sesión
                 session.setAttribute("usuario", user);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("index");
             } else {
                 // Si los datos son incorrectos, mostrar mensaje de error y redirigir a login.jsp
 
@@ -130,7 +130,7 @@ public class UserController extends HttpServlet {
         } else {
             System.out.println("no hay sesion");
         }
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("index");
 
     }
 

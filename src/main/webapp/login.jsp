@@ -11,12 +11,13 @@
 </head>
 
 <body>
+    
 
     <!--Header-->
     <nav class="navbar navbar-light navbar-expand-lg custom-header">
         <div class="container">
             <!-- Logo -->
-            <a class="navbar-brand" href="index.jsp">
+            <a class="navbar-brand" href="index">
                 <img src="assets/img/logo_blanco.png" alt="Logo" height="50">
             </a>
         </div>

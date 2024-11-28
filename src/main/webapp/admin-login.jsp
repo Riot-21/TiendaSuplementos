@@ -16,7 +16,7 @@
     <nav class="navbar navbar-light navbar-expand-lg custom-header">
         <div class="container">
             <!-- Logo -->
-            <a class="navbar-brand" href="index.jsp">
+            <a class="navbar-brand" href="index">
                 <img src="assets/img/logo_blanco.png" alt="Logo" height="50">
             </a>
         </div>
@@ -38,7 +38,7 @@
                 <button type="submit" class="btn btn-danger btn-block" name="action" value="login">Iniciar Sesión</button>
             </form>
             <div class="text-center mt-3">
-                <p><a href="index.jsp">Volver a la página principal</a></p>
+                <p><a href="index">Volver a la página principal</a></p>
             </div>
         </div>
     </div>

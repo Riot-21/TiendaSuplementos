@@ -77,89 +77,80 @@ public class ProductController extends HttpServlet {
             exportarExcel(request, response);
         } else if ("tienda".equals(action)) {
             ProdTienda(request, response);
-        }else if ("sortBy".equals(action)) {
+        } else if ("sortBy".equals(action)) {
             filterProductos(request, response);
-        }else if ("index".equals(action)) {
-            principal(request, response);
+        } else if ("search".equals(action)) {
+            buscarprod(request, response);
         }
         System.out.println("Action: " + action);
     }
-    
-    private void principal(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
 
-                try {
-            // Obtener productos vendidos con stock suficiente
-            List<Producto> productosVendidosConStock = producdao.ProductosVendidosConStock();
-            if (productosVendidosConStock.size() < 3) {
-                // Si no hay suficientes productos, obtener productos aleatorios
-                productosVendidosConStock.addAll(producdao.ProductosAleatorios());
+    private void buscarprod(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String nombre = request.getParameter("busqueda");
+        try {
+            List<Producto> prodbusc = producdao.buscarProductosPorNombre(nombre);
+            List<Categoria> categorias = catdao.getAllCategorias();
+            request.setAttribute("categorias", categorias);
+            if (nombre.isEmpty() || nombre.isEmpty()) {
+                request.getRequestDispatcher("ProductController?action=tienda").forward(request, response);
+            } else {
+                if (prodbusc != null && !prodbusc.isEmpty()) {
+                    request.setAttribute("busq", prodbusc);
+                    request.getRequestDispatcher("productos.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("mensaje", "No se encontraron productos con ese término.");
+                    request.getRequestDispatcher("productos.jsp").forward(request, response);
+                }
             }
-            // Limitar a 3 productos
-            request.setAttribute("pdest", productosVendidosConStock.size() > 3 ? productosVendidosConStock.subList(0, 3) : productosVendidosConStock);
-
-            // Obtener productos con el menor precio
-            List<Producto> productosMenorPrecio = producdao.ProductosConMenorPrecio();
-            if (productosMenorPrecio.size() < 3) {
-                // Si no hay suficientes productos, obtener productos aleatorios
-                productosMenorPrecio.addAll(producdao.ProductosAleatorios());
-            }
-            // Limitar a 3 productos
-            request.setAttribute("ofsem", productosMenorPrecio.size() > 3 ? productosMenorPrecio.subList(0, 3) : productosMenorPrecio);
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Manejar excepción adecuadamente
+            Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, e);
         }
-
-        // Redirigir a la vista JSP para mostrar los productos
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-        dispatcher.forward(request, response);
     }
 
-    
     private void filterProductos(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
-    String[] categoriasParam = request.getParameterValues("categorias");
-    String precio = request.getParameter("precio");
-    String orden = request.getParameter("orden");
-    // Imprimir el valor recibido para depuración
-    System.out.println("Orden recibido: " + orden);
+        String[] categoriasParam = request.getParameterValues("categorias");
+        String precio = request.getParameter("precio");
+        String orden = request.getParameter("orden");
+        // Imprimir el valor recibido para depuración
+        System.out.println("Orden recibido: " + orden);
 
-    // Mantener los valores existentes de filtros en caso ya estén aplicados
-    List<Integer> categorias = new ArrayList<>();
-    if (categoriasParam != null) {
-        for (String catId : categoriasParam) {
-            categorias.add(Integer.valueOf(catId));
+        // Mantener los valores existentes de filtros en caso ya estén aplicados
+        List<Integer> categorias = new ArrayList<>();
+        if (categoriasParam != null) {
+            for (String catId : categoriasParam) {
+                categorias.add(Integer.valueOf(catId));
+            }
+        }
+
+        try {
+            // Obtener productos con los filtros acumulados
+            List<Producto> productos = producdao.obtenerProductosPorFiltros(categorias, precio, orden);
+
+            // Enviar productos filtrados a la vista
+            request.setAttribute("tienda", productos);
+
+            // Mantener categorías seleccionadas
+            List<Categoria> categoriasList = catdao.getAllCategorias();
+            request.setAttribute("categorias", categoriasList);
+            request.setAttribute("categoriasSeleccionadas", categorias);
+
+            // Mantener el precio y orden seleccionados
+            request.setAttribute("precioSeleccionado", precio);
+            request.setAttribute("ordenSeleccionado", orden);
+
+            // Redirigir a la vista con los filtros aplicados
+            RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
+            dispatcher.forward(request, response);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            // Manejar error si ocurre un fallo en la consulta
         }
     }
-
-    try {
-        // Obtener productos con los filtros acumulados
-        List<Producto> productos = producdao.obtenerProductosPorFiltros(categorias, precio, orden);
-
-        // Enviar productos filtrados a la vista
-        request.setAttribute("tienda", productos);
-
-        // Mantener categorías seleccionadas
-        List<Categoria> categoriasList = catdao.getAllCategorias();
-        request.setAttribute("categorias", categoriasList);
-        request.setAttribute("categoriasSeleccionadas", categorias);
-
-        // Mantener el precio y orden seleccionados
-        request.setAttribute("precioSeleccionado", precio);
-        request.setAttribute("ordenSeleccionado", orden);
-
-        // Redirigir a la vista con los filtros aplicados
-        RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
-        dispatcher.forward(request, response);
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        // Manejar error si ocurre un fallo en la consulta
-    }
-}
-    
 
     private void ProdTienda(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -240,13 +231,16 @@ public class ProductController extends HttpServlet {
                 }
 
                 if (producto != null) {
+                    List<Producto> prods = producdao.ProductosTienda();
+                    prods.removeIf(p -> p.getIdProducto() == producto.getIdProducto());
                     request.setAttribute("cant", cant);
+                    request.setAttribute("prodal", prods);
                     request.setAttribute("producto", producto); // Agregar producto al request
                     RequestDispatcher dispatcher = request.getRequestDispatcher("producto-especifico.jsp");
                     dispatcher.forward(request, response);
                 } else {
                     // Manejar caso de producto no encontrado
-                    response.sendRedirect("error.jsp?mensaje=Producto no encontrado");
+                    response.sendRedirect("index");
                 }
             } catch (NumberFormatException | SQLException e) {
                 e.printStackTrace();
@@ -360,10 +354,40 @@ public class ProductController extends HttpServlet {
             guardarProducto(request, response);
         } else if ("addToCart".equals(action)) {
             agregarCarrito(request, response);
+        } else if ("deleteFromCart".equals(action)) {
+            eliminarDeCarrito(request, response);
         } else {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("index");
         }
         System.out.println("Action: " + action);
+    }
+
+    private void eliminarDeCarrito(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int idp = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        double total = 0.0;
+
+        // Buscar el producto en la lista del carrito y eliminarlo
+        for (int i = 0; i < listaCarrito.size(); i++) {
+            if (listaCarrito.get(i).getIdProducto() == idp) {
+                listaCarrito.remove(i);
+                break;
+            }
+        }
+
+        // Recalcular el total después de eliminar el producto
+        for (Carrito car : listaCarrito) {
+            total += car.getSubtotal();
+        }
+
+        // Actualizar los atributos de sesión
+        session.setAttribute("total", total);
+        session.setAttribute("contador", listaCarrito.size());
+        session.setAttribute("carrito", listaCarrito);
+
+        // Redirigir al carrito o página correspondiente
+        response.sendRedirect(request.getHeader("Referer"));
     }
 
     private void agregarCarrito(HttpServletRequest request, HttpServletResponse response)

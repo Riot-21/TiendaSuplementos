@@ -4,7 +4,7 @@
 <nav class="navbar navbar-light navbar-expand-lg custom-header">
     <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand" href="index.jsp">
+        <a class="navbar-brand" href="index">
             <img src="assets/img/logo_blanco.png" alt="Logo" height="50">
         </a>
         <!-- Menu Responsivo -->
@@ -18,7 +18,7 @@
             <!-- Enlaces -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="index.jsp">Inicio</a>
+                    <a class="nav-link text-white" href="index">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <form action="${pageContext.request.contextPath}/ProductController" method="GET">
@@ -33,9 +33,9 @@
                 </li>
             </ul>
             <!-- Buscar -->
-            <form class="d-flex me-3">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-light" type="button"><i class="fa fa-search"></i></button>
+            <form class="d-flex me-3" action="${pageContext.request.contextPath}/ProductController" method="GET">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" name="busqueda">
+                <button class="btn btn-outline-light" name="action" value="search"><i class="fa fa-search"></i></button>
             </form>
 
 
@@ -93,6 +93,11 @@
                                         <p>Precio: S/.<span class="cart-item-price">${cart.precio}</span></p>
                                         <p>Subtotal: S/.<span class="cart-item-price">${cart.subtotal}</span></p>
                                     </div>
+                                    <!-- Botón para eliminar el producto -->
+                                    <form action="${pageContext.request.contextPath}/ProductController" method="POST">
+                                        <input type="hidden" name="id" value="${cart.idProducto}">
+                                        <button name="action" value="deleteFromCart" class="btn btn-danger">Eliminar</button>
+                                    </form>
                                 </div>
                             </c:forEach>
                         </div>

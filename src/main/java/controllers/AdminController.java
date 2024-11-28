@@ -133,7 +133,7 @@ public class AdminController extends HttpServlet {
         } else {
             System.out.println("no hay sesion");
         }
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("index");
 
     }
 

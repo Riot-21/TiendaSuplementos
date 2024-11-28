@@ -21,14 +21,14 @@
             <div class="row">
                 <!-- Filtros -->
                 <div class="col-lg-3">
-                    
+
                     <div class="filter-section">
                         <h3>Filtrar por</h3>
-<form action="ProductController" method="GET" id="filterForm">
-                        <!-- Filtro de categorías -->
-                        <h6>Categorías</h6>
-                        
-                                                        <c:forEach var="cat" items="${categorias}">
+                        <form action="ProductController" method="GET" id="filterForm">
+                            <!-- Filtro de categorías -->
+                            <h6>Categorías</h6>
+
+                            <c:forEach var="cat" items="${categorias}">
                                 <div class="form-check">
                                     <!-- Checkbox para cada categoría -->
                                     <input class="form-check-input" type="checkbox" name="categorias" value="${cat.idCategoria}" id="${cat.categoria}">
@@ -76,45 +76,81 @@
                                 <option value="name-asc" ${ordenSeleccionado == 'name-asc' ? 'selected' : ''}>Ordenar por Nombre: A-Z</option>
                                 <option value="name-desc" ${ordenSeleccionado == 'name-desc' ? 'selected' : ''}>Ordenar por Nombre: Z-A</option>
                             </select>
-</form>
+                        </form>
                     </div>
-                        
 
-                            
-                            
+
+
+
                 </div>
                 <!-- Productos -->
                 <div class="col-lg-9">
                     <h2 class="text-start mb-4 title-products">Productos</h2>
-                    <div class="row">
-                        <c:if test="${not empty tienda}">
-                            <c:forEach var="producto" items="${tienda}">
-                                <div class="col-md-4 mb-4">
-                                    <div class="card product-card">
-                                        <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}"style="width: 100%; height: 200px; object-fit: contain;">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${producto.nombre}</h5>
-                                            <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
-                                            <c:choose>
-                                                <c:when test="${producto.stock > 0}">
-                                                    <p class="stock-status text-muted">Stock disponible: 
-                                                        <span class="text-dark fw-bold">${producto.stock} unidades</span>
-                                                    </p>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <p class="stock-status text-danger">Sin stock</p>
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <a href="ProductController?action=cargarid&id=${producto.idProducto}"  class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                    <!-- Si hay una búsqueda -->
+                        <div class="row">
+                            <c:if test="${not empty busq}">
+                                <c:forEach var="producto" items="${busq}">
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card product-card">
+                                            <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${producto.nombre}</h5>
+                                                <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
+                                                <c:choose>
+                                                    <c:when test="${producto.stock > 0}">
+                                                        <p class="stock-status text-muted">Stock disponible: 
+                                                            <span class="text-dark fw-bold">${producto.stock} unidades</span>
+                                                        </p>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="stock-status text-danger">Sin stock</p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <a href="ProductController?action=cargarid&id=${producto.idProducto}" class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </c:forEach>
-                        </c:if>
-                        <c:if test="${empty tienda}">
-                            <h2>No hay productos disponibles</h2>
-                        </c:if>
-                    </div>
+                                </c:forEach>
+                            </c:if>
+
+                            <!-- Si no hay productos en la búsqueda -->
+                            <c:if test="${empty busq && empty tienda}">
+                                <h2>No se encontraron productos con ese término de búsqueda.</h2>
+                            </c:if>
+                        </div>
+
+                    <!-- Si no hay búsqueda, mostrar todos los productos de la tienda -->
+                        <div class="row">
+                            <c:if test="${not empty tienda}">
+                                <c:forEach var="producto" items="${tienda}">
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card product-card">
+                                            <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${producto.nombre}</h5>
+                                                <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
+                                                <c:choose>
+                                                    <c:when test="${producto.stock > 0}">
+                                                        <p class="stock-status text-muted">Stock disponible: 
+                                                            <span class="text-dark fw-bold">${producto.stock} unidades</span>
+                                                        </p>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="stock-status text-danger">Sin stock</p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <a href="ProductController?action=cargarid&id=${producto.idProducto}" class="btn fw-bold rounded-pill button-action">Seleccionar Opciones</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:if>
+
+                            <!-- Si no hay productos en la tienda -->
+                            <c:if test="${empty tienda && empty mensaje}">
+                                <h2>No hay productos disponibles</h2>
+                            </c:if>
+                        </div>
                 </div>
 
                 <!-- Paginación -->

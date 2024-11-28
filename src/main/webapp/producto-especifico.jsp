@@ -89,36 +89,18 @@
             <!-- Productos Relacionados -->
             <h4 class="mt-5">Productos Relacionados</h4>
             <div class="row related-products">
+                <c:forEach var="al" items="${prodal}" begin="0" end="2">
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="assets/img/Aminoacidos.png" class="card-img-top" alt="Producto Relacionado 1">
+                        <img src="${al.imagen}" class="card-img-top" alt="${al.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
                         <div class="card-body">
-                            <h5 class="card-title">Amino Fuel Liquid 32 oz - Twinlab 100% Whey 4</h5>
-                            <p class="text-primary">S/ 129.00</p>
-                            <a href="#" class="btn btn-dark btn-sm">Ver Producto</a>
+                            <h5 class="card-title">${al.nombre}</h5>
+                            <p class="text-primary">S/ ${al.preciounit}</p>
+                            <a href="ProductController?action=cargarid&id=${al.idProducto}" class="btn btn-dark btn-sm">Ver Producto</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="assets/img/Proteinas.png" class="card-img-top" alt="Producto Relacionado 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Optimum Nutrition Gold Standard 100% Whey 5 lb</h5>
-                            <p class="text-primary">S/ 289.00</p>
-                            <a href="#" class="btn btn-dark btn-sm">Ver Producto</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="assets/img/Vitaminas.png" class="card-img-top" alt="Producto Relacionado 3">
-                        <div class="card-body">
-                            <h5 class="card-title">BCAA 5000 Powder - Dymatize 100% Whey 4</h5>
-                            <p class="text-primary">S/ 99.00</p>
-                            <a href="#" class="btn btn-dark btn-sm">Ver Producto</a>
-                        </div>
-                    </div>
-                </div>
+                </c:forEach>
             </div>
         </div>
 

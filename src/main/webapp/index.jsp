@@ -19,6 +19,7 @@
         <%@include file="components/header.jsp" %>
 
         <div class="container mt-4">
+            <p>${add}</p>
             <c:if test="${not empty sessionScope.usuario}">
                 <p>Bienvenido, ${sessionScope.usuario.nombres}!</p>
             </c:if>
@@ -62,45 +63,52 @@
             <a class="brand ms-4 p-3" href="#"> <img src="assets/img/brand-ultimate_nutrition.png" alt="brand1" height="50"></a>
         </div>
 
+        
         <!--Lista de Productos Principales -->
         <div class="container mt-3">
             <h2 class="text-left mb-4 title-products">Productos Destacados</h2>
             <div class="row mt-3">
-
+                <c:forEach var="prod" items="${proddest}" begin="0" end="2">
                 <!-- Producto 2 -->
                 <div class="col-md-4 mb-4">
                     <div class="card product-card">
-                        <img src="assets/img/Vitaminas.png" class="card-img-top" alt="Vitaminas">
+                        <img src="${prod.imagen}" class="card-img-top" alt="Vitaminas" style="width: 100%; height: 200px; object-fit: contain;">
                         <div class="card-body">
-                            <h5 class="card-title">Multivitamí­nico Completo</h5>
-                            <p class="card-text">Mejora tu salud con vitaminas esenciales.</p>
-                            <a href="producto-especifico.jsp" class="btn btn-dark">Comprar Ahora</a>
+                            <h5 class="card-title ">${prod.nombre}</h5>
+                            <p class="card-price fw-bold text-price">S/. ${prod.preciounit}</p>
+                            <a href="ProductController?action=cargarid&id=${prod.idProducto}" class="btn btn-dark">Comprar Ahora</a>
                         </div>
                     </div>
                 </div>
+                </c:forEach>
 
             </div>
         </div>
-
+        
+        
+        
         <!-- Lista de Ofertas Semanales -->
         <div class="container mt-3">
             <h2 class="text-center mb-4 title-products">Ofertas Semanales</h2>
             <div class="row mt-3">
+                <c:forEach var="p" items="${ofert}" begin="0" end="2">
                 <!-- Producto 1 -->
                 <div class="col-md-4 mb-4">
                     <div class="card product-card">
-                        <img src="assets/img/Proteinas.png" class="card-img-top" alt="ProteÃ­na">
+                        <img src="${p.imagen}" class="card-img-top" alt="${p.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
                         <div class="card-body">
-                            <h5 class="card-title">Proteí­na Whey</h5>
-                            <p class="card-text">La mejor proteí­na para tus entrenamientos.</p>
-                            <a href="producto-especifico.jsp" class="btn btn-dark">Comprar Ahora</a>
+                            <h5 class="card-title">${p.nombre}</h5>
+                            <p class="card-text">${p.preciounit}</p>
+                            <a href="ProductController?action=cargarid&id=${p.idProducto}" class="btn btn-dark">Comprar Ahora</a>
                         </div>
                     </div>
                 </div>
+                </c:forEach>
 
             </div>
         </div>
-
+        
+        
         
         
         <%@include file="components/footer.jsp" %>

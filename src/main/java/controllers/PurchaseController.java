@@ -76,7 +76,7 @@ public class PurchaseController extends HttpServlet {
             session.removeAttribute("carrito");
             session.removeAttribute("total");
             session.removeAttribute("contador");
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("index");
             
         }catch(Exception e){
             e.printStackTrace();

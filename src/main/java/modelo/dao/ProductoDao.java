@@ -137,7 +137,7 @@ public class ProductoDao {
 
     public List<Producto> ProductosTienda() throws SQLException {
         List<Producto> productos = new ArrayList<>();
-        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock , MIN(i.imagen) AS imagen\n"
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock , MAX(i.imagen) AS imagen\n"
                 + "FROM productos p\n"
                 + "INNER JOIN imgProd i ON p.id_producto = i.id_producto\n"
                 + "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock;";
@@ -167,7 +167,7 @@ public class ProductoDao {
     public List<Producto> obtenerProductosPorFiltros(List<Integer> categorias, String precio, String orden) throws SQLException {
         List<Producto> productos = new ArrayList<>();
 
-        StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen "
+        StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MAX(i.imagen) AS imagen "
                 + "FROM productos p "
                 + "INNER JOIN imgProd i ON p.id_producto = i.id_producto ");
 
@@ -218,8 +218,10 @@ public class ProductoDao {
         }
 
         // Ejecutar la consulta
-        try (Connection cnx = new ConexionBD().getConexion(); PreparedStatement ps = cnx.prepareStatement(query.toString()); ResultSet rs = ps.executeQuery()) {
-
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query.toString());
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Producto producto = new Producto();
                 producto.setIdProducto(rs.getInt("id_producto"));
@@ -240,117 +242,139 @@ public class ProductoDao {
         return productos;
     }
 
-    // Método para obtener productos vendidos con stock suficiente
-    public List<Producto> ProductosVendidosConStock() throws SQLException {
+    //METODOS NUEVOS:
+    public List<Producto> obtenerProductosMasVendidos() throws SQLException {
         List<Producto> productos = new ArrayList<>();
-        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
-                       "FROM productos p " +
-                       "INNER JOIN imgProd i ON p.id_producto = i.id_producto " +
-                       "INNER JOIN detalleCompra dc ON p.id_producto = dc.id_producto " +
-                       "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock " +
-                       "HAVING p.stock > 0 " + 
-                       "ORDER BY COUNT(dc.id_producto) DESC"; 
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, \n"
+                + "       (SELECT i.imagen \n"
+                + "        FROM imgProd i \n"
+                + "        WHERE i.id_producto = p.id_producto \n"
+                + "        LIMIT 1) AS imagen\n"
+                + "FROM productos p\n"
+                + "INNER JOIN detalleCompra dc ON p.id_producto = dc.id_producto\n"
+                + "WHERE p.stock > 0\n"
+                + "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock\n"
+                + "ORDER BY SUM(dc.cantidad) DESC\n"
+                + "LIMIT 3";
 
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
             rs = ps.executeQuery();
-            
             while (rs.next()) {
                 Producto producto = new Producto();
                 producto.setIdProducto(rs.getInt("id_producto"));
                 producto.setNombre(rs.getString("nombre"));
                 producto.setPreciounit(rs.getDouble("preciounit"));
                 producto.setStock(rs.getInt("stock"));
-                
+
                 ImgProd img = new ImgProd();
                 img.setImagen(rs.getString("imagen"));
                 producto.setImagenes(Collections.singletonList(img));
 
                 productos.add(producto);
             }
-
-            if (productos.size() < 3) {
-                productos.addAll(ProductosAleatorios());
-            }
-
-        } catch (SQLException ex) {
-            throw ex;
-        }
-        return productos.size() > 3 ? productos.subList(0, 3) : productos; 
-    }
-
-    // Método para obtener productos con el menor precio
-    public List<Producto> ProductosConMenorPrecio() throws SQLException {
-        List<Producto> productos = new ArrayList<>();
-        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
-                       "FROM productos p " +
-                       "INNER JOIN imgProd i ON p.id_producto = i.id_producto " +
-                       "WHERE p.stock > 0 " + 
-                       "ORDER BY p.preciounit ASC"; 
-
-        try {
-            cnx = new ConexionBD().getConexion();
-            ps = cnx.prepareStatement(query);
-            rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Producto producto = new Producto();
-                producto.setIdProducto(rs.getInt("id_producto"));
-                producto.setNombre(rs.getString("nombre"));
-                producto.setPreciounit(rs.getDouble("preciounit"));
-                producto.setStock(rs.getInt("stock"));
-                
-                ImgProd img = new ImgProd();
-                img.setImagen(rs.getString("imagen"));
-                producto.setImagenes(Collections.singletonList(img));
-
-                productos.add(producto);
-            }
-
-            if (productos.size() < 3) {
-                productos.addAll(ProductosAleatorios());
-            }
-
-        } catch (SQLException ex) {
-            throw ex;
-        }
-        return productos.size() > 3 ? productos.subList(0, 3) : productos;
-    }
-
-    // Método para obtener 3 productos aleatorios
-    public List<Producto> ProductosAleatorios() throws SQLException {
-        List<Producto> productos = new ArrayList<>();
-        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen " +
-                       "FROM productos p " +
-                       "INNER JOIN imgProd i ON p.id_producto = i.id_producto " +
-                       "ORDER BY RAND() LIMIT 3"; 
-
-        try {
-            cnx = new ConexionBD().getConexion();
-            ps = cnx.prepareStatement(query);
-            rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Producto producto = new Producto();
-                producto.setIdProducto(rs.getInt("id_producto"));
-                producto.setNombre(rs.getString("nombre"));
-                producto.setPreciounit(rs.getDouble("preciounit"));
-                producto.setStock(rs.getInt("stock"));
-                
-                ImgProd img = new ImgProd();
-                img.setImagen(rs.getString("imagen"));
-                producto.setImagenes(Collections.singletonList(img));
-
-                productos.add(producto);
-            }
-
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
             throw ex;
         }
         return productos;
     }
 
+    public List<Producto> obtenerProductosConMenorPrecio() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, "
+                + "(SELECT i.imagen FROM imgProd i WHERE i.id_producto = p.id_producto LIMIT 1) AS imagen "
+                + "FROM productos p "
+                + "WHERE p.stock > 0 "
+                + "ORDER BY p.preciounit ASC "
+                + "LIMIT 3";
 
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
+
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
+
+                productos.add(producto);
+            }
+        }catch (SQLException ex) {
+            throw ex;
+        }
+        return productos;
+    }
+
+    public List<Producto> obtenerProductosAleatorios() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, "
+                + "(SELECT i.imagen FROM imgProd i WHERE i.id_producto = p.id_producto LIMIT 1) AS imagen "
+                + "FROM productos p "
+                + "WHERE p.stock > 0 "
+                + "ORDER BY RAND() ";
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPreciounit(rs.getDouble("preciounit"));
+                producto.setStock(rs.getInt("stock"));
+
+                ImgProd img = new ImgProd();
+                img.setImagen(rs.getString("imagen"));
+                producto.setImagenes(Collections.singletonList(img));
+
+                productos.add(producto);
+            }
+        }catch (SQLException ex) {
+            throw ex;
+        }
+        return productos;
+    }
+
+    public List<Producto> buscarProductosPorNombre(String nombre) throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, "
+                + "(SELECT i.imagen FROM imgProd i WHERE i.id_producto = p.id_producto LIMIT 1) AS imagen "
+                + "FROM productos p "
+                + "WHERE p.nombre LIKE ?";
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            
+            // Usamos % para indicar que la búsqueda puede ser parcial
+            ps.setString(1, "%" + nombre + "%");
+            rs = ps.executeQuery();
+                while (rs.next()) {
+                    Producto producto = new Producto();
+                    producto.setIdProducto(rs.getInt("id_producto"));
+                    producto.setNombre(rs.getString("nombre"));
+                    producto.setPreciounit(rs.getDouble("preciounit"));
+                    producto.setStock(rs.getInt("stock"));
+
+                    ImgProd img = new ImgProd();
+                    img.setImagen(rs.getString("imagen"));
+                    producto.setImagenes(Collections.singletonList(img));
+
+                    productos.add(producto);
+                }
+
+        }catch (SQLException ex) {
+            throw ex;
+        }
+        return productos;
+    }
 
 }
