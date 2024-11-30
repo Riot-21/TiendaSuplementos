@@ -137,7 +137,7 @@ public class ProductoDao {
 
     public List<Producto> ProductosTienda() throws SQLException {
         List<Producto> productos = new ArrayList<>();
-        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock , MAX(i.imagen) AS imagen\n"
+        String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock , MIN(i.imagen) AS imagen\n"
                 + "FROM productos p\n"
                 + "INNER JOIN imgProd i ON p.id_producto = i.id_producto\n"
                 + "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock;";
@@ -167,7 +167,7 @@ public class ProductoDao {
     public List<Producto> obtenerProductosPorFiltros(List<Integer> categorias, String precio, String orden) throws SQLException {
         List<Producto> productos = new ArrayList<>();
 
-        StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MAX(i.imagen) AS imagen "
+        StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen "
                 + "FROM productos p "
                 + "INNER JOIN imgProd i ON p.id_producto = i.id_producto ");
 

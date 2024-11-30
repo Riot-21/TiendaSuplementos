@@ -440,6 +440,7 @@ public class ProductController extends HttpServlet {
                 car.setDescripcion(p.getDescripcion());
                 car.setImagen(p.getImagen());
                 car.setPrecio(p.getPreciounit());
+                car.setStock(p.getStock());
                 car.setCantidad(cantidad);
                 car.setSubtotal(cantidad * p.getPreciounit());
 //                total = total + car.getSubtotal();

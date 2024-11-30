@@ -4,8 +4,8 @@
 <nav class="navbar navbar-light navbar-expand-lg custom-header">
     <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand" href="index">
-            <img src="assets/img/logo_blanco.png" alt="Logo" height="50">
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/index">
+            <img src="${pageContext.request.contextPath}/assets/img/logo_blanco.png" alt="Logo" height="50">
         </a>
         <!-- Menu Responsivo -->
         <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse"
@@ -18,7 +18,7 @@
             <!-- Enlaces -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="index">Inicio</a>
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/index">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <form action="${pageContext.request.contextPath}/ProductController" method="GET">
@@ -26,10 +26,10 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="nosotros.jsp">Nosotros</a>
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/nosotros.jsp">Nosotros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="tiendas.jsp">Locales</a>
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/tiendas.jsp">Locales</a>
                 </li>
             </ul>
             <!-- Buscar -->
@@ -110,6 +110,7 @@
                             <input type="hidden" name="distrito" value="distritoprueba">
                             <button class="btn btn-dark" name="action" value="buy">Finalizar Compra</button>
                         </form>
+                        <a class="btn btn-dark" href="users/cart.jsp">Ir a comprar</a>
                     </div>
                 </c:if>
                 <!-- Mostrar un mensaje si el carrito está vacío -->

@@ -19,7 +19,6 @@
         <%@include file="components/header.jsp" %>
 
         <div class="container mt-4">
-            <p>${add}</p>
             <c:if test="${not empty sessionScope.usuario}">
                 <p>Bienvenido, ${sessionScope.usuario.nombres}!</p>
             </c:if>
@@ -68,6 +67,7 @@
         <div class="container mt-3">
             <h2 class="text-left mb-4 title-products">Productos Destacados</h2>
             <div class="row mt-3">
+                <c:if test="${not empty proddest}">
                 <c:forEach var="prod" items="${proddest}" begin="0" end="2">
                 <!-- Producto 2 -->
                 <div class="col-md-4 mb-4">
@@ -81,7 +81,10 @@
                     </div>
                 </div>
                 </c:forEach>
-
+                </c:if>
+                <c:if test="${empty proddest}">
+                    <h4 class="text-danger">No hay productos disponibles</h4>
+                </c:if>
             </div>
         </div>
         
@@ -91,6 +94,7 @@
         <div class="container mt-3">
             <h2 class="text-center mb-4 title-products">Ofertas Semanales</h2>
             <div class="row mt-3">
+                <c:if test="${not empty ofert}">
                 <c:forEach var="p" items="${ofert}" begin="0" end="2">
                 <!-- Producto 1 -->
                 <div class="col-md-4 mb-4">
@@ -104,7 +108,10 @@
                     </div>
                 </div>
                 </c:forEach>
-
+                </c:if>
+                <c:if test="${empty ofert}">
+                    <h4 class="text-danger">No hay ofertas disponibles</h4>
+                </c:if>
             </div>
         </div>
         

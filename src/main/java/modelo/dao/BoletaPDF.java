@@ -14,6 +14,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import modelo.dto.Carrito;
 import modelo.dto.Compra;
 import modelo.dto.Producto;
@@ -21,20 +22,19 @@ import modelo.dto.Usuario;
 
 public class BoletaPDF {
         
-    public void generarPDFBoleta(List<Carrito> productos, Usuario cliente, Compra venta, int codigo) {
+public void generarPDFBoleta(HttpServletResponse response, List<Carrito> productos, Usuario cliente, Compra venta, int codigo) {
     try {
-        // Ruta donde se almacenará el PDF // Método que retorna el código de la venta
-        File file = new File("C:\\Users\\uset\\Documents\\NetBeansProjects\\TiendaSuplementos\\src\\main\\webapp\\pdf/" + codigo + ".pdf");
-        
-        FileOutputStream archivo = new FileOutputStream(file);
+        // Configurar el contenido para la descarga
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=boleta_" + codigo + ".pdf");
 
         // Crear el documento
         Document documento = new Document();
-        PdfWriter.getInstance(documento, archivo);
+        PdfWriter.getInstance(documento, response.getOutputStream());
         documento.open();
 
         // Agregar logo de la empresa
-        Image logo = Image.getInstance("C:\\Users\\uset\\Documents\\NetBeansProjects\\TiendaSuplementos\\src\\main\\webapp\\assets\\img\\Tienda.jpg"); // Ruta del logo
+        Image logo = Image.getInstance("C:\\Users\\RIOT\\Documents\\NetBeansProjects\\TiendaSuplementos\\src\\main\\webapp\\assets\\img\\Tienda.jpg");
         logo.scaleToFit(100, 100);
         logo.setAlignment(Element.ALIGN_LEFT);
         documento.add(logo);
@@ -44,7 +44,7 @@ public class BoletaPDF {
         datosEmpresa.setAlignment(Element.ALIGN_LEFT);
         datosEmpresa.add(new Phrase("Nutripooint\n", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD)));
         datosEmpresa.add(new Phrase("RUC: 123456789\n", new Font(Font.FontFamily.HELVETICA, 12)));
-        datosEmpresa.add(new Phrase("Dirección: Calle Ejemplo 123\nTeléfono: +51 987654321\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
+        datosEmpresa.add(new Phrase("Dirección: " + venta.getDireccion() + "\nTeléfono: +51 987654321\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
         documento.add(datosEmpresa);
 
         // Agregar datos del cliente
@@ -52,7 +52,7 @@ public class BoletaPDF {
         datosCliente.setAlignment(Element.ALIGN_LEFT);
         datosCliente.add(new Phrase("Cliente:\n", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
         datosCliente.add(new Phrase("DNI: " + cliente.getDni() + "\n", new Font(Font.FontFamily.HELVETICA, 12)));
-        datosCliente.add(new Phrase("Nombre: " + cliente.getNombres()+ " " + cliente.getApellidos() + "\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
+        datosCliente.add(new Phrase("Nombre: " + cliente.getNombres() + " " + cliente.getApellidos() + "\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
         documento.add(datosCliente);
 
         // Agregar tabla de productos
@@ -85,14 +85,10 @@ public class BoletaPDF {
 
         // Cerrar el documento
         documento.close();
-        archivo.close();
-
-        // Abrir el PDF automáticamente
-        Desktop.getDesktop().open(file);
     } catch (Exception e) {
         System.err.println("Error al generar el PDF: " + e.getMessage());
         e.printStackTrace();
     }
+}
 
-    }
 }

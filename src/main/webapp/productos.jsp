@@ -114,7 +114,7 @@
                             </c:if>
 
                             <!-- Si no hay productos en la búsqueda -->
-                            <c:if test="${empty busq && empty tienda}">
+                            <c:if test="${empty busq && empty tienda && not empty mensaje}">
                                 <h2>No se encontraron productos con ese término de búsqueda.</h2>
                             </c:if>
                         </div>
@@ -147,7 +147,7 @@
                             </c:if>
 
                             <!-- Si no hay productos en la tienda -->
-                            <c:if test="${empty tienda && empty mensaje}">
+                            <c:if test="${empty tienda && empty mensaje && empty busq}">
                                 <h2>No hay productos disponibles</h2>
                             </c:if>
                         </div>

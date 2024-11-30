@@ -17,10 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import modelo.dao.ProductoDao;
 import modelo.dto.Producto;
 
-/**
- *
- * @author uset
- */
 @WebServlet(name = "RootController", urlPatterns = {"/index"})
 public class RootController extends HttpServlet {
     private ProductoDao producdao;

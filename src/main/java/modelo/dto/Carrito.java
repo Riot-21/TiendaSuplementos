@@ -7,23 +7,24 @@ public class Carrito {
     private String descripcion;
     private double precio;
     private int cantidad;
+    private int stock;
     private double subtotal;
-    String imagen;
+    private String imagen;
 
     public Carrito() {
     }
 
-    public Carrito(int item, int idProducto, String nombres, String descripcion, double precio, int cantidad, double subtotal, String imagen) {
+    public Carrito(int item, int idProducto, String nombres, String descripcion, double precio, int cantidad, int stock, double subtotal, String imagen) {
         this.item = item;
         this.idProducto = idProducto;
         this.nombres = nombres;
         this.descripcion = descripcion;
         this.precio = precio;
         this.cantidad = cantidad;
+        this.stock = stock;
         this.subtotal = subtotal;
         this.imagen = imagen;
     }
-
 
     public String getImagen() {
         return imagen;
@@ -31,14 +32,6 @@ public class Carrito {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
-    }
-
-    public double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
     }
 
     public int getItem() {
@@ -88,6 +81,24 @@ public class Carrito {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+
     
     
 }

@@ -37,9 +37,25 @@ public class PurchaseController extends HttpServlet {
         String action = request.getParameter("action");
         if ("buy".equals(action)) {
             generarCompra(request, response);
-        } else{
+        } else if("payment".equals(action)){
+            metodoPago(request, response);
+        }else{
             System.out.println("action: "+action);
         }
+    }
+    
+    private void metodoPago(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String metodo = request.getParameter("metodo");
+        if(metodo.equals("delivery")){
+            session.setAttribute("metodo", metodo);
+        }else if(metodo.equals("recojo")){
+            session.setAttribute("metodo", metodo);
+        }else{
+            System.out.println("metodo no reconocido: "+metodo);
+        }
+        response.sendRedirect("users/payment.jsp");
     }
                 private void generarCompra(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -65,7 +81,7 @@ public class PurchaseController extends HttpServlet {
 //            compradao.generarCompra(c, listaCarrito);
             int codigo = compradao.generarCompra(c, listaCarrito);
             BoletaPDF pdf = new BoletaPDF();
-            pdf.generarPDFBoleta(listaCarrito, usuario, c, codigo);
+            pdf.generarPDFBoleta(response,listaCarrito, usuario, c, codigo);
             System.out.println("id compra: "+c.getIdCompra());
             for(Carrito carrito : listaCarrito){
                 compradao.actualizarStock(carrito.getIdProducto(), carrito.getCantidad());
