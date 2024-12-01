@@ -9,9 +9,6 @@ contraseña varchar(50),
 dni int,
 telefono int
 );
- -- comentario
-
-drop table administrador;
 create table administrador(
 id_admin int primary key auto_increment,
 nombres varchar(70),
@@ -21,6 +18,8 @@ contraseña varchar(50),
 dni int,
 telefono int
 );
+INSERT INTO administrador (nombres, apellidos, email, contraseña, dni, telefono) VALUES ("adm1","apellidadmo","admin@gmail.com","123",98654,9764564);
+
 
 create table productos(
 id_producto int primary key auto_increment,
@@ -64,8 +63,9 @@ create table compra(
 id_compra int primary key auto_increment,
 fecha date,
 total decimal(10,2),
-direccion varchar(100),
-distrito varchar(50),
+tipo_pago varchar(50),
+direccion varchar(100) null,
+distrito varchar(50) null,
 id_usuario int,
 foreign key (id_usuario) references usuarios(id_usuario)
 on delete cascade
@@ -88,6 +88,25 @@ on delete cascade
 on update cascade
 );
 
+create table empresa(
+id_empresa int primary key auto_increment,
+nombre varchar(50),
+ruc_empresa varchar(11),
+razonSocial varchar(100)
+);
+
+insert into empresa (nombre,ruc_empresa,razonSocial) values ("Nutripoint","11122233344","razon social de la emrpesa");
+
+create table tiendas(
+id_tienda int primary key auto_increment,
+distrito varchar(50),
+direccion varchar(100),
+telefono int,
+horario varchar (50)
+);
+
+insert into tiendas(distrito, direccion, telefono, horario) values("San Isidro","av. kfhsd 432","935426123","9am-10pm");
+
 -- consulta para ver productos con sus imagenes
 select p.id_producto, p.nombre, p.preciounit ,i.imagen from productos p 
 inner join imgProd i on p.id_producto = i.id_producto ;
@@ -106,16 +125,13 @@ SHOW VARIABLES LIKE 'character_set%';
 SHOW CREATE DATABASE bd_nutripoint;
 SHOW CREATE TABLE usuarios;  
 
-
-drop table imgProd;
-select * from prodcategoria;
-
-select * from imgprod;
-select * from categorias;
-select * from prodcategoria;
+select * from tiendas;
 select * from productos;
 select * from usuarios;
+select * from prodcategoria;
 select * from administrador;
+select * from imgProd;
+select * from categorias;
 select * from usuarios where email = "user3@gmail.com" and contraseña = "contraseña";
-INSERT INTO administrador (nombres, apellidos, email, contraseña, dni, telefono) VALUES ("adm1","apellidadmo","passadmin@gmail.com","contraseñadmin",98654,9764564);
+INSERT INTO usuarios (nombres, apellidos, email, contraseña, dni, telefono) VALUES ("juan","perz","pass3@gmail.com","contraseña",98654,9764564);
 drop database bd_nutripoint;
