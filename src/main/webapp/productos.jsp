@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="es_PE" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -95,7 +97,9 @@
                                             <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
                                             <div class="card-body">
                                                 <h5 class="card-title">${producto.nombre}</h5>
-                                                <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
+                                                <fmt:formatNumber value="${producto.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="precio"></fmt:formatNumber>
+                                                <p class="card-price fw-bold text-price">S/. ${precio}</p>
+                                                
                                                 <c:choose>
                                                     <c:when test="${producto.stock > 0}">
                                                         <p class="stock-status text-muted">Stock disponible: 
@@ -128,7 +132,8 @@
                                             <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
                                             <div class="card-body">
                                                 <h5 class="card-title">${producto.nombre}</h5>
-                                                <p class="card-price fw-bold text-price">S/. ${producto.preciounit}</p>
+                                                <fmt:formatNumber value="${producto.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="precio"></fmt:formatNumber>
+                                                <p class="card-price fw-bold text-price">S/. ${precio}</p>
                                                 <c:choose>
                                                     <c:when test="${producto.stock > 0}">
                                                         <p class="stock-status text-muted">Stock disponible: 

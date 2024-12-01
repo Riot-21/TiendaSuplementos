@@ -1,4 +1,3 @@
-
 package modelo.dao;
 
 import com.itextpdf.text.Document;
@@ -17,12 +16,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import modelo.dto.Carrito;
 import modelo.dto.Compra;
+import modelo.dto.Empresa;
 import modelo.dto.Producto;
 import modelo.dto.Usuario;
 
 public class BoletaPDF {
         
-public void generarPDFBoleta(HttpServletResponse response, List<Carrito> productos, Usuario cliente, Compra venta, int codigo) {
+public void generarPDFBoleta(Empresa emp,HttpServletResponse response, List<Carrito> productos, Usuario cliente, Compra venta, int codigo) {
+    
     try {
         // Configurar el contenido para la descarga
         response.setContentType("application/pdf");
@@ -42,9 +43,14 @@ public void generarPDFBoleta(HttpServletResponse response, List<Carrito> product
         // Agregar encabezado con datos de la empresa
         Paragraph datosEmpresa = new Paragraph();
         datosEmpresa.setAlignment(Element.ALIGN_LEFT);
-        datosEmpresa.add(new Phrase("Nutripooint\n", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD)));
-        datosEmpresa.add(new Phrase("RUC: 123456789\n", new Font(Font.FontFamily.HELVETICA, 12)));
-        datosEmpresa.add(new Phrase("Dirección: " + venta.getDireccion() + "\nTeléfono: +51 987654321\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
+        datosEmpresa.add(new Phrase(emp.getNombre()+"\n", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD)));
+        datosEmpresa.add(new Phrase("RUC: "+emp.getRuc()+"\n", new Font(Font.FontFamily.HELVETICA, 12)));
+        datosEmpresa.add(new Phrase("Metodo envío: " + venta.getTipopago()+"\n", new Font(Font.FontFamily.HELVETICA, 12)));
+        if(venta.getTipopago().equals("delivery")){
+            datosEmpresa.add(new Phrase("Direccion de envío: "+venta.getDireccion()+", "+venta.getDistrito(), new Font(Font.FontFamily.HELVETICA, 12)));
+        }else if(venta.getTipopago().equals("recojo")){
+            datosEmpresa.add(new Phrase("Sede de Recojo: Tienda- "+venta.getDistrito()+"\nDireccion: "+venta.getDireccion()+"\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
+        }
         documento.add(datosEmpresa);
 
         // Agregar datos del cliente
@@ -75,6 +81,9 @@ public void generarPDFBoleta(HttpServletResponse response, List<Carrito> product
         // Agregar resumen de la venta
         Paragraph resumenVenta = new Paragraph();
         resumenVenta.setAlignment(Element.ALIGN_RIGHT);
+        if(venta.getTipopago().equals("delivery")){
+            resumenVenta.add(new Phrase("Coste envío: S/10.00 \n", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+        }
         resumenVenta.add(new Phrase("Total: S/ " + String.format("%.2f", venta.getTotal()) + "\n\n", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
         documento.add(resumenVenta);
 

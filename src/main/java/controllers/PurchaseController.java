@@ -15,12 +15,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modelo.dao.BoletaPDF;
 import modelo.dao.CompraDao;
+import modelo.dao.EmpresaDao;
+import modelo.dao.TiendasDao;
 import modelo.dto.Carrito;
 import modelo.dto.Compra;
+import modelo.dto.Empresa;
+import modelo.dto.Tiendas;
 import modelo.dto.Usuario;
 
 @WebServlet(name = "PurchaseController", urlPatterns = {"/PurchaseController"})
 public class PurchaseController extends HttpServlet {
+    TiendasDao tdao= new TiendasDao();
+    List<Tiendas> listaTiendas= new ArrayList<>();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -51,6 +57,12 @@ public class PurchaseController extends HttpServlet {
         if(metodo.equals("delivery")){
             session.setAttribute("metodo", metodo);
         }else if(metodo.equals("recojo")){
+            try{
+            listaTiendas=tdao.listarTiendas();
+            session.setAttribute("tiendas", listaTiendas);
+            }catch(Exception e){
+                request.setAttribute("error", e);
+            }
             session.setAttribute("metodo", metodo);
         }else{
             System.out.println("metodo no reconocido: "+metodo);
@@ -61,6 +73,22 @@ public class PurchaseController extends HttpServlet {
         throws ServletException, IOException {
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
+        String metodo = (String) session.getAttribute("metodo");
+        String direccion=null;
+        String distrito=null;
+        double envio=0;
+        if(metodo.equals("delivery")){
+            envio=10.00;
+            direccion=request.getParameter("direccion");
+        }else if(metodo.equals("recojo")){
+            try{
+            Tiendas t =tdao.GetTiendaById(Integer.parseInt(request.getParameter("distrito")));
+            direccion=t.getDireccion();
+            distrito=t.getDistrito();
+            }catch(Exception exc){
+                System.out.println("error: "+exc);
+            }
+        }
         if(usuario == null){
             response.sendRedirect("login.jsp");
             return;
@@ -72,16 +100,18 @@ public class PurchaseController extends HttpServlet {
             
             Compra c = new Compra();
             c.setFecha(LocalDate.now());
-            c.setTotal(total);
-            c.setDireccion(request.getParameter("direccion"));
-            c.setDistrito(request.getParameter("distrito"));
+            c.setTotal(total+envio);
+            c.setTipopago(metodo);
+            c.setDireccion(direccion);
+            c.setDistrito(distrito);
             c.setIdUsuario(usuario.getIdUsuario());
             
             CompraDao compradao = new CompraDao();
-//            compradao.generarCompra(c, listaCarrito);
+            EmpresaDao empdao = new EmpresaDao();
+            Empresa e= empdao.datosEmpresa();
             int codigo = compradao.generarCompra(c, listaCarrito);
             BoletaPDF pdf = new BoletaPDF();
-            pdf.generarPDFBoleta(response,listaCarrito, usuario, c, codigo);
+            pdf.generarPDFBoleta(e,response,listaCarrito, usuario, c, codigo);
             System.out.println("id compra: "+c.getIdCompra());
             for(Carrito carrito : listaCarrito){
                 compradao.actualizarStock(carrito.getIdProducto(), carrito.getCantidad());

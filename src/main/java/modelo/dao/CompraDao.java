@@ -16,16 +16,17 @@ public class CompraDao {
     ResultSet rs;
     
         public int generarCompra(Compra compra, List<Carrito> carritoItems) throws SQLException{
-            String query = "insert into compra (fecha, total, direccion, distrito, id_usuario) values(?,?,?,?,?)";
+            String query = "insert into compra (fecha, total,tipo_pago, direccion, distrito, id_usuario) values(?,?,?,?,?,?)";
             int idCompra=0;
             try{
                 cnx = new ConexionBD().getConexion();
                 ps = cnx.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
                 ps.setDate(1, java.sql.Date.valueOf(compra.getFecha()));
                 ps.setDouble(2, compra.getTotal());
-                ps.setString(3, compra.getDireccion());
-                ps.setString(4, compra.getDistrito());
-                ps.setInt(5, compra.getIdUsuario());
+                ps.setString(3, compra.getTipopago());
+                ps.setString(4, compra.getDireccion());
+                ps.setString(5, compra.getDistrito());
+                ps.setInt(6, compra.getIdUsuario());
                 ps.executeUpdate();
                 
                 rs = ps.getGeneratedKeys();

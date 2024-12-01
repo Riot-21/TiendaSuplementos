@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,83 +22,21 @@
     <div class="container mt-3">
         <h1 class="text-center mb-4 title-store">Nuestras Tiendas</h1>
         <div class="row g-4">
+            <c:forEach var="t" items="${shop}">
             <!-- Tienda 1 -->
             <div class="col-lg-4 col-md-6">
                 <div class="store-card bg-white">
                     <img src="assets/img/Store-1.jpg" class="store-img" alt="Tienda 1">
                     <div class="store-info">
-                        <h5 class="text-primary">Tienda Central</h5>
-                        <p><i class="fa fa-map-marker me-2"></i>Av. Peru 123, Lima, Perú</p>
-                        <p><i class="fa fa-phone me-2"></i>+51 987 654 321</p>
-                        <p><i class="fa fa-clock me-2"></i>Horario: 9:00 AM - 7:00 PM</p>
+                        <h5 class="text-primary">Tienda - ${t.distrito}</h5>
+                        <p><i class="fa fa-map-marker me-2"></i>${t.direccion}</p>
+                        <p><i class="fa fa-phone me-2"></i>+51 ${t.telefono}</p>
+                        <p><i class="fa fa-clock me-2"></i>Horario: ${t.horario}</p>
                     </div>
                 </div>
             </div>
+            </c:forEach>
 
-            <!-- Tienda 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="store-card bg-white">
-                    <img src="assets/img/Store-2.jpg" class="store-img" alt="Tienda 2">
-                    <div class="store-info">
-                        <h5 class="text-primary">Tienda Surco</h5>
-                        <p><i class="fa fa-map-marker me-2"></i>Av. Peru 456, Surco, Lima</p>
-                        <p><i class="fa fa-phone me-2"></i>+51 987 654 322</p>
-                        <p><i class="fa fa-clock me-2"></i>Horario: 10:00 AM - 8:00 PM</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tienda 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="store-card bg-white">
-                    <img src="assets/img/Store-3.jpg" class="store-img" alt="Tienda 3">
-                    <div class="store-info">
-                        <h5 class="text-primary">Tienda Miraflores</h5>
-                        <p><i class="fa fa-map-marker me-2"></i>Av. Peru 789, Miraflores, Lima</p>
-                        <p><i class="fa fa-phone me-2"></i>+51 987 654 323</p>
-                        <p><i class="fa fa-clock me-2"></i>Horario: 8:00 AM - 9:00 PM</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tienda 4 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="store-card bg-white">
-                    <img src="assets/img/Store-4.jpg" class="store-img" alt="Tienda 3">
-                    <div class="store-info">
-                        <h5 class="text-primary">Tienda Miraflores</h5>
-                        <p><i class="fa fa-map-marker me-2"></i>Av. Peru 789, Miraflores, Lima</p>
-                        <p><i class="fa fa-phone me-2"></i>+51 987 654 323</p>
-                        <p><i class="fa fa-clock me-2"></i>Horario: 8:00 AM - 9:00 PM</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tienda 5 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="store-card bg-white">
-                    <img src="assets/img/Store-5.jpg" class="store-img" alt="Tienda 3">
-                    <div class="store-info">
-                        <h5 class="text-primary">Tienda Miraflores</h5>
-                        <p><i class="fa fa-map-marker me-2"></i>Av. Peru 789, Miraflores, Lima</p>
-                        <p><i class="fa fa-phone me-2"></i>+51 987 654 323</p>
-                        <p><i class="fa fa-clock me-2"></i>Horario: 8:00 AM - 9:00 PM</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tienda 6 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="store-card bg-white">
-                    <img src="assets/img/Store-6.jpg" class="store-img" alt="Tienda 3">
-                    <div class="store-info">
-                        <h5 class="text-primary">Tienda Miraflores</h5>
-                        <p><i class="fa fa-map-marker me-2"></i>Av. Peru 789, Miraflores, Lima</p>
-                        <p><i class="fa fa-phone me-2"></i>+51 987 654 323</p>
-                        <p><i class="fa fa-clock me-2"></i>Horario: 8:00 AM - 9:00 PM</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

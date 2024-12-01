@@ -231,7 +231,7 @@ public class ProductController extends HttpServlet {
                 }
 
                 if (producto != null) {
-                    List<Producto> prods = producdao.ProductosTienda();
+                    List<Producto> prods = producdao.obtenerProductosAleatorios();
                     prods.removeIf(p -> p.getIdProducto() == producto.getIdProducto());
                     request.setAttribute("cant", cant);
                     request.setAttribute("prodal", prods);
@@ -356,7 +356,9 @@ public class ProductController extends HttpServlet {
             agregarCarrito(request, response);
         } else if ("deleteFromCart".equals(action)) {
             eliminarDeCarrito(request, response);
-        } else {
+        } else if ("update".equals(action)) {
+            doPut(request, response);
+        }else {
             response.sendRedirect("index");
         }
         System.out.println("Action: " + action);
@@ -547,6 +549,49 @@ public class ProductController extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
             dispatcher.forward(request, response);
         }
+    }
+    
+        @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try {
+            // Leer los parámetros enviados en la solicitud
+            int idProducto = Integer.parseInt(request.getParameter("id-producto"));
+            String nombre = request.getParameter("nombre-producto");
+            String descripcion = request.getParameter("descripcion-producto");
+            int stock = Integer.parseInt(request.getParameter("stock-producto"));
+            String marca = request.getParameter("marca-producto");
+            double preciounit = Double.parseDouble(request.getParameter("precio-producto"));
+            String modEmpleo = request.getParameter("empleo-producto");
+            String advert = request.getParameter("advertencia-producto");
+            
+            Producto p = new Producto();
+            p.setIdProducto(idProducto);
+            p.setNombre(nombre);
+            p.setDescripcion(descripcion);
+            p.setStock(stock);
+            p.setMarca(marca);
+            p.setPreciounit(preciounit);
+            p.setMod_empleo(modEmpleo);
+            p.setAdvert(advert);
+            
+            boolean actualizado = producdao.actualizarProducto(p);
+            
+            // Responder según el resultado
+            if (actualizado) {
+                out.write("{\"message\": \"Producto actualizado exitosamente.\"}");
+                response.sendRedirect("ProductController?action=cargartodo");
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("{\"message\": \"No se pudo actualizar el producto.\"}");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
     }
 
     @Override

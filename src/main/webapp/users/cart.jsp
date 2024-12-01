@@ -68,9 +68,9 @@
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">Detalles de la Compra</h5>
                             <p class="card-text"><strong>Subtotal: ${contador} producto(s)</strong> S/. ${total}</p>
-                            <p class="card-text"><strong>Envío:</strong> S/. 15.00</p>
+                            <p class="card-text"><strong>Envío(Solo Lima Metropolitana):</strong> S/. 10.00</p>
                             <hr>
-                            <p class="card-text fs-5"><strong>Total:</strong> S/. ${total+15}</p>
+                            <p class="card-text fs-5"><strong>Total:</strong> S/. ${total+10}</p>
                             <!-- Método de pago -->
                             <form action="${pageContext.request.contextPath}/PurchaseController" method="POST">
                                 <div class="mb-3">

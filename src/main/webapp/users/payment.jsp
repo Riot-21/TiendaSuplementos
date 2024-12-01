@@ -69,7 +69,6 @@
                                 <input type="text" class="form-control" id="distrito"
                                        placeholder="Ingrese su distrito" name="distrito" required>
                             </div>
-                            <button type="button" class="btn btn-dark w-100" id="confirmarBtn">Confirmar Datos</button>
                             </c:if>
                         
                     </div>
@@ -80,13 +79,12 @@
                             <h3 class="mb-4">Selecciona una tienda para el recojo:</h3>
                             <div class="mb-3">
                                 <label for="selectTienda" class="form-label">Selecciona una tienda</label>
-                                <select class="form-select" id="selectTienda">
-                                    <option value="callao">Tienda Central - Callao</option>
-                                    <option value="miraflores">Tienda Sur - Miraflores</option>
-                                    <option value="losOlivos">Tienda Norte - Los Olivos</option>
-                                    <option value="sanIsidro">Tienda Este - San Isidro</option>
-                                    <option value="sanBorja">Tienda Oeste - San Borja</option>
+                                
+                                <select class="form-select" id="selectTienda" name="distrito">
+                                    <c:forEach var="t" items="${tiendas}">
+                                    <option value="${t.idTienda}">Tienda ${t.distrito}</option></c:forEach>
                                 </select>
+                                
                             </div>
                         </div>
                     </div>
@@ -98,19 +96,26 @@
                         <h3 class="mb-4">Resumen de la Compra</h3>
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between">
-                                <strong>Fecha:</strong> <span>01/01/2023</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>Número de Compra:</strong> <span>123456</span>
+                                <strong>Número de Productos:</strong> <span>${contador}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <strong>Subtotal:</strong> <span>S/. ${total}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
+                                <c:if test="${metodo eq 'recojo'}">
+                                <strong>Envío:</strong> <span>No aplica</span>
+                                </c:if>
+                                <c:if test="${metodo eq 'delivery'}">
                                 <strong>Envío:</strong> <span>S/. 10.00</span>
+                                </c:if>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
+                                <c:if test="${metodo eq 'recojo'}">
+                                <strong>Total:</strong> <span>S/. ${total}</span>
+                                </c:if>
+                                <c:if test="${metodo eq 'delivery'}">
                                 <strong>Total:</strong> <span>S/. ${total+10}</span>
+                                </c:if>
                             </li>
                         </ul>
                                                 

@@ -51,47 +51,47 @@
                             <!--Nombre-->
                             <div class="form-group">
                                 <label for="product-name">Nombre del Producto</label>
-                                <input type="text" class="form-control" id="product-name" name="nombrep">
+                                <input type="text" class="form-control" id="product-name" name="nombrep" required>
                             </div>
                             <!--Descripcion-->
                             <div class="form-group">
                                 <label for="product-description">Descripcion del Producto</label>
-                                <textarea class="form-control" id="product-description" name="descp"></textarea>
+                                <textarea class="form-control" id="product-description" name="descp" required></textarea>
                             </div>
                             <!--Stock-->
                             <div class="form-group">
                                 <label for="product-stock">Stock del Producto</label>
-                                <input type="number" class="form-control" id="product-stock" name="stkp">
+                                <input type="number" class="form-control" id="product-stock" name="stkp" min="0" required>
                             </div>
                             <!--Marca-->
                             <div class="form-group">
                                 <label for="product-brand">Marca del Producto</label>
-                                <input type="text" class="form-control" id="product-brand" name="marcap">
+                                <input type="text" class="form-control" id="product-brand" name="marcap" required>
                             </div>
                             <!--Precio-->
                             <div class="form-group">
                                 <label for="product-price">Precio del Producto (S/.)</label>
-                                <input type="number" class="form-control" id="product-price" name="preciop">
+                                <input type="number" class="form-control" id="product-price" name="preciop" step="0.01" min="0" required>
                             </div>
                             <!--Modo de Empleo-->
                             <div class="form-group">
                                 <label for="product-modeUse">Modo del Empleo del Producto</label>
-                                <textarea class="form-control" id="product-modeUse" name="modp"></textarea>
+                                <textarea class="form-control" id="product-modeUse" name="modp" required></textarea>
                             </div>
                             <!--Advertencia-->
                             <div class="form-group">
                                 <label for="product-warning">Advertencia del Producto</label>
-                                <textarea class="form-control" id="product-warning" name="advp"></textarea>
+                                <textarea class="form-control" id="product-warning" name="advp" required></textarea>
                             </div>
                             <!-- Imagen -->
                             <div class="form-group">
                                 <label for="product-photos">Imagen del Producto</label>
-                                <input type="file" multiple accept="image/*" class="form-control" id="product-photos" name="photos">
+                                <input type="file" multiple accept="image/*" class="form-control" id="product-photos" name="photos" required>
                             </div>
                             <!-- Categorias -->
                             <div class="form-group">
                                 <label for="product-cat">Categoria del Producto:</label>
-                                <select class="form-control" id="product-cat" name="catp[]" multiple>
+                                <select class="form-control" id="product-cat" name="catp[]" multiple required>
                                     <c:forEach var="cat" items="${cat}">                                 
                                         <option value="${cat.idCategoria}">${cat.categoria}</option>
                                     </c:forEach> 
@@ -107,11 +107,11 @@
                     <form action="${pageContext.request.contextPath}/CategoryController" method="POST">
                         <div class="form-group">
                             <label>nombre de categoria</label>
-                            <input type="text" class="form-control" name="categoria-nombre">  
+                            <input type="text" class="form-control" name="categoria-nombre" required>  
                         </div>
                         <div class="form-group">
                             <label>objetivo de categoria</label>
-                            <input type="text" class="form-control" name="categoria-obj">  
+                            <input type="text" class="form-control" name="categoria-obj"required>  
                         </div>
                         <button type="submit" class="btn btn-success">Add category</button>
                     </form>

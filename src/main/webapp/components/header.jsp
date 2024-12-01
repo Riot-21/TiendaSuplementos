@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page session="true"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="es_PE" />
 <!-- Header -->
 <nav class="navbar navbar-light navbar-expand-lg custom-header">
     <div class="container">
@@ -29,7 +31,7 @@
                     <a class="nav-link text-white" href="${pageContext.request.contextPath}/nosotros.jsp">Nosotros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/tiendas.jsp">Locales</a>
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/shop">Locales</a>
                 </li>
             </ul>
             <!-- Buscar -->
@@ -91,7 +93,8 @@
                                         <h6>${cart.nombres}</h6>
                                         <p>Cantidad: <span class="cart-item-quantity">${cart.cantidad}</span></p>
                                         <p>Precio: S/.<span class="cart-item-price">${cart.precio}</span></p>
-                                        <p>Subtotal: S/.<span class="cart-item-price">${cart.subtotal}</span></p>
+                                        <fmt:formatNumber value="${cart.subtotal}" minFractionDigits="2" maxFractionDigits="2" var="subt"></fmt:formatNumber>
+                                        <p>Subtotal: S/.<span class="cart-item-price">${subt}</span></p>
                                     </div>
                                     <!-- Botón para eliminar el producto -->
                                     <form action="${pageContext.request.contextPath}/ProductController" method="POST">
@@ -104,12 +107,8 @@
                     </div>
 
                     <div class="cart-footer">
-                        <h5>Total: S/.<span id="cart-total"></span>${total}</h5>
-                        <form action="${pageContext.request.contextPath}/PurchaseController" method="POST">
-                            <input type="hidden" name="direccion" value="pruebadireccion">
-                            <input type="hidden" name="distrito" value="distritoprueba">
-                            <button class="btn btn-dark" name="action" value="buy">Finalizar Compra</button>
-                        </form>
+                        <fmt:formatNumber value="${total}" minFractionDigits="2" maxFractionDigits="2" var="formattedTotal"></fmt:formatNumber>
+                        <h5>Total: S/.<span id="cart-total"></span>${formattedTotal}</h5>                  
                         <a class="btn btn-dark" href="users/cart.jsp">Ir a comprar</a>
                     </div>
                 </c:if>

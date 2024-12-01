@@ -96,13 +96,14 @@
                         <div class="modal fade" id="EditarProductoModal" tabindex="-1" aria-labelledby="EditarProductoLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
+                                <form id="editarProductoForm" action="${pageContext.request.contextPath}/ProductController" method="POST">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="EditarProductoLabel">Editar Producto</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="editarProductoForm">
+                                        <input type="hidden" name="id-producto" id="id-producto">
                                             <div class="form-group">
                                                 <label for="nombre-producto">Nombre del Producto</label>
                                                 <input type="text" class="form-control" id="nombre-producto" name="nombre-producto">
@@ -121,7 +122,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="precio-producto">Precio del Producto (S/.)</label>
-                                                <input type="number" class="form-control" id="precio-producto" name="precio-producto">
+                                                <input type="number" class="form-control" id="precio-producto" name="precio-producto" step="0.01" min="0" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="empleo-producto">Modo de Empleo del Producto</label>
@@ -131,18 +132,18 @@
                                                 <label for="advertencia-producto">Advertencia del Producto</label>
                                                 <textarea class="form-control" id="advertencia-producto" name="advertencia-producto"></textarea>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="imagen-producto">Imagen del Producto</label>
-                                                <input type="file" class="form-control" id="imagen-producto" name="imagen-producto" accept="image/*">
-                                            </div>
-                                        </form>
+                                        
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success" id="confirmar-editar">Confirmar</button>
+                                        <button type="submit" name="action" value="update" class="btn btn-success" id="confirmar-editar">Confirmar</button>
                                     </div>
+                                            
                                 </div>
+                                </form>
+                                            
                             </div>
+                                            
                         </div>
 
 
@@ -168,6 +169,7 @@
                         })
                         .then(producto => {
                             // Rellenar los campos del formulario con los datos
+                    document.getElementById('id-producto').value = id;
                             document.getElementById('nombre-producto').value = producto.nombre;
                             document.getElementById('descripcion-producto').value = producto.descripcion;
                             document.getElementById('stock-producto').value = producto.stock;

@@ -6,6 +6,7 @@ public class Compra {
     private int idCompra;
     private LocalDate fecha; 
     private double total;
+    private String tipopago;
     private String direccion;
     private String distrito;
     private int idUsuario;
@@ -13,20 +14,13 @@ public class Compra {
     public Compra() {
     }
 
-    public Compra(int idCompra, LocalDate fecha, double total, String direccion, String distrito, int idUsuario) {
+    public Compra(int idCompra, LocalDate fecha, double total, String tipopago, String direccion, String distrito, int idUsuario) {
         this.idCompra = idCompra;
         this.fecha = fecha;
         this.total = total;
+        this.tipopago = tipopago;
         this.direccion = direccion;
         this.distrito = distrito;
-        this.idUsuario = idUsuario;
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
 
@@ -54,6 +48,14 @@ public class Compra {
         this.total = total;
     }
 
+    public String getTipopago() {
+        return tipopago;
+    }
+
+    public void setTipopago(String tipopago) {
+        this.tipopago = tipopago;
+    }
+
     public String getDireccion() {
         return direccion;
     }
@@ -69,6 +71,16 @@ public class Compra {
     public void setDistrito(String distrito) {
         this.distrito = distrito;
     }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+
     
     
 }

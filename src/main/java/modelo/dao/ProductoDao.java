@@ -18,6 +18,35 @@ public class ProductoDao {
     Connection cnx;
     PreparedStatement ps;
     ResultSet rs;
+    
+    public boolean actualizarProducto(Producto prod) throws SQLException {
+    boolean actualizado = false;
+    String query = "UPDATE productos SET nombre = ?, descripcion = ?, stock = ?, marca = ?, preciounit = ?, mod_empleo = ?, advert = ? WHERE id_producto = ?";
+    
+    try {
+        cnx = new ConexionBD().getConexion();
+        ps = cnx.prepareStatement(query);
+        
+        // Establecer los valores de los parámetros
+        ps.setString(1, prod.getNombre());
+        ps.setString(2, prod.getDescripcion());
+        ps.setInt(3, prod.getStock());
+        ps.setString(4, prod.getMarca());
+        ps.setDouble(5, prod.getPreciounit());
+        ps.setString(6, prod.getMod_empleo());
+        ps.setString(7, prod.getAdvert());
+        ps.setInt(8, prod.getIdProducto());
+        
+        // Ejecutar la actualización
+        int filasAfectadas = ps.executeUpdate();
+        actualizado = (filasAfectadas > 0);
+    } catch (SQLException ex) {
+        System.out.println("Error al actualizar el producto: " + ex.getMessage());
+        throw ex;
+    }
+    return actualizado;
+}
+
 
     public void agregarProducto(Producto prod) throws SQLException {
         String query = "insert into productos(nombre, descripcion, stock, marca, preciounit, mod_empleo, advert) values(?,?,?,?,?,?,?)";
