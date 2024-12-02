@@ -86,7 +86,8 @@
                             <!-- Imagen -->
                             <div class="form-group">
                                 <label for="product-photos">Imagen del Producto</label>
-                                <input type="file" multiple accept="image/*" class="form-control" id="product-photos" name="photos" required>
+                                <input type="file" multiple accept="image/*" class="form-control" id="product-photos" name="photos" required onchange="validarImagenes()">
+                                <p id="error" style="color:red; display:none;">Solo puedes seleccionar hasta 3 imágenes.</p>
                             </div>
                             <!-- Categorias -->
                             <div class="form-group">
@@ -127,6 +128,22 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
                 integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+
+        <script>
+            function validarImagenes() {
+                const archivoInput = document.getElementById('product-photos');
+                const errorMsg = document.getElementById('error');
+
+                if (archivoInput.files.length > 3) {
+                    errorMsg.style.display = 'block';
+                    archivoInput.setCustomValidity('Solo puedes seleccionar hasta 3 imágenes.');
+                    archivoInput.value='';
+                } else {
+                    errorMsg.style.display = 'none';
+                    archivoInput.setCustomValidity('');
+                }
+            }
+        </script>
     </body>
 
 </html>

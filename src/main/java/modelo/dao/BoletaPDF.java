@@ -35,7 +35,7 @@ public void generarPDFBoleta(Empresa emp,HttpServletResponse response, List<Carr
         documento.open();
 
         // Agregar logo de la empresa
-        Image logo = Image.getInstance("C:\\Users\\RIOT\\Documents\\NetBeansProjects\\TiendaSuplementos\\src\\main\\webapp\\assets\\img\\Tienda.jpg");
+        Image logo = Image.getInstance("C:\\Users\\uset\\Documents\\NetBeansProjects\\TiendaSuplementos\\src\\main\\webapp\\assets\\img\\Tienda.jpg");
         logo.scaleToFit(100, 100);
         logo.setAlignment(Element.ALIGN_LEFT);
         documento.add(logo);

@@ -9,18 +9,20 @@ public class Compra {
     private String tipopago;
     private String direccion;
     private String distrito;
+    private String estado;
     private int idUsuario;
 
     public Compra() {
     }
 
-    public Compra(int idCompra, LocalDate fecha, double total, String tipopago, String direccion, String distrito, int idUsuario) {
+    public Compra(int idCompra, LocalDate fecha, double total, String tipopago, String direccion, String distrito, String estado, int idUsuario) {
         this.idCompra = idCompra;
         this.fecha = fecha;
         this.total = total;
         this.tipopago = tipopago;
         this.direccion = direccion;
         this.distrito = distrito;
+        this.estado = estado;
         this.idUsuario = idUsuario;
     }
 
@@ -72,6 +74,14 @@ public class Compra {
         this.distrito = distrito;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -79,6 +89,7 @@ public class Compra {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
+
 
 
     

@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -27,6 +28,9 @@
     <div class="login-container">
         <div class="login-box">
             <h3 class="text-center">Iniciar Sesión</h3>
+            <c:if test="${not empty error}">
+                <h6 class="text-danger">${error}</h6>
+            </c:if>
             <form action="UserController" method="POST">
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
@@ -40,6 +44,7 @@
             </form>
             <div class="text-center mt-3">
                 <p>¿No tienes cuenta? <a href="registro.jsp">Regí­strate aquí­</a></p>
+                <p><a href="forgot-password.jsp">¿Olvidaste tu contraseña?</a></p> <!-- Enlace para recuperar contraseña -->
             </div>
         </div>
     </div>

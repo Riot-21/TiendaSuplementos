@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -26,30 +27,33 @@
     <div class="register-container">
         <div class="register-box">
             <h3 class="text-center">Registro</h3>
+            <c:if test="${not empty error}">
+                <h6 class="text-danger">${error}</h6>
+            </c:if>
             <form action="UserController" method="POST">
                 <div class="form-group">
                     <label for="username">Nombres</label>
-                    <input type="text" class="form-control" id="username" name="nombres" placeholder="Ingresa tu nombre">
+                    <input type="text" class="form-control" id="username" name="nombres" placeholder="Ingresa tu nombre" required>
                 </div>
                 <div class="form-group">
                     <label for="lastname">Apellido</label>
-                    <input type="text" class="form-control" id="lastname" name="apellidos" placeholder="Ingresa tu nombre de usuario">
+                    <input type="text" class="form-control" id="lastname" name="apellidos" placeholder="Ingresa tu nombre de usuario" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="pass" placeholder="Crea una contraseña">
+                    <input type="password" class="form-control" id="password" name="pass" placeholder="Crea una contraseña" required>
                 </div>
                 <div class="form-group">
                     <label for="dni">Dni</label>
-                    <input type="text" class="form-control" id="dni" name="dni" placeholder="Ingresa tu numero de DNI">
+                    <input type="text" class="form-control" id="dni" name="dni" placeholder="Ingresa tu numero de DNI" maxlength="8" pattern="^\d{8}$" title="Debe contener exactamente 8 dígitos" required oninput="validarNumero(this)">
                 </div>
                 <div class="form-group">
                     <label for="phone">Teléfono</label>
-                    <input type="text" class="form-control" id="phoone" name="telefono" placeholder="Ingresa tu teléfono">
+                    <input type="text" class="form-control" id="phoone" name="telefono" placeholder="Ingresa tu teléfono" maxlength="9" pattern="^\d{9}$" title="Debe contener exactamente 9 dígitos" required oninput="validarNumero(this)">
                 </div>
                 <button type="submit" name="action" value="register" class="btn btn-dark btn-block">Crear Cuenta</button>
             </form>
@@ -60,7 +64,14 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Función para validar que solo se ingresen números
+    function validarNumero(input) {
+        input.value = input.value.replace(/[^0-9]/g, ''); // Reemplaza cualquier carácter que no sea un número
+    }
+    </script>
 </body>
 
 </html>

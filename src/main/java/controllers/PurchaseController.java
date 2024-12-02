@@ -27,12 +27,60 @@ import modelo.dto.Usuario;
 public class PurchaseController extends HttpServlet {
     TiendasDao tdao= new TiendasDao();
     List<Tiendas> listaTiendas= new ArrayList<>();
+    CompraDao cdao= new CompraDao();
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        String action =request.getParameter("action");
+        if ("history".equals(action)) {
+            historialCompra(request, response);
+        } else if("detail".equals(action)){
+            DetalleCompra(request, response);
+        }else{
+            System.out.println("action: "+action);
+        }
+    }
+    
+    private void historialCompra(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        try{  
+            List<Compra> listaCompra=cdao.obtenerComprasPorUsuario(usuario.getIdUsuario());
+
+            session.setAttribute("historial", listaCompra);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("users/history.jsp");
+            dispatcher.forward(request, response);
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            request.setAttribute("error", "Error al subir el archivo: " + e.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+    private void DetalleCompra(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int idCompra=Integer.parseInt(request.getParameter("id"));
+        System.out.println("id compra: "+idCompra);
+        try{
+            Compra com=cdao.obtenerCompraId(idCompra);
+            List<Carrito> detalle =cdao.obtenerDetalleCompra(idCompra);
+            request.setAttribute("compra", com);
+            System.out.println("compra: "+com.getTotal());
+            request.setAttribute("detalle", detalle);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("users/detail.jsp");
+            dispatcher.forward(request, response);
+        }catch(Exception e){
+            e.printStackTrace();
+            request.setAttribute("error", "Error al subir el archivo: " + e.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("productos.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     @Override
@@ -80,6 +128,7 @@ public class PurchaseController extends HttpServlet {
         if(metodo.equals("delivery")){
             envio=10.00;
             direccion=request.getParameter("direccion");
+            distrito=request.getParameter("distrito");
         }else if(metodo.equals("recojo")){
             try{
             Tiendas t =tdao.GetTiendaById(Integer.parseInt(request.getParameter("distrito")));

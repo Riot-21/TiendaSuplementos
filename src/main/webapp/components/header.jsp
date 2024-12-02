@@ -52,7 +52,7 @@
                     <!-- Menú desplegable -->
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                         <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
-                        <li><a class="dropdown-item" href="#">Configuración</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/PurchaseController?action=history">Mis Compras</a></li>
                         <li>
                             <form action="${pageContext.request.contextPath}/UserController" method="post">
                                 <button type="submit" name="action" value="logout" class="dropdown-item">Cerrar Sesión</button>
