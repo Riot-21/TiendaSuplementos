@@ -1,10 +1,5 @@
-<%-- 
-    Document   : changePassword
-    Created on : 1 dic. 2024, 17:50:58
-    Author     : uset
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -25,13 +20,21 @@
                 </a>
             </div>
         </nav>
-        <form action="UserController" method="POST">
-            <input type="hidden" name="idUsuario" value="3">
-            <label for="nuevaContrasena">Nueva Contraseña:</label>
-            <input type="password" id="nuevaContrasena" name="nuevaContrasena" required>
-            <label for="confirmarContrasena">Confirmar Contraseña:</label>
-            <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
-            <button type="submit" name="action" value="changePass">Cambiar Contraseña</button>
-        </form>
+        <div class="login-container">
+            <div class="login-box">
+                <c:if test="${not empty error}">
+                    <h6 class="text-danger">${error}</h6>
+                </c:if>
+                <form action="UserController" method="POST">
+                    <div class="form-group">
+                        <label for="nuevaContrasena">Nueva Contraseña:</label>
+                        <input type="password" id="nuevaContrasena" name="nuevaContrasena" required>
+                        <label for="confirmarContrasena">Confirmar Contraseña:</label>
+                        <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+                        <button type="submit" name="action" value="changePass">Cambiar Contraseña</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

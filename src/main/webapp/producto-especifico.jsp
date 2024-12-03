@@ -36,7 +36,8 @@
                 <div class="col-md-8">
                     <h2 id="productoNombre">${producto.nombre}</h2>
                     <p><strong>SKU:</strong> <span id="productoSKU">${producto.idProducto}</span></p>
-                    <h3 class="text-primary" id="productoPrecio">S/. ${producto.preciounit}</h3>
+                    <fmt:formatNumber value="${producto.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="preciop"></fmt:formatNumber>
+                    <h3 class="text-primary" id="productoPrecio">S/. ${preciop}</h3>
                     <!-- Verificar stock -->
                     <p class="text-${producto.stock > 0 ? 'success' : 'danger'}" id="productoStock">
                         <c:if test="${producto.stock > 0}">
@@ -95,7 +96,8 @@
                         <img src="${al.imagen}" class="card-img-top" alt="${al.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
                         <div class="card-body">
                             <h5 class="card-title">${al.nombre}</h5>
-                            <p class="text-primary">S/ ${al.preciounit}</p>
+                            <fmt:formatNumber value="${al.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="precioal"></fmt:formatNumber>
+                            <p class="text-primary">S/ ${precioal}</p>
                             <a href="ProductController?action=cargarid&id=${al.idProducto}" class="btn btn-dark btn-sm">Ver Producto</a>
                         </div>
                     </div>

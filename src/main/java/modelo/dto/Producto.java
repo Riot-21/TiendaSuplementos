@@ -1,5 +1,6 @@
 package modelo.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Producto {
@@ -12,6 +13,9 @@ public class Producto {
     private double preciounit;
     private String mod_empleo;
     private String advert;
+    private LocalDate fechav;
+    private String mensajeProximoAVencer; 
+    private int ventas;
     
     private List<Categoria> categorias;
     private List<ImgProd> imagenes;
@@ -19,7 +23,7 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(int idProducto, String nombre, String descripcion, int stock, String marca, double preciounit, String mod_empleo, String advert, List<Categoria> categorias, List<ImgProd> imagenes) {
+    public Producto(int idProducto, String nombre, String descripcion, int stock, String marca, double preciounit, String mod_empleo, String advert, LocalDate fechav, String mensajeProximoAVencer, int ventas, List<Categoria> categorias, List<ImgProd> imagenes) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -28,9 +32,26 @@ public class Producto {
         this.preciounit = preciounit;
         this.mod_empleo = mod_empleo;
         this.advert = advert;
+        this.fechav = fechav;
+        this.mensajeProximoAVencer = mensajeProximoAVencer;
+        this.ventas = ventas;
         this.categorias = categorias;
         this.imagenes = imagenes;
     }
+
+
+
+    public int getVentas() {
+        return ventas;
+    }
+
+    public void setVentas(int ventas) {
+        this.ventas = ventas;
+    }
+
+
+
+
         // Método para obtener una sola imagen (por ejemplo, la primera)
     public String getImagen() {
         return (imagenes != null && !imagenes.isEmpty()) ? imagenes.get(0).getImagen() : null;
@@ -114,6 +135,22 @@ public class Producto {
 
     public void setAdvert(String advert) {
         this.advert = advert;
+    }
+
+    public LocalDate getFechav() {
+        return fechav;
+    }
+
+    public void setFechav(LocalDate fechav) {
+        this.fechav = fechav;
+    }
+
+    public String getMensajeProximoAVencer() {
+        return mensajeProximoAVencer;
+    }
+
+    public void setMensajeProximoAVencer(String mensajeProximoAVencer) {
+        this.mensajeProximoAVencer = mensajeProximoAVencer;
     }
     
     

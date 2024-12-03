@@ -103,11 +103,11 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="agregarDNI" class="form-label">DNI</label>
-                                        <input type="text" class="form-control" id="agregarDNI" name="dni" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
+                                        <input type="number" class="form-control" id="agregarDNI" name="dni" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
                                     </div>
                                     <div class="mb-3">
                                         <label for="agregarTelf" class="form-label">Telefono</label>
-                                        <input type="text" class="form-control" id="agregarCorreo" name="tel" required>
+                                        <input type="number" class="form-control" id="agregarCorreo" name="tel" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="agregarCorreo" class="form-label">Correo</label>

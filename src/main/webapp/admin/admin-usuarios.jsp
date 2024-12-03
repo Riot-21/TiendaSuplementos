@@ -50,6 +50,7 @@
                             <button type="submit" class="btn btn-primary">Recargar</button>
                         </form>
                         <hr>
+                        <c:if test="${not empty listaUsuarios}">
                         <!-- Tabla de usuarios -->
                         <table class="table table-striped table-bordered mt-3">
                             <thead class="thead-dark">
@@ -82,6 +83,10 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+                        </c:if>
+                        <c:if test="${empty listaUsuarios}">
+                            <h3 class="text-danger">Aun no hay usuarios registrados</h3>
+                        </c:if>
                     </div>
                 </main>
             </div>

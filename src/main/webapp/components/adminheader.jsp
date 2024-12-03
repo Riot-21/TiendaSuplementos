@@ -5,13 +5,13 @@
         <div class="sidebar-heading">Administrador</div>
         <ul class="nav flex-column mt-3 w-100">
             <li class="nav-item p-2">
-                <a class="nav-link active text-white" href="${pageContext.request.contextPath}/admin/dashboard.jsp">
+                <a class="nav-link active text-white" href="${pageContext.request.contextPath}/AdminController?action=dashboard">
                     <i class="fa-solid fa-house me-2"></i>Dashboard
                 </a>
             </li>
             <li class="nav-item p-2">
                 <form action="${pageContext.request.contextPath}/UserController" method="GET">
-                    <button type="submit" class="nav-link text-white">
+                    <button type="submit" class="nav-link text-white" name="action" value="show">
                         <i class="fas fa-users me-2"></i>Usuarios</button>
                 </form>
             </li>
@@ -27,14 +27,14 @@
                 </a>
             </li>
             <li class="nav-item p-2">
-                <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/pedidos.jsp">
+                <a class="nav-link text-white" href="${pageContext.request.contextPath}/AdminController?action=pedidos">
                     <i class="fa-solid fa-cart-shopping me-2"></i>Pedidos
                 </a>
             </li>
             <li class="nav-item p-2">
                 <form action="${pageContext.request.contextPath}/AdminController" method="GET">
-                    <button type="submit" class="nav-link text-white">
-                        <i class="fas fa-user me-2"></i>Administradores</button>
+                    <button type="submit" class="nav-link text-white" name="action" value="list">
+                        <i class="fas fa-user me-2" ></i>Administradores</button>
                 </form>
             </li>
             <li class="nav-item p-2">

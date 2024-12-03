@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="es_PE" />
 <!doctype html>
 <html lang="es">
 
@@ -43,6 +45,10 @@
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-1">
 
                     <h2>Productos</h2>
+                    <c:if test="${empty productos}">
+                        <h4 class="text-danger">No hay productos registrados</h4>
+                    </c:if>
+                    <c:if test="${not empty productos}">
                     <p>Lista de productos.</p>
                     <table class="table table-striped table-bordered" id="tabla-productos">
                         <thead class="thead-dark">
@@ -66,9 +72,16 @@
                                     <td>${producto.descripcion}</td>
                                     <td>${producto.stock}</td>
                                     <td>${producto.marca}</td>
-                                    <td>${producto.preciounit}</td>
+                                    <fmt:formatNumber value="${producto.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="precio"></fmt:formatNumber>
+                                    <td>${precio}</td>
                                     <td>${producto.mod_empleo}</td>
                                     <td>${producto.advert}</td>
+                                    <td>${producto.fechav}
+
+                                        <c:if test="${not empty producto.mensajeProximoAVencer}">
+                                            <span class="alert alert-warning">${producto.mensajeProximoAVencer}</span>
+                                        </c:if>
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-between">
                                             <button class="btn btn-danger btn-sm me-2" onclick="" data-bs-toggle="modal"
@@ -81,6 +94,7 @@
                             </c:forEach>
                         </tbody>
                     </table>
+                    
 
 
                     <div class="d-flex justify-content-end mb-3">
@@ -97,13 +111,13 @@
                              aria-hidden="true">
                             <div class="modal-dialog">
                                 <form id="editarProductoForm" action="${pageContext.request.contextPath}/ProductController" method="POST">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="EditarProductoLabel">Editar Producto</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input type="hidden" name="id-producto" id="id-producto">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="EditarProductoLabel">Editar Producto</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id-producto" id="id-producto">
                                             <div class="form-group">
                                                 <label for="nombre-producto">Nombre del Producto</label>
                                                 <input type="text" class="form-control" id="nombre-producto" name="nombre-producto">
@@ -132,22 +146,24 @@
                                                 <label for="advertencia-producto">Advertencia del Producto</label>
                                                 <textarea class="form-control" id="advertencia-producto" name="advertencia-producto"></textarea>
                                             </div>
-                                        
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" name="action" value="update" class="btn btn-success" id="confirmar-editar">Confirmar</button>
+                                        </div>
+
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" name="action" value="update" class="btn btn-success" id="confirmar-editar">Confirmar</button>
-                                    </div>
-                                            
-                                </div>
                                 </form>
-                                            
+
                             </div>
-                                            
+
                         </div>
 
 
                     </div>
+                                    </c:if>
+                    
 
                 </main>
             </div>
@@ -158,30 +174,30 @@
         crossorigin="anonymous"></script>
 
         <script>
-            // Definimos una función llamada cargarDatosProducto que recibe un ID de producto.
-            function cargarDatosProducto(id) {
-                fetch(`ProductController?action=editar&id=` + id)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`Error: ${response.status}`);
-                            }
-                            return response.json(); // Procesar como JSON
-                        })
-                        .then(producto => {
-                            // Rellenar los campos del formulario con los datos
-                    document.getElementById('id-producto').value = id;
-                            document.getElementById('nombre-producto').value = producto.nombre;
-                            document.getElementById('descripcion-producto').value = producto.descripcion;
-                            document.getElementById('stock-producto').value = producto.stock;
-                            document.getElementById('marca-producto').value = producto.marca;
-                            document.getElementById('precio-producto').value = producto.preciounit;
-                            document.getElementById('empleo-producto').value = producto.mod_empleo;
-                            document.getElementById('advertencia-producto').value = producto.advert;
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-            }
+                                                        // Definimos una función llamada cargarDatosProducto que recibe un ID de producto.
+                                                        function cargarDatosProducto(id) {
+                                                            fetch(`ProductController?action=editar&id=` + id)
+                                                                    .then(response => {
+                                                                        if (!response.ok) {
+                                                                            throw new Error(`Error: ${response.status}`);
+                                                                        }
+                                                                        return response.json(); // Procesar como JSON
+                                                                    })
+                                                                    .then(producto => {
+                                                                        // Rellenar los campos del formulario con los datos
+                                                                        document.getElementById('id-producto').value = id;
+                                                                        document.getElementById('nombre-producto').value = producto.nombre;
+                                                                        document.getElementById('descripcion-producto').value = producto.descripcion;
+                                                                        document.getElementById('stock-producto').value = producto.stock;
+                                                                        document.getElementById('marca-producto').value = producto.marca;
+                                                                        document.getElementById('precio-producto').value = producto.preciounit;
+                                                                        document.getElementById('empleo-producto').value = producto.mod_empleo;
+                                                                        document.getElementById('advertencia-producto').value = producto.advert;
+                                                                    })
+                                                                    .catch(error => {
+                                                                        console.error('Error:', error);
+                                                                    });
+                                                        }
         </script>
     </body>
 </html>

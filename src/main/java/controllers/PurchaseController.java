@@ -160,7 +160,7 @@ public class PurchaseController extends HttpServlet {
             Empresa e= empdao.datosEmpresa();
             int codigo = compradao.generarCompra(c, listaCarrito);
             BoletaPDF pdf = new BoletaPDF();
-            pdf.generarPDFBoleta(e,response,listaCarrito, usuario, c, codigo);
+            pdf.generarPDFBoleta(e,response,listaCarrito, usuario, c, codigo,request);
             System.out.println("id compra: "+c.getIdCompra());
             for(Carrito carrito : listaCarrito){
                 compradao.actualizarStock(carrito.getIdProducto(), carrito.getCantidad());

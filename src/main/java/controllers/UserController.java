@@ -36,6 +36,18 @@ public class UserController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        String action = request.getParameter("action");
+        if ("show".equals(action)) {
+            mostrarUsuarios(request, response);
+        }else{
+            response.sendRedirect("index");
+        }
+        System.out.println("action: "+action);
+    }
+    
+
+    private void mostrarUsuarios(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         List<Usuario> listaUsuarios = new ArrayList<>();
         try {
             listaUsuarios = userdao.listarUsuarios();
@@ -45,7 +57,6 @@ public class UserController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @Override
@@ -65,70 +76,84 @@ public class UserController extends HttpServlet {
             forgotPassword(request, response);
         } else if ("verifyCode".equals(action)) {
             verificarCodigo(request, response);
-        }else if ("changePass".equals(action)) {
+        } else if ("changePass".equals(action)) {
             cambiarPsw(request, response);
         }
     }
-    
+
     private void cambiarPsw(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-            String nuevaContraseña = request.getParameter("nuevaContrasena");
-    String confirmarContraseña = request.getParameter("confirmarContrasena");
-    int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));  // El ID del usuario viene como parámetro
-    
-    // Verificar que las contraseñas coincidan
-    if (!nuevaContraseña.equals(confirmarContraseña)) {
-        request.setAttribute("error", "Las contraseñas no coinciden.");
-        request.getRequestDispatcher("cambiar_contrasena.jsp").forward(request, response);
-        return;
-    }
-    
-    try {
-        // Actualizar la contraseña en la base de datos
-        boolean exito = userdao.actualizarContraseña(idUsuario, nuevaContraseña);
-        
-        if (exito) {
-            // Si la actualización fue exitosa
-            request.setAttribute("mensaje", "Tu contraseña ha sido actualizada exitosamente.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            // Si ocurrió un error o el usuario no existe
-            request.setAttribute("error", "No se pudo actualizar la contraseña. Intenta nuevamente.");
-            request.getRequestDispatcher("cambiar_contrasena.jsp").forward(request, response);
+
+        String nuevaContraseña = request.getParameter("nuevaContrasena");
+        String confirmarContraseña = request.getParameter("confirmarContrasena");
+        HttpSession session = request.getSession();
+        Integer idUser = (Integer) session.getAttribute("idUsuario");
+
+        if (idUser == null) {
+            request.setAttribute("error", "No se ha encontrado el id usuario");
+            request.getRequestDispatcher("verificar-codigo.jsp").forward(request, response);
+            return;
         }
-    } catch (SQLException e) {
-        System.out.println("Error al cambiar la contraseña: " + e);
-        request.setAttribute("error", "Hubo un error al actualizar la contraseña. Intenta nuevamente.");
-        request.getRequestDispatcher("cambiar_contrasena.jsp").forward(request, response);
-    }
-    }
-    
-    private void verificarCodigo(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            String codigoIngresado = request.getParameter("codigo");
-    int idUsuario = Integer.parseInt(request.getParameter("idUsuario")); // Supón que el idUsuario es enviado junto al formulario
 
-    try {
-        String codigoAlmacenado = userdao.obtenerCodigoVerificacion(idUsuario);
+        // Verificar que las contraseñas coincidan
+        if (!nuevaContraseña.equals(confirmarContraseña)) {
+            request.setAttribute("error", "Las contraseñas no coinciden.");
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
 
-        if (codigoIngresado.equals(codigoAlmacenado)) {
-            // Verificar si el código ha expirado
-            boolean haExpirado = userdao.verificarExpiracionCodigo(idUsuario);
-            if (haExpirado) {
-                request.setAttribute("error", "El código ha expirado. Solicita uno nuevo.");
-                request.getRequestDispatcher("recuperar_contraseña.jsp").forward(request, response);
+        try {
+            // Actualizar la contraseña en la base de datos
+            boolean exito = userdao.actualizarContraseña(idUser, nuevaContraseña);
+
+            if (exito) {
+                // Si la actualización fue exitosa
+                request.setAttribute("mensaje", "Tu contraseña ha sido actualizada exitosamente.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             } else {
-                // Código correcto, permitir que el usuario cambie la contraseña
+                // Si ocurrió un error o el usuario no existe
+                request.setAttribute("error", "No se pudo actualizar la contraseña. Intenta nuevamente.");
                 request.getRequestDispatcher("changePassword.jsp").forward(request, response);
             }
-        } else {
-            request.setAttribute("error", "El código ingresado es incorrecto.");
-            request.getRequestDispatcher("verificar-codigo.jsp").forward(request, response);
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar la contraseña: " + e);
+            request.setAttribute("error", "Hubo un error al actualizar la contraseña. Intenta nuevamente.");
+            request.getRequestDispatcher("cambiar_contrasena.jsp").forward(request, response);
         }
-    } catch (SQLException e) {
-        throw new ServletException("Error al verificar el código", e);
     }
+
+    private void verificarCodigo(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String codigoIngresado = request.getParameter("codigo");
+        HttpSession session = request.getSession();
+        Integer idUser = (Integer) session.getAttribute("idUsuario");
+
+        if (idUser == null) {
+            request.setAttribute("error", "No se ha encontrado el id usuario");
+            request.getRequestDispatcher("verificar-codigo.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            String codigoAlmacenado = userdao.obtenerCodigoVerificacion(idUser);
+
+            if (codigoIngresado.equals(codigoAlmacenado)) {
+                // Verificar si el código ha expirado
+                boolean haExpirado = userdao.verificarExpiracionCodigo(idUser);
+                if (haExpirado) {
+                    request.setAttribute("error", "El código ha expirado. Solicita uno nuevo.");
+                    request.getRequestDispatcher("verificar-codigo.jsp").forward(request, response);
+                } else {
+                    // Código correcto, permitir que el usuario cambie la contraseña
+                    request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+                }
+            } else {
+                request.setAttribute("error", "El código ingresado es incorrecto.");
+                request.getRequestDispatcher("verificar-codigo.jsp").forward(request, response);
+            }
+        } catch (SQLException e) {
+            throw new ServletException("Error al verificar el código", e);
+        }
     }
 
     private void forgotPassword(HttpServletRequest request, HttpServletResponse response)
@@ -149,9 +174,14 @@ public class UserController extends HttpServlet {
                 try {
                     // Enviar el código al correo electrónico del usuario
                     enviarCodigoEmail(email, codigoVerificacion);
+
                 } catch (MessagingException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UserController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
+
+                HttpSession session = request.getSession();
+                session.setAttribute("idUsuario", user.getIdUsuario());
 
                 // Redirigir al formulario para ingresar el código de verificación
                 request.setAttribute("mensaje", "Se ha enviado un código de verificación a tu correo.");
@@ -216,6 +246,7 @@ public class UserController extends HttpServlet {
                 HttpSession session = request.getSession(true);  // No usar false aquí, ya que necesitamos una sesión
                 session.setAttribute("usuario", user);
                 response.sendRedirect("index");
+                session.removeAttribute("idUsuario");
             } else {
                 // Si los datos son incorrectos, mostrar mensaje de error y redirigir a login.jsp
                 request.setAttribute("error", "Usuario o contraseña incorrectos");

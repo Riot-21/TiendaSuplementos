@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -15,13 +16,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modelo.dao.AdminDao;
 import modelo.dao.CategoriaDao;
+import modelo.dao.CompraDao;
+import modelo.dao.ProductoDao;
+import modelo.dao.TiendasDao;
 import modelo.dto.Administrador;
+import modelo.dto.Carrito;
 import modelo.dto.Categoria;
+import modelo.dto.Compra;
+import modelo.dto.Producto;
+import modelo.dto.Tiendas;
 
 @WebServlet(name = "AdminController", urlPatterns = {"/AdminController"})
 public class AdminController extends HttpServlet {
-        private AdminDao admindao;
-        private CategoriaDao catdao;
+
+    private AdminDao admindao;
+    private CategoriaDao catdao;
+    TiendasDao tdao = new TiendasDao();
+    List<Tiendas> listaTiendas = new ArrayList<>();
+    CompraDao cdao = new CompraDao();
+    ProductoDao pdao = new ProductoDao();
 
     @Override
     public void init() {
@@ -34,6 +47,72 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        String action = request.getParameter("action");
+        if ("list".equals(action)) {
+            listarAdmin(request, response);
+        } else if ("pedidos".equals(action)) {
+            pedidos(request,response);
+        } else if ("detail".equals(action)) {
+            detalle(request,response);
+        }else if ("dashboard".equals(action)) {
+            dash(request,response);
+        }else {
+            response.sendRedirect("index");
+        }
+        System.out.println("action: " + action);
+    }
+    
+    private void dash(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try{
+            List<Producto> listP=pdao.obtenerProductosMasVendidos();
+            request.setAttribute("pvendidos", listP);
+            request.getRequestDispatcher("admin/dashboard.jsp").forward(request, response);
+                    
+        }catch (Exception e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+    }
+    
+    private void detalle(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            try {
+                int id = Integer.parseInt(idParam);
+                List<Carrito> car = cdao.obtenerDetalleCompra(id);
+                Compra com=cdao.obtenerCompraId(id);
+            request.setAttribute("compra", com);
+                request.setAttribute("deta", car);
+                request.getRequestDispatcher("admin/detalle.jsp").forward(request, response);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            response.sendRedirect("index");
+        }
+    }
+    
+    private void pedidos(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        try{
+            List<Compra> listaCompra=cdao.listarCompras();
+            HttpSession misesion = request.getSession();
+            misesion.setAttribute("pedidos", listaCompra);
+            response.sendRedirect("admin/pedidos.jsp");
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+    private void listarAdmin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         List<Administrador> listaAdmin = new ArrayList<>();
         try {
             listaAdmin = admindao.listarAdmin();
@@ -58,10 +137,29 @@ public class AdminController extends HttpServlet {
             register(request, response);
         } else if ("logout".equals(action)) {
             logout(request, response);
-        } 
+        }else if ("update".equals(action)) {
+            actualizarestado(request, response);
+        }
     }
     
-        private void login(HttpServletRequest request, HttpServletResponse response)
+    private void actualizarestado(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String newest = request.getParameter("estado-pedido");
+        try{
+            boolean e=cdao.actualizarEstadoPedido(id, newest);
+            if(e){
+                response.sendRedirect("AdminController?action=pedidos");
+            }else{
+                System.out.println("fallo actualizar");
+            }
+        }catch (SQLException e) {
+            System.out.println("error" + e);
+            throw new ServletException("Error", e);
+        }
+    }
+
+    private void login(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String email = request.getParameter("email");
@@ -72,12 +170,12 @@ public class AdminController extends HttpServlet {
 
             if (admin != null) {
                 List<Categoria> categorias = catdao.getAllCategorias();
-                
+
                 // Si el admin es válido, crear o obtener la sesión y redirigir a index.jsp
                 HttpSession session = request.getSession(true);  // No usar false aquí, ya que necesitamos una sesión
                 session.setAttribute("administrador", admin);
                 session.setAttribute("cat", categorias);
-                response.sendRedirect("admin/dashboard.jsp");
+                response.sendRedirect("AdminController?action=dashboard");
             } else {
                 // Si los datos son incorrectos, mostrar mensaje de error y redirigir a login.jsp
                 request.setAttribute("error", "Aministrador o contraseña incorrectos");
@@ -106,7 +204,7 @@ public class AdminController extends HttpServlet {
         newadmin.setContraseña(contraseña);
         newadmin.setDni(dni);
         newadmin.setTelefono(telefono);
-        
+
         try {
             boolean resultado = admindao.registroAdmin(newadmin);
             System.out.println(newadmin.getApellidos() + "+" + newadmin.getContraseña());

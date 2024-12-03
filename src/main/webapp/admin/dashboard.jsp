@@ -90,13 +90,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <c:forEach var="p" items="${pvendidos}">
                                             <tr>
-                                                <th>00167</th>
-                                                <td>Proteína de suero</td>
-                                                <td>1200</td>
-                                                <td>$120.00</td>
-                                                <td>134</td>
+                                                <th>${p.idProducto}</th>
+                                                <td>${p.nombre}</td>
+                                                <td>${p.ventas}</td>
+                                                <td>S/. ${p.preciounit}</td>
+                                                <td>${p.stock}</td>
                                             </tr>
+                                            </c:forEach>
                                             <tr>
                                                 <th>00357</th>
                                                 <td>Vitaminas b12</td>

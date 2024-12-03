@@ -19,38 +19,38 @@ public class UsuarioDao {
     Connection cnx;
     PreparedStatement ps;
     ResultSet rs;
-    
+
     public boolean actualizarContraseña(int idUsuario, String nuevaContraseña) throws SQLException {
-    String query = "UPDATE usuarios SET contraseña = ? WHERE id_usuario = ?";
-    
-    try {
-        // Conexión a la base de datos
-        cnx = new ConexionBD().getConexion();
-        ps = cnx.prepareStatement(query);
-        
-        // Hashear la nueva contraseña
-        String hashedPassword = hashPassword(nuevaContraseña);
-        
-        // Establecer los parámetros para la consulta
-        ps.setString(1, hashedPassword);  // Nueva contraseña hasheada
-        ps.setInt(2, idUsuario);           // ID del usuario
-        
-        // Ejecutar la actualización
-        int filasAfectadas = ps.executeUpdate();
-        
-        if (filasAfectadas > 0) {
-            System.out.println("Contraseña actualizada exitosamente.");
-            return true;  // Se actualizó correctamente
-        } else {
-            System.out.println("No se encontró el usuario para actualizar la contraseña.");
-            return false;  // No se encontró el usuario o no se actualizó
+        String query = "UPDATE usuarios SET contraseña = ? WHERE id_usuario = ?";
+
+        try {
+            // Conexión a la base de datos
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+
+            // Hashear la nueva contraseña
+            String hashedPassword = hashPassword(nuevaContraseña);
+
+            // Establecer los parámetros para la consulta
+            ps.setString(1, hashedPassword);  // Nueva contraseña hasheada
+            ps.setInt(2, idUsuario);           // ID del usuario
+
+            // Ejecutar la actualización
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Contraseña actualizada exitosamente.");
+                return true;  // Se actualizó correctamente
+            } else {
+                System.out.println("No se encontró el usuario para actualizar la contraseña.");
+                return false;  // No se encontró el usuario o no se actualizó
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar la contraseña: " + e.getMessage());
+            return false;  // Error al ejecutar la consulta
         }
-        
-    } catch (SQLException e) {
-        System.out.println("Error al actualizar la contraseña: " + e.getMessage());
-        return false;  // Error al ejecutar la consulta
-    } 
-}
+    }
 
     // Método para hashear contraseñas con SHA-256
     private String hashPassword(String password) {
@@ -233,7 +233,7 @@ public class UsuarioDao {
             // Establecer los valores de la consulta
             ps.setInt(1, idUsuario);      // id_usuario
             ps.setString(2, codigo);      // código
-            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now().plus(30, ChronoUnit.MINUTES))); // fecha_expiracion
+            ps.setObject(3, LocalDateTime.now().plus(30, ChronoUnit.MINUTES)); // fecha_expiracion
 
             // Ejecutar la consulta
             ps.executeUpdate();
@@ -255,32 +255,34 @@ public class UsuarioDao {
                 return rs.getString("codigo");
             }
             return null;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println("Error al guardar el código temporal: " + e.getMessage());
             throw e;  // Propagar la excepción
         }
     }
 
-
 // Verificar si el código ha expirado
-public boolean verificarExpiracionCodigo(int idUsuario) throws SQLException {
-    String sql = "SELECT fecha_expiracion FROM codigo_verificacion WHERE id_usuario = ? ORDER BY fecha_creacion DESC LIMIT 1";
-    try {
-cnx = new ConexionBD().getConexion();
+    public boolean verificarExpiracionCodigo(int idUsuario) throws SQLException {
+        String sql = "SELECT fecha_expiracion FROM codigo_verificacion WHERE id_usuario = ? ORDER BY fecha_creacion DESC LIMIT 1";
+        try {
+            cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(sql);
-        ps.setInt(1, idUsuario);
-         rs = ps.executeQuery();
+            ps.setInt(1, idUsuario);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 Timestamp fechaExpiracion = rs.getTimestamp("fecha_expiracion");
                 LocalDateTime now = LocalDateTime.now();
-                return fechaExpiracion.toLocalDateTime().isBefore(now); // Verifica si la fecha de expiración ya pasó
+
+                // Considerar una pequeña diferencia en la comparación
+                long diferenciaMinutos = ChronoUnit.MINUTES.between(fechaExpiracion.toLocalDateTime(), now);
+
+                // Si la diferencia es mayor que 0 minutos, el código ha expirado
+                return diferenciaMinutos < 0;
             }
             return true; // Si no se encuentra el código, se considera expirado
-        }catch (SQLException e) {
-            System.err.println("Error al guardar el código temporal: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error al verificar la expiración del código: " + e.getMessage());
             throw e;  // Propagar la excepción
         }
     }
-
-
 }

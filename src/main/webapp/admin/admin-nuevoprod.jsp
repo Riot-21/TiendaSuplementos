@@ -83,6 +83,12 @@
                                 <label for="product-warning">Advertencia del Producto</label>
                                 <textarea class="form-control" id="product-warning" name="advp" required></textarea>
                             </div>
+                            <!--Fecha de Vencimiento-->
+                            <div class="form-group">
+                                <label for="product-expiration-date">Fecha de Vencimiento del Producto</label>
+                                <input type="date" class="form-control" id="product-expiration-date" name="fechaVencimiento" required onchange="validarFecha()">
+                                <p id="errorFecha" style="color:red; display:none;">La fecha de vencimiento debe ser posterior a la fecha actual.</p>
+                            </div>
                             <!-- Imagen -->
                             <div class="form-group">
                                 <label for="product-photos">Imagen del Producto</label>
@@ -104,18 +110,35 @@
                         </form>
 
                     </div>
-                    <h2>Agregar Categorias</h2>
-                    <form action="${pageContext.request.contextPath}/CategoryController" method="POST">
-                        <div class="form-group">
-                            <label>nombre de categoria</label>
-                            <input type="text" class="form-control" name="categoria-nombre" required>  
+                             <!-- Botón para abrir el modal de agregar categoría -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                    Agregar Categoría
+                </button>
+
+                <!-- Modal de agregar categoría -->
+                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addCategoryModalLabel">Agregar Categoría</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="${pageContext.request.contextPath}/CategoryController" method="POST">
+                                    <div class="form-group">
+                                        <label for="category-name">Nombre de la Categoría</label>
+                                        <input type="text" class="form-control" name="categoria-nombre" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category-objective">Objetivo de la Categoría</label>
+                                        <input type="text" class="form-control" name="categoria-obj" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success mt-2">Agregar Categoría</button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>objetivo de categoria</label>
-                            <input type="text" class="form-control" name="categoria-obj"required>  
-                        </div>
-                        <button type="submit" class="btn btn-success">Add category</button>
-                    </form>
+                    </div>
+</div>
                 </main>
             </div>
         </div>
@@ -137,12 +160,32 @@
                 if (archivoInput.files.length > 3) {
                     errorMsg.style.display = 'block';
                     archivoInput.setCustomValidity('Solo puedes seleccionar hasta 3 imágenes.');
-                    archivoInput.value='';
+                    archivoInput.value = '';
                 } else {
                     errorMsg.style.display = 'none';
                     archivoInput.setCustomValidity('');
                 }
             }
+                                    
+                                        function validarFecha() {
+        const fechaInput = document.getElementById('product-expiration-date');
+        const errorFecha = document.getElementById('errorFecha');
+
+        const fechaSeleccionada = new Date(fechaInput.value);
+        const fechaActual = new Date();
+
+        // Eliminar la hora para comparar solo la fecha
+        fechaActual.setHours(0, 0, 0, 0);
+
+        if (fechaSeleccionada <= fechaActual) {
+            errorFecha.style.display = 'block';
+            fechaInput.setCustomValidity('La fecha debe ser posterior a la actual.');
+            fechaInput.value='';
+        } else {
+            errorFecha.style.display = 'none';
+            fechaInput.setCustomValidity('');
+        }
+    }
         </script>
     </body>
 

@@ -69,15 +69,16 @@ public class CompraDao {
             throw ex;
         }
     }
-    public Compra obtenerCompraId(int idCompra)throws SQLException{
-        Compra c=new Compra();
-        String query="select * from compra where id_compra=?";
-        try{
+
+    public Compra obtenerCompraId(int idCompra) throws SQLException {
+        Compra c = new Compra();
+        String query = "select * from compra where id_compra=?";
+        try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
             ps.setInt(1, idCompra);
-            rs=ps.executeQuery();
-            if(rs.next()){
+            rs = ps.executeQuery();
+            if (rs.next()) {
                 c.setIdCompra(rs.getInt("id_compra"));
                 c.setFecha(rs.getDate("fecha").toLocalDate());
                 c.setTotal(rs.getDouble("total"));
@@ -86,8 +87,9 @@ public class CompraDao {
                 c.setDistrito(rs.getString("distrito"));
                 c.setEstado(rs.getString("estado"));
             }
-        }catch (SQLException ex) {
-            throw ex;}
+        } catch (SQLException ex) {
+            throw ex;
+        }
         return c;
     }
 
@@ -116,6 +118,31 @@ public class CompraDao {
         return listaCompras;
     }
 
+    public List<Compra> listarCompras() throws SQLException {
+        List<Compra> listac = new ArrayList<>();
+        String sql = "select * from compra";
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Compra c = new Compra();
+                c.setIdCompra(rs.getInt("id_compra"));
+                c.setFecha(rs.getDate("fecha").toLocalDate());
+                c.setTotal(rs.getDouble("total"));
+                c.setTipopago(rs.getString("tipo_pago"));
+                c.setDireccion(rs.getString("direccion"));
+                c.setDistrito(rs.getString("distrito"));
+                c.setEstado(rs.getString("estado"));
+                c.setIdUsuario(rs.getInt("id_usuario"));
+                listac.add(c);
+            }
+        } catch (SQLException ex) {
+            throw ex;
+        }
+        return listac;
+    }
+
     public List<Carrito> obtenerDetalleCompra(int idCompra) throws SQLException {
         List<Carrito> detalles = new ArrayList<>();
         String sql = "SELECT dc.item, dc.cantidad, dc.preciouni, dc.subtotal, dc.id_producto, p.nombre AS producto "
@@ -141,6 +168,27 @@ public class CompraDao {
             throw ex;
         }
         return detalles;
+    }
+
+    public boolean actualizarEstadoPedido(int idCompra,String estado) throws SQLException {
+        boolean actualizado = false;
+        String sql = "UPDATE compra SET estado = ? WHERE id_compra = ?";
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(sql);
+            ps.setString(1, estado);
+            ps.setInt(2, idCompra);
+
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                actualizado = true;
+            }
+        } catch (SQLException ex) {
+            throw ex;
+        }
+        return actualizado;
     }
 
 }

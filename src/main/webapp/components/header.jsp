@@ -51,7 +51,7 @@
 
                     <!-- Menú desplegable -->
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">Ver Perfil</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/users/profile.jsp">Ver Perfil</a></li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/PurchaseController?action=history">Mis Compras</a></li>
                         <li>
                             <form action="${pageContext.request.contextPath}/UserController" method="post">

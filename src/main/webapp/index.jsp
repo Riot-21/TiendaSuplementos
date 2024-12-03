@@ -75,7 +75,8 @@
                         <img src="${prod.imagen}" class="card-img-top" alt="Vitaminas" style="width: 100%; height: 200px; object-fit: contain;">
                         <div class="card-body">
                             <h5 class="card-title ">${prod.nombre}</h5>
-                            <p class="card-price fw-bold text-price">S/. ${prod.preciounit}</p>
+                            <fmt:formatNumber value="${prod.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="precio"></fmt:formatNumber>
+                                                <p class="card-price fw-bold text-price">S/. ${precio}</p>
                             <a href="ProductController?action=cargarid&id=${prod.idProducto}" class="btn btn-dark">Comprar Ahora</a>
                         </div>
                     </div>
@@ -102,7 +103,8 @@
                         <img src="${p.imagen}" class="card-img-top" alt="${p.nombre}" style="width: 100%; height: 200px; object-fit: contain;">
                         <div class="card-body">
                             <h5 class="card-title">${p.nombre}</h5>
-                            <p class="card-text">${p.preciounit}</p>
+                            <fmt:formatNumber value="${p.preciounit}" minFractionDigits="2" maxFractionDigits="2" var="precio"></fmt:formatNumber>
+                                                <p class="card-price fw-bold text-price">S/. ${precio}</p>
                             <a href="ProductController?action=cargarid&id=${p.idProducto}" class="btn btn-dark">Comprar Ahora</a>
                         </div>
                     </div>
