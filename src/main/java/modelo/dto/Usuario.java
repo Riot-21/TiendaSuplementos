@@ -9,6 +9,10 @@ public class Usuario {
     private String contraseña;
     private int dni;
     private int telefono;
+    
+    //Atributos adicionales
+    private int numCompras;
+    private double totalCompras;
 
     public Usuario() {
     }
@@ -23,6 +27,8 @@ public class Usuario {
         this.dni = dni;
         this.telefono = telefono;
     }
+    
+    
 
     public int getTelefono() {return telefono;}
     public void setTelefono(int telefono) {
@@ -51,6 +57,22 @@ public class Usuario {
     public int getDni() {return dni;}
     public void setDni(int dni) {
         this.dni = dni;}    
+
+    public int getNumCompras() {
+        return numCompras;
+    }
+
+    public void setNumCompras(int numCompras) {
+        this.numCompras = numCompras;
+    }
+
+    public double getTotalCompras() {
+        return totalCompras;
+    }
+
+    public void setTotalCompras(double totalCompras) {
+        this.totalCompras = totalCompras;
+    }
     
 
 }

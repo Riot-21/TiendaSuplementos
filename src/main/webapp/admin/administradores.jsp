@@ -70,12 +70,14 @@
                                         <td>${adm.dni}</td>
                                         <td>${adm.email}</td>
                                         <td>${adm.telefono}</td>
+                                        <c:if test="${adm.idAdmin>1}">
                                         <td>
                                             <form action="${pageContext.request.contextPath}/SvEliminar" method="POST">
-                                                <input type="hidden" name="idUsuario" value="${usu.idUsuario}" />
-                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button> 
+                                                <input type="hidden" name="idAdmin" value="${adm.idAdmin}" />
+                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="admin">Eliminar</button> 
                                             </form>
                                         </td>
+                                        </c:if>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -103,11 +105,11 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="agregarDNI" class="form-label">DNI</label>
-                                        <input type="number" class="form-control" id="agregarDNI" name="dni" required maxlength="8" pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese solo números">
+                                        <input type="text" class="form-control" id="agregarDNI" name="dni" required maxlength="8" pattern="^\d{8}$" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese la cantidad correcta de dígitos">
                                     </div>
                                     <div class="mb-3">
                                         <label for="agregarTelf" class="form-label">Telefono</label>
-                                        <input type="number" class="form-control" id="agregarCorreo" name="tel" required>
+                                        <input type="text" class="form-control" id="agregarCorreo" name="tel" required maxlength="9" pattern="^\d{9}$" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" title="Ingrese la cantidad correcta de dígitos">
                                     </div>
                                     <div class="mb-3">
                                         <label for="agregarCorreo" class="form-label">Correo</label>

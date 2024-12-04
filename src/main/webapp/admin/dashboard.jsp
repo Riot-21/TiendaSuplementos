@@ -50,8 +50,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title text-primary">Usuario Registrados</h5>
-                                    <p><strong>145 usuarios registrados</strong></p>
-                                    <small>+18 en la última semana</small>
+                                    <p><strong>${users} usuarios registrados</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -59,8 +58,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title text-primary">Productos Disponibles</h5>
-                                    <p><strong>234 prodcutos disponibles</strong></p>
-                                    <small>+36 en la última semana</small>
+                                    <p><strong>${ptotal} productos disponibles</strong></p>
+                                    <small>${proxAVencer} próximos a vencer   </small>
                                 </div>
                             </div>
                         </div>
@@ -68,8 +67,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title text-primary">Ventas</h5>
-                                    <p><strong>2500 ventas registradas</strong></p>
-                                    <small>+78 en la última semana</small>
+                                    <p><strong>${totalVentas} ventas registradas</strong></p>
+                                    <small>+${ventasUltimaSemana} en la última semana</small>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +89,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="p" items="${pvendidos}">
+                                            <c:forEach var="p" items="${pvendidos}" begin="0" end="5">
                                             <tr>
                                                 <th>${p.idProducto}</th>
                                                 <td>${p.nombre}</td>
@@ -99,13 +98,6 @@
                                                 <td>${p.stock}</td>
                                             </tr>
                                             </c:forEach>
-                                            <tr>
-                                                <th>00357</th>
-                                                <td>Vitaminas b12</td>
-                                                <td>980</td>
-                                                <td>$98.00</td>
-                                                <td>198</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -125,18 +117,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <c:forEach var="u" items="${act}" begin="0" end="5">
+                                                <c:if test="${u.numCompras > 0}">
                                             <tr>
-                                                <td>Jhoan Muñoz</td>
-                                                <td>74640816</td>
-                                                <td>65</td>
-                                                <td>S/. 124</td>
+                                                <td>${u.nombres} ${u.apellidos}</td>
+                                                <td>${u.dni}</td>
+                                                <td>${u.numCompras}</td>
+                                                <td>S/. ${u.totalCompras}</td>
                                             </tr>
-                                            <tr>
-                                                <td>Miguel Ruiz</td>
-                                                <td>74688816</td>
-                                                <td>54</td>
-                                                <td>S/. 114</td>
-                                            </tr>
+                                            </c:if>
+                                            </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -146,6 +136,7 @@
                 </main>
             </div>
         </div>
+                
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

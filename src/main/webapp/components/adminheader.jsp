@@ -32,6 +32,16 @@
                 </a>
             </li>
             <li class="nav-item p-2">
+                <a class="nav-link text-white" href="${pageContext.request.contextPath}/shop?action=admin">
+                    <i class="fa-solid fa-cart-shopping me-2"></i>Tiendas
+                </a>
+            </li>
+            <li class="nav-item p-2">
+                <a class="nav-link text-white" href="${pageContext.request.contextPath}/empresa">
+                    <i class="fa-solid fa-cart-shopping me-2"></i>Empresa
+                </a>
+            </li>
+            <li class="nav-item p-2">
                 <form action="${pageContext.request.contextPath}/AdminController" method="GET">
                     <button type="submit" class="nav-link text-white" name="action" value="list">
                         <i class="fas fa-user me-2" ></i>Administradores</button>

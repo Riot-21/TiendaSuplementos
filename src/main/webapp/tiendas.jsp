@@ -26,7 +26,7 @@
             <!-- Tienda 1 -->
             <div class="col-lg-4 col-md-6">
                 <div class="store-card bg-white">
-                    <img src="assets/img/Store-1.jpg" class="store-img" alt="Tienda 1">
+                    <img src="${t.foto}" class="store-img" alt="Tienda 1">
                     <div class="store-info">
                         <h5 class="text-primary">Tienda - ${t.distrito}</h5>
                         <p><i class="fa fa-map-marker me-2"></i>${t.direccion}</p>

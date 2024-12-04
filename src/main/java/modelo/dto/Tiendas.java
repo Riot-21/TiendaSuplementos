@@ -7,17 +7,31 @@ public class Tiendas {
     private String direccion;
     private int telefono;
     private String horario;
+    private String foto;
 
     public Tiendas() {
     }
 
-    public Tiendas(int idTienda, String distrito, String direccion, int telefono, String horario) {
+    public Tiendas(int idTienda, String distrito, String direccion, int telefono, String horario, String foto) {
         this.idTienda = idTienda;
         this.distrito = distrito;
         this.direccion = direccion;
         this.telefono = telefono;
         this.horario = horario;
+        this.foto = foto;
     }
+
+
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+    
+    
 
     public String getHorario() {
         return horario;

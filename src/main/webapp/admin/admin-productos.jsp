@@ -61,6 +61,7 @@
                                 <th>Precio U. (S/.)</th>
                                 <th>Modo Empleo</th>
                                 <th>Advertencia</th>
+                                <th>Fecha Vencimiento</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -84,8 +85,10 @@
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-between">
-                                            <button class="btn btn-danger btn-sm me-2" onclick="" data-bs-toggle="modal"
-                                                    data-bs-target="#EliminarProductoModal">Eliminar</button>
+                                            <form action="${pageContext.request.contextPath}/SvEliminar" method="POST">
+                                                    <input type="hidden" name="idProd" value="${producto.idProducto}" />
+                                                    <button type="submit" class="btn btn-danger btn-sm btn-confirmar-eliminar" name="action" value="product">Eliminar</button> 
+                                                </form>
                                             <button class="btn btn-warning btn-sm"  data-bs-toggle="modal"
                                                     data-bs-target="#EditarProductoModal" onclick="cargarDatosProducto(${producto.idProducto})">Editar</button>
                                         </div>

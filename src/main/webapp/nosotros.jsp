@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -67,13 +68,9 @@
         <div class="row">
             <div class="col-md-6">
                 <ul class="list-group">
-                    <li class="list-group-item">Nutripoint - Tienda Central (Lima)</li>
-                    <li class="list-group-item">Nutripoint - Miraflores</li>
-                    <li class="list-group-item">Nutripoint - San Isidro</li>
-                    <li class="list-group-item">Nutripoint - Callao</li>
-                    <li class="list-group-item">Nutripoint - Arequipa</li>
-                    <li class="list-group-item">Nutripoint - Puente Piedra</li>
-                    <li class="list-group-item">Nutripoint - Ventanilla</li>
+                    <c:forEach var="t" items="${shop}">
+                    <li class="list-group-item">Nutripoint - Tienda ${t.distrito}</li>
+                    </c:forEach>
                 </ul>
             </div>
             <div class="col-md-6">

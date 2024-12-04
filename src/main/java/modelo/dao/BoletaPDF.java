@@ -13,6 +13,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.http.HttpRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +30,7 @@ public class BoletaPDF {
         try {
             // Configurar el contenido para la descarga
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=boleta_" + codigo + ".pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=boleta_" + codigo + "_"+venta.getFecha()+".pdf");
 
             // Crear el documento
             Document documento = new Document();
@@ -65,7 +66,8 @@ public class BoletaPDF {
             datosCliente.setAlignment(Element.ALIGN_LEFT);
             datosCliente.add(new Phrase("Cliente:\n", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
             datosCliente.add(new Phrase("DNI: " + cliente.getDni() + "\n", new Font(Font.FontFamily.HELVETICA, 12)));
-            datosCliente.add(new Phrase("Nombre: " + cliente.getNombres() + " " + cliente.getApellidos() + "\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
+            datosCliente.add(new Phrase("Nombre: " + cliente.getNombres() + " " + cliente.getApellidos() + "\n", new Font(Font.FontFamily.HELVETICA, 12)));
+            datosCliente.add(new Phrase("Fecha de compra: " + venta.getFecha() + "\n\n", new Font(Font.FontFamily.HELVETICA, 12)));
             documento.add(datosCliente);
 
             // Agregar tabla de productos

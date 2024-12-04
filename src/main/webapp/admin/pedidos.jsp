@@ -128,8 +128,8 @@
                     </table>
 
                     <div class="d-flex justify-content-end mb-3">
-                        <form action="${pageContext.request.contextPath}/PedidoController" method="GET">
-                            <button type="submit" class="btn btn-success" name="action" value="exportarExcel">
+                        <form action="${pageContext.request.contextPath}/PurchaseController" method="GET">
+                            <button type="submit" class="btn btn-success" name="action" value="exportxl">
                                 <i class="fas fa-file-excel"></i> Exportar a Excel
                             </button>
                         </form>

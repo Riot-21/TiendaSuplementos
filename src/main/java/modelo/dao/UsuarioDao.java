@@ -20,6 +20,28 @@ public class UsuarioDao {
     PreparedStatement ps;
     ResultSet rs;
 
+    public boolean eliminarUsuario(int idUsuario) throws SQLException {
+        String query = "UPDATE usuarios SET estado = 'inactivo' WHERE id_usuario = ? ";
+        boolean eliminado = false;
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, idUsuario); // Establecer el ID del usuario a eliminar
+
+            // Ejecutar la sentencia y verificar si eliminó alguna fila
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                eliminado = true; // Usuario eliminado correctamente
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Error al eliminar usuario: " + ex.getMessage());
+        }
+
+        return eliminado;
+    }
+
     public boolean actualizarContraseña(int idUsuario, String nuevaContraseña) throws SQLException {
         String query = "UPDATE usuarios SET contraseña = ? WHERE id_usuario = ?";
 
@@ -69,7 +91,7 @@ public class UsuarioDao {
 
     public List<Usuario> listarUsuarios() throws SQLException {
         List<Usuario> listaUsuarios = new ArrayList<>();
-        String query = "select * from usuarios";
+        String query = "select * from usuarios where estado='activo'";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -95,7 +117,7 @@ public class UsuarioDao {
     }
 
     public boolean registroUsuario(Usuario user) throws SQLException {
-        String query = "INSERT INTO usuarios (nombres, apellidos, email, contraseña, dni, telefono) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO usuarios (nombres, apellidos, email, contraseña, dni, telefono,estado) VALUES (?, ?, ?, ?, ?, ?,'activo')";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -124,7 +146,7 @@ public class UsuarioDao {
 
     public Usuario validarUsuarioEmail(String email) throws SQLException {
         Usuario user = null;
-        String query = "select * from usuarios where email = ?";
+        String query = "select * from usuarios where email = ? and estado='activo'";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -151,7 +173,7 @@ public class UsuarioDao {
 
     public Usuario validarUsuario(String email, String contraseña) throws SQLException {
         Usuario user = null;
-        String query = "select * from usuarios where email = ? and contraseña = ?";
+        String query = "select * from usuarios where email = ? and contraseña = ? and estado='activo'";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -181,31 +203,9 @@ public class UsuarioDao {
 
     }
 
-    public boolean eliminarUsuario(int idUsuario) throws SQLException {
-        String query = "DELETE FROM usuarios WHERE id_usuario = ?";
-        boolean eliminado = false;
-
-        try {
-            cnx = new ConexionBD().getConexion();
-            ps = cnx.prepareStatement(query);
-            ps.setInt(1, idUsuario); // Establecer el ID del usuario a eliminar
-
-            // Ejecutar la sentencia y verificar si eliminó alguna fila
-            int filasAfectadas = ps.executeUpdate();
-            if (filasAfectadas > 0) {
-                eliminado = true; // Usuario eliminado correctamente
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.out.println("Error al eliminar usuario: " + ex.getMessage());
-        }
-
-        return eliminado;
-    }
     // Método para verificar si ya existe un email o DNI en la base de datos
-
     public boolean existeUsuario(String email, int dni) throws SQLException {
-        String query = "SELECT COUNT(*) AS count FROM usuarios WHERE email = ? OR dni = ?";
+        String query = "SELECT COUNT(*) AS count FROM usuarios WHERE email = ? OR dni = ? and estado='activo'";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -284,5 +284,47 @@ public class UsuarioDao {
             System.err.println("Error al verificar la expiración del código: " + e.getMessage());
             throw e;  // Propagar la excepción
         }
+    }
+
+    //Metodo para usuarios mas activos
+    public List<Usuario> usuariosActivos() throws SQLException {
+        List<Usuario> user = new ArrayList<>();
+        String sql = "            SELECT \n"
+                + "                u.id_usuario AS ID,\n"
+                + "                u.nombres AS Nombres,\n"
+                + "                u.apellidos AS Apellidos,\n"
+                + "                u.dni AS DNI,\n"
+                + "                COUNT(c.id_compra) AS Numero_Compras,\n"
+                + "                IFNULL(SUM(c.total), 0) AS Total_Compras\n"
+                + "            FROM \n"
+                + "                usuarios u\n"
+                + "            LEFT JOIN \n"
+                + "                compra c ON u.id_usuario = c.id_usuario\n"
+                + "            GROUP BY \n"
+                + "                u.id_usuario, u.nombres, u.apellidos, u.dni\n"
+                + "            ORDER BY \n"
+                + "                Numero_Compras DESC, Total_Compras DESC;";
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("ID"));
+                u.setNombres(rs.getString("Nombres"));
+                u.setApellidos(rs.getString("Apellidos"));
+                u.setDni(rs.getInt("DNI"));
+                u.setNumCompras(rs.getInt("Numero_Compras"));
+                u.setTotalCompras(rs.getDouble("Total_Compras"));
+
+                user.add(u);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+            throw e;  // Propagar la excepción
+        }
+        return user;
     }
 }

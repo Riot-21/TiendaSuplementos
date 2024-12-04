@@ -29,11 +29,11 @@
             <form action="AdminController" method="POST">
                 <div class="form-group">
                     <label for="admin-email">Correo Electrónico de Administrador</label>
-                    <input type="email" class="form-control" name="email" id="admin-email" placeholder="Ingresa tu correo de administrador">
+                    <input type="email" class="form-control" name="email" id="admin-email" placeholder="Ingresa tu correo de administrador" required>
                 </div>
                 <div class="form-group">
                     <label for="admin-password">Contraseña</label>
-                    <input type="password" class="form-control" name="passw" id="admin-password" placeholder="Ingresa tu contraseña">
+                    <input type="password" class="form-control" name="passw" id="admin-password" placeholder="Ingresa tu contraseña" required>
                 </div>
                 <button type="submit" class="btn btn-danger btn-block" name="action" value="login">Iniciar Sesión</button>
             </form>

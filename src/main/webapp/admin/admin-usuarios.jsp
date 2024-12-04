@@ -47,42 +47,42 @@
                         <h2>Usuarios</h2>
                         <p>Lista de usuarios en la plataforma.</p>
                         <form action="${pageContext.request.contextPath}/UserController" method="GET">
-                            <button type="submit" class="btn btn-primary">Recargar</button>
+                            <button type="submit" class="btn btn-primary" name="action" value="show">Recargar</button>
                         </form>
                         <hr>
                         <c:if test="${not empty listaUsuarios}">
-                        <!-- Tabla de usuarios -->
-                        <table class="table table-striped table-bordered mt-3">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Apellidos</th>
-                                    <th>Email</th>
-                                    <th>DNI</th>
-                                    <th>Telefono</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="usu" items="${sessionScope.listaUsuarios}">
+                            <!-- Tabla de usuarios -->
+                            <table class="table table-striped table-bordered mt-3">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <td>${usu.idUsuario}</td>
-                                        <td>${usu.nombres}</td>
-                                        <td>${usu.apellidos}</td>
-                                        <td>${usu.email}</td>
-                                        <td>${usu.dni}</td>
-                                        <td>${usu.telefono}</td>
-                                        <td>
-                                            <form action="${pageContext.request.contextPath}/SvEliminar" method="POST">
-                                                <input type="hidden" name="idUsuario" value="${usu.idUsuario}" />
-                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button> 
-                                            </form>
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Apellidos</th>
+                                        <th>Email</th>
+                                        <th>DNI</th>
+                                        <th>Telefono</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="usu" items="${sessionScope.listaUsuarios}">
+                                        <tr>
+                                            <td>${usu.idUsuario}</td>
+                                            <td>${usu.nombres}</td>
+                                            <td>${usu.apellidos}</td>
+                                            <td>${usu.email}</td>
+                                            <td>${usu.dni}</td>
+                                            <td>${usu.telefono}</td>
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/SvEliminar" method="POST">
+                                                    <input type="hidden" name="idUsuario" value="${usu.idUsuario}" />
+                                                    <button type="submit" class="btn btn-danger btn-sm" name="action" value="user">Eliminar</button> 
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
                         </c:if>
                         <c:if test="${empty listaUsuarios}">
                             <h3 class="text-danger">Aun no hay usuarios registrados</h3>
@@ -100,5 +100,21 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
                 integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Interceptar el botón de eliminar
+                $('.btn-confirmar-eliminar').on('click', function (e) {
+                    e.preventDefault();
+
+                    // Mostrar un diálogo de confirmación
+                    const confirmed = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+                    if (confirmed) {
+                        // Enviar el formulario si el usuario confirma
+                        $(this).closest('form').submit();
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

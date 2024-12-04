@@ -28,10 +28,10 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/nosotros.jsp">Nosotros</a>
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/shop?action=about">Nosotros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/shop">Locales</a>
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/shop?action=all">Locales</a>
                 </li>
             </ul>
             <!-- Buscar -->

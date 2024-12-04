@@ -22,6 +22,28 @@ public class ProductoDao {
     PreparedStatement ps;
     ResultSet rs;
 
+    public boolean eliminarProducto(int idProd) throws SQLException {
+        String query = "UPDATE productos SET estado = 'inactivo' WHERE id_producto = ? ";
+        boolean eliminado = false;
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, idProd); // Establecer el ID del admin a eliminar
+
+            // Ejecutar la sentencia y verificar si eliminó alguna fila
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                eliminado = true; // Admin eliminado correctamente
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Error al eliminar usuario: " + ex.getMessage());
+        }
+
+        return eliminado;
+    }
+
     public boolean actualizarProducto(Producto prod) throws SQLException {
         boolean actualizado = false;
         String query = "UPDATE productos SET nombre = ?, descripcion = ?, stock = ?, marca = ?, preciounit = ?, mod_empleo = ?, advert = ? WHERE id_producto = ?";
@@ -51,7 +73,7 @@ public class ProductoDao {
     }
 
     public void agregarProducto(Producto prod) throws SQLException {
-        String query = "insert into productos(nombre, descripcion, stock, marca, preciounit, mod_empleo, advert, fechav) values(?,?,?,?,?,?,?,?)";
+        String query = "insert into productos(nombre, descripcion, stock, marca, preciounit, mod_empleo, advert, fechav,estado) values(?,?,?,?,?,?,?,?,'activo')";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -102,7 +124,7 @@ public class ProductoDao {
                 + "p.mod_empleo, p.advert, i.imagen "
                 + "FROM productos p "
                 + "LEFT JOIN imgProd i ON p.id_producto = i.id_producto "
-                + "WHERE p.id_producto = ?";
+                + "WHERE p.id_producto = ? and p.estado='activo'";
 
         try {
             cnx = new ConexionBD().getConexion();
@@ -142,7 +164,7 @@ public class ProductoDao {
 
     public List<Producto> obtenerTodosLosProductos() throws SQLException {
         List<Producto> productos = new ArrayList<>();
-        String query = "SELECT * FROM productos";
+        String query = "SELECT * FROM productos where estado ='activo'";
 
         try {
             cnx = new ConexionBD().getConexion();
@@ -189,7 +211,7 @@ public class ProductoDao {
         List<Producto> productos = new ArrayList<>();
         String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock , MIN(i.imagen) AS imagen\n"
                 + "FROM productos p\n"
-                + "INNER JOIN imgProd i ON p.id_producto = i.id_producto\n"
+                + "INNER JOIN imgProd i ON p.id_producto = i.id_producto where p.estado='activo'\n"
                 + "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock;";
         try {
             cnx = new ConexionBD().getConexion();
@@ -219,11 +241,13 @@ public class ProductoDao {
 
         StringBuilder query = new StringBuilder("SELECT p.id_producto, p.nombre, p.preciounit, p.stock, MIN(i.imagen) AS imagen "
                 + "FROM productos p "
-                + "INNER JOIN imgProd i ON p.id_producto = i.id_producto ");
+                + "INNER JOIN imgProd i ON p.id_producto = i.id_producto "
+                + "INNER JOIN prodCategoria pc ON p.id_producto = pc.id_producto "
+                + "WHERE p.estado = 'activo'");
 
         // Agregar filtros de categorías
         if (categorias != null && !categorias.isEmpty()) {
-            query.append("INNER JOIN prodCategoria pc ON p.id_producto = pc.id_producto WHERE pc.id_categoria IN (");
+            query.append(" AND pc.id_categoria IN (");
             for (int i = 0; i < categorias.size(); i++) {
                 query.append(categorias.get(i));
                 if (i < categorias.size() - 1) {
@@ -306,7 +330,7 @@ public class ProductoDao {
                 + "       SUM(dc.cantidad) AS ventas   -- Agregamos la suma de las cantidades como ventas\n"
                 + "FROM productos p\n"
                 + "INNER JOIN detalleCompra dc ON p.id_producto = dc.id_producto\n"
-                + "WHERE p.stock > 0\n"
+                + "WHERE p.stock > 0 and p.estado='activo'\n"
                 + "GROUP BY p.id_producto, p.nombre, p.preciounit, p.stock\n"
                 + "ORDER BY ventas DESC";
 
@@ -338,7 +362,7 @@ public class ProductoDao {
         String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, "
                 + "(SELECT i.imagen FROM imgProd i WHERE i.id_producto = p.id_producto LIMIT 1) AS imagen "
                 + "FROM productos p "
-                + "WHERE p.stock > 0 "
+                + "WHERE p.stock > 0 and p.estado='activo'"
                 + "ORDER BY p.preciounit ASC ";
 
         try {
@@ -369,7 +393,7 @@ public class ProductoDao {
         String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, "
                 + "(SELECT i.imagen FROM imgProd i WHERE i.id_producto = p.id_producto LIMIT 1) AS imagen "
                 + "FROM productos p "
-                + "WHERE p.stock > 0 "
+                + "WHERE p.stock > 0 and p.estado='activo'"
                 + "ORDER BY RAND() ";
 
         try {
@@ -400,7 +424,7 @@ public class ProductoDao {
         String query = "SELECT p.id_producto, p.nombre, p.preciounit, p.stock, "
                 + "(SELECT i.imagen FROM imgProd i WHERE i.id_producto = p.id_producto LIMIT 1) AS imagen "
                 + "FROM productos p "
-                + "WHERE p.nombre LIKE ?";
+                + "WHERE p.nombre LIKE ? and p.estado='activo'";
 
         try {
             cnx = new ConexionBD().getConexion();

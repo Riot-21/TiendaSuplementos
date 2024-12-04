@@ -10,13 +10,14 @@ import modelo.dto.Administrador;
 import servicios.conexion.ConexionBD;
 
 public class AdminDao {
+
     Connection cnx;
     PreparedStatement ps;
     ResultSet rs;
-    
-        public List<Administrador> listarAdmin() throws SQLException {
+
+    public List<Administrador> listarAdmin() throws SQLException {
         List<Administrador> listaadmin = new ArrayList<>();
-        String query = "select * from administrador";
+        String query = "select * from administrador where estado='activo'";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -40,9 +41,9 @@ public class AdminDao {
         }
         return listaadmin;
     }
-    
-        public boolean registroAdmin(Administrador admin) throws SQLException {
-        String query = "INSERT INTO administrador (nombres, apellidos, email, contraseña, dni, telefono) VALUES (?, ?, ?, ?, ?, ?)";
+
+    public boolean registroAdmin(Administrador admin) throws SQLException {
+        String query = "INSERT INTO administrador (nombres, apellidos, email, contraseña, dni, telefono,estado) VALUES (?, ?, ?, ?, ?, ?,'activo')";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);
@@ -64,9 +65,31 @@ public class AdminDao {
 
     }
 
+    public boolean eliminarAdmin(int idAdmin) throws SQLException {
+        String query = "UPDATE administrador SET estado = 'inactivo' WHERE id_admin = ? ";
+        boolean eliminado = false;
+
+        try {
+            cnx = new ConexionBD().getConexion();
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, idAdmin); // Establecer el ID del admin a eliminar
+
+            // Ejecutar la sentencia y verificar si eliminó alguna fila
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                eliminado = true; // Admin eliminado correctamente
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Error al eliminar usuario: " + ex.getMessage());
+        }
+
+        return eliminado;
+    }
+
     public Administrador validarAdmin(String email, String contraseña) throws SQLException {
         Administrador admin = null;
-        String query = "select * from administrador where email = ? and contraseña = ?";
+        String query = "select * from administrador where email = ? and contraseña = ? and estado='activo'";
         try {
             cnx = new ConexionBD().getConexion();
             ps = cnx.prepareStatement(query);

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,18 +20,21 @@ import modelo.dao.CategoriaDao;
 import modelo.dao.CompraDao;
 import modelo.dao.ProductoDao;
 import modelo.dao.TiendasDao;
+import modelo.dao.UsuarioDao;
 import modelo.dto.Administrador;
 import modelo.dto.Carrito;
 import modelo.dto.Categoria;
 import modelo.dto.Compra;
 import modelo.dto.Producto;
 import modelo.dto.Tiendas;
+import modelo.dto.Usuario;
 
 @WebServlet(name = "AdminController", urlPatterns = {"/AdminController"})
 public class AdminController extends HttpServlet {
 
     private AdminDao admindao;
     private CategoriaDao catdao;
+    private UsuarioDao udao;
     TiendasDao tdao = new TiendasDao();
     List<Tiendas> listaTiendas = new ArrayList<>();
     CompraDao cdao = new CompraDao();
@@ -40,6 +44,7 @@ public class AdminController extends HttpServlet {
     public void init() {
         admindao = new AdminDao();
         catdao = new CategoriaDao();
+        udao = new UsuarioDao();
     }
 
     @Override
@@ -51,30 +56,63 @@ public class AdminController extends HttpServlet {
         if ("list".equals(action)) {
             listarAdmin(request, response);
         } else if ("pedidos".equals(action)) {
-            pedidos(request,response);
+            pedidos(request, response);
         } else if ("detail".equals(action)) {
-            detalle(request,response);
-        }else if ("dashboard".equals(action)) {
-            dash(request,response);
-        }else {
+            detalle(request, response);
+        } else if ("dashboard".equals(action)) {
+            dash(request, response);
+        } else {
             response.sendRedirect("index");
         }
         System.out.println("action: " + action);
     }
-    
+
     private void dash(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try{
-            List<Producto> listP=pdao.obtenerProductosMasVendidos();
+        try {
+            // Cantidad de usuarios
+            int cantUsers = udao.listarUsuarios().size();
+
+            // Usuarios más activos
+            List<Usuario> listU = udao.usuariosActivos();
+
+            // Productos más vendidos
+            List<Producto> listP = pdao.obtenerProductosMasVendidos();
+
+            // Cantidad de productos próximos a vencer
+            List<Producto> listProductos = pdao.obtenerTodosLosProductos();
+            int totalP =listProductos.size();
+            long cantProximosAVencer = listProductos.stream()
+                    .filter(p -> "¡Producto próximo a vencer!".equals(p.getMensajeProximoAVencer()))
+                    .count();
+
+            // Listar compras
+            List<Compra> compras = cdao.listarCompras();
+            int totalVentas = compras.size();
+
+            // Ventas en la última semana
+            LocalDate haceUnaSemana = LocalDate.now().minusWeeks(1);
+            long ventasUltimaSemana = compras.stream()
+                    .filter(c -> c.getFecha().isAfter(haceUnaSemana))
+                    .count();
+
+            // Atributos para el JSP
+            request.setAttribute("ptotal", totalP);
+            request.setAttribute("users", cantUsers);
             request.setAttribute("pvendidos", listP);
+            request.setAttribute("act", listU);
+            request.setAttribute("proxAVencer", cantProximosAVencer);
+            request.setAttribute("totalVentas", totalVentas);
+            request.setAttribute("ventasUltimaSemana", ventasUltimaSemana);
+
+            // Redirección al dashboard
             request.getRequestDispatcher("admin/dashboard.jsp").forward(request, response);
-                    
-        }catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
-    
+
     private void detalle(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idParam = request.getParameter("id");
@@ -82,8 +120,8 @@ public class AdminController extends HttpServlet {
             try {
                 int id = Integer.parseInt(idParam);
                 List<Carrito> car = cdao.obtenerDetalleCompra(id);
-                Compra com=cdao.obtenerCompraId(id);
-            request.setAttribute("compra", com);
+                Compra com = cdao.obtenerCompraId(id);
+                request.setAttribute("compra", com);
                 request.setAttribute("deta", car);
                 request.getRequestDispatcher("admin/detalle.jsp").forward(request, response);
 
@@ -91,24 +129,24 @@ public class AdminController extends HttpServlet {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        }else{
+        } else {
             response.sendRedirect("index");
         }
     }
-    
+
     private void pedidos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        try{
-            List<Compra> listaCompra=cdao.listarCompras();
+
+        try {
+            List<Compra> listaCompra = cdao.listarCompras();
             HttpSession misesion = request.getSession();
             misesion.setAttribute("pedidos", listaCompra);
             response.sendRedirect("admin/pedidos.jsp");
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     private void listarAdmin(HttpServletRequest request, HttpServletResponse response)
@@ -137,23 +175,23 @@ public class AdminController extends HttpServlet {
             register(request, response);
         } else if ("logout".equals(action)) {
             logout(request, response);
-        }else if ("update".equals(action)) {
+        } else if ("update".equals(action)) {
             actualizarestado(request, response);
         }
     }
-    
+
     private void actualizarestado(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String newest = request.getParameter("estado-pedido");
-        try{
-            boolean e=cdao.actualizarEstadoPedido(id, newest);
-            if(e){
+        try {
+            boolean e = cdao.actualizarEstadoPedido(id, newest);
+            if (e) {
                 response.sendRedirect("AdminController?action=pedidos");
-            }else{
+            } else {
                 System.out.println("fallo actualizar");
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("error" + e);
             throw new ServletException("Error", e);
         }
@@ -209,7 +247,7 @@ public class AdminController extends HttpServlet {
             boolean resultado = admindao.registroAdmin(newadmin);
             System.out.println(newadmin.getApellidos() + "+" + newadmin.getContraseña());
             if (resultado) {
-                response.sendRedirect("admin/administradores.jsp");
+                response.sendRedirect("AdminController?action=list");
             } else {
                 request.setAttribute("error", "No se puedo registrar el administrador");
                 request.getRequestDispatcher("admin/administradores.jsp").forward(request, response);
